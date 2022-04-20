@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mentoring">
+
+<select id="nextNum" resultType="int">
+select mentorseq.nextval from dual
+</select>
+
+<insert id="insert" parameterType="mentoring">
+insert into mentoring values (#{mentoring_Id}, #{mentor_Id}, #{content}, #{intro}, sysdate, #{title})
+</insert>
+
+<select id="selectList" resultType="mentoring">
+select * from mentoring order by regdate desc
+</select>
+
+<select id="selectListKeyword" resultType="mentoring" parameterType="map">
+select * from mentoring where title like '%${keyword}%'order by regdate desc
+</select>
+
+<select id="selectOne" resultType="mentoring" parameterType="string">
+select * from mentoring where mentoring_Id = #{mentoring_Id}
+</select>
+
+<select id="profileList" resultType="string">
+select profile from mentoring m, knoc_member mem where mentor_id = id order by regdate desc
+</select>
+
+<select id="profileListKeyword" resultType="string" parameterType="map">
+select profile from mentoring m, knoc_member mem where mentor_id = id and title like '%${keyword}%' order by regdate desc
+</select>
+
+<delete id="delete" parameterType="string">
+delete from mentoring where mentoring_Id = #{mentoring_Id}
+</delete>
+
+<update id="update" parameterType="map">
+update mentoring set title = #{title}, content = #{content}, intro = #{intro} where mentoring_Id = #{mentoring_Id}
+</update>
+
+</mapper>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wishlist">
+<select id="nextSeq" resultType="int">
+select wishseq.nextval from dual
+</select>
+
+<select id="wishOne" resultType="wishlist" parameterType="map">
+select * from wishlist where id = #{id} and class_id = #{classId}
+</select>
+
+<select id="wishListOne" resultType="HashMap" parameterType="String">
+select * from (select title, id, w.class_id from wishlist w, classes c where w.class_id = c.class_id) where id = #{value}
+</select>
+
+<select id="insertWish" resultType="int" parameterType="wishlist">
+insert into wishlist (no, id, class_id) values(#{no}, #{id}, #{class_id})
+</select>
+
+<delete id="deleteWish" parameterType="map">
+delete from wishlist where id = #{id} and class_id = #{classId}
+</delete>
+</mapper>

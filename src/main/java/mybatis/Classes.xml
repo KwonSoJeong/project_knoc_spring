@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="classes">
+<select id="classList" resultType="classes" parameterType="map">
+<!-- select * from classes order by regdate desc-->
+select * from (select rownum rnum, a.* from (select * from classes order by regdate desc) a) where rnum between #{start} and #{end}
+</select>
+
+<select id="newClassNum" resultType="int">
+select classseq.nextval from dual
+</select>
+
+<insert id="classUpload" parameterType="classes">
+insert into classes values (#{class_id}, #{lec_id}, #{title}, #{intro}, #{category_id}, #{type}, 0, sysdate, #{price}, #{thumbnail})
+</insert>
+
+<select id="classOne" parameterType="string" resultType="classes">
+select * from classes where class_id = #{class_id}
+</select>
+
+<select id="sortedClassList" parameterType="string" resultType="classes">
+select * from (select rownum, a.* from (select * from classes order by ${value} desc) a) where rownum between 1 and 4
+</select>
+
+<select id="classifiedList" parameterType="map" resultType="classes">
+<!-- select * from classes where category_id like '${columnName}' -->
+select * from (select rownum rnum, a.* from (select * from classes where category_id like '${value}' order by regdate desc) a) where rnum between #{start} and #{end}
+</select>
+
+<select id="searchedList" parameterType="map" resultType="classes">
+<!-- select * from classes where title like '%${value}%' -->
+select * from (select rownum rnum, a.* from (select * from classes where title like '%${value}%' order by regdate desc) a) where rnum between #{start} and #{end}
+</select>
+
+<update id="favoriteCntUp" parameterType="string">
+update classes set favorite = favorite + 1 where class_id = #{value}
+</update>
+
+<update id="favoriteCntDown" parameterType="string">
+update classes set favorite = favorite - 1 where class_id = #{value}
+</update>
+
+<update id="classUpdate" parameterType="classes">
+update classes set thumbnail = #{thumbnail}, intro = #{intro}, price = #{price}
+where class_id = #{class_id}
+</update>
+
+<delete id="classDelete" parameterType="string">
+delete from classes where class_id = #{value}
+</delete>
+</mapper>

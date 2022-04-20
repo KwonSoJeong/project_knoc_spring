@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="study">
+
+<select id="nextNum" resultType="int">
+select studyseq.nextval from dual
+</select>
+
+<insert id="insertStudy" parameterType="study">
+insert into study values (#{study_Id},#{title},#{leader_Id},#{content},sysdate,1)
+</insert>
+
+<select id="studyCount" resultType="int" parameterType="string">
+select count(*) from study where process = #{process}
+</select>
+
+<select id="studyAllCount" resultType="int">
+select count(*) from study
+</select>
+
+<select id="studyList" resultType="study" parameterType="map">
+select * from (select rownum rnum, a.* from (
+select * from study where process = #{process} order by regDate desc) a) 
+where rnum between #{start} and #{end}
+</select>
+
+<select id="studyListKeyword" resultType="study" parameterType="map">
+select * from (select rownum rnum, a.* from (
+select * from study where process = #{process} and title like '%${keyword}%' order by regDate desc) a) 
+where rnum between #{start} and #{end}
+</select>
+
+<select id="studyAllList" resultType="study" parameterType="map">
+select * from (select rownum rnum, a.* from (
+select * from study order by regDate desc) a) 
+where rnum between #{start} and #{end}
+</select>
+
+<select id="studyAllListKeyword" resultType="study" parameterType="map">
+select * from (select rownum rnum, a.* from (
+select * from study where title like '%${keyword}%' order by regDate desc) a) 
+where rnum between #{start} and #{end}
+</select>
+ 
+ <select id="selectOne" resultType="study" parameterType="string">
+ select * from study where study_Id = #{study_Id}
+ </select>
+ 
+<select id="callProfile" resultType="string" parameterType="string">
+select profile from knoc_member where id = #{id} 
+</select>
+ 
+ <select id="callProfileAllListKeyword" resultType="string" parameterType="map">
+select * from (select a.*, rownum rnum from (
+select m.PROFILE from study s,KNOC_MEMBER m where s.LEADER_ID = m.ID(+) and title like '%${keyword}%' order by regDate desc) a) 
+where rnum between #{start} and #{end}
+</select>
+
+<select id="callProfileAllList" resultType="string" parameterType="map">
+select * from (select a.*, rownum rnum from (
+select m.PROFILE from study s,KNOC_MEMBER m where s.LEADER_ID = m.ID(+) order by regDate desc) a) 
+where rnum between #{start} and #{end}
+</select>
+ 
+ <select id="callProfileList" resultType="string" parameterType="map">
+select * from (select a.*, rownum rnum from (
+select m.PROFILE from study s,KNOC_MEMBER m where s.LEADER_ID = m.ID(+) and process = #{process} order by regDate desc) a) 
+where rnum between #{start} and #{end}
+</select>
+ 
+ <select id="callProfileListKeyword" resultType="string" parameterType="map">
+select * from (select a.*, rownum rnum from (
+select m.PROFILE from study s,KNOC_MEMBER m where s.LEADER_ID = m.ID(+) and process = #{process} and title like '%${keyword}%' order by regDate desc) a) 
+where rnum between #{start} and #{end}
+</select>
+
+<select id="infoChk" resultType="int" parameterType="map">
+select count(*) from MEMBER_STUDY_INFO where id = #{id} and MEMBER_STUDY_ID = #{member_study_id}
+</select>
+
+<update id="changeProcessToTwo">
+update study set process = 2 where study_Id = #{study_Id}
+</update>
+
+<update id="changeProcessToOne">
+update study set process = 1 where study_Id = #{study_Id}
+</update>
+
+<delete id="delete" parameterType="string">
+delete from study where study_Id = #{study_Id}
+</delete>
+ 
+<update id="update" parameterType="map">
+update study set title = #{title}, content = #{content} where study_Id = #{study_Id}
+</update>
+ 
+</mapper>

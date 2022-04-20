@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="class_content">
+<select id="newContentNum" resultType="int">
+select contentseq.nextval from dual
+</select>
+
+<insert id="contentUpload" parameterType="class_content">
+insert into class_content values(#{content_Id}, #{class_Id}, #{title}, #{file1})
+</insert>
+
+<select id="contentOne" parameterType="map" resultType="class_content">
+select * from class_content where class_id = #{classId} and content_id = #{contentId} 
+</select>
+
+<select id="contentList" parameterType="string" resultType="class_content">
+select * from class_content where class_id = #{value}
+</select>
+
+<update id="contentUpdate" parameterType="class_content">
+update class_content set title = #{title}, file1 = #{file1}
+where class_id = #{class_Id} and content_id = #{content_Id}
+</update>
+
+<delete id="contentDelete" parameterType="string">
+delete from class_content where class_id = #{value}
+</delete>
+</mapper>

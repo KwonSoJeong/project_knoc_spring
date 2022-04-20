@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="qna_comment">
+
+<select id="selectComment" resultType="qna_comment" parameterType="string">
+select * from qna_comment where refId = #{refId} order by regdate asc
+</select>
+
+<select id="selectOneComment" resultType="qna_comment" parameterType="string">
+select * from qna_comment where refId = #{refId}
+</select>
+
+<select id="countList" resultType="int" parameterType="map">
+select count from (select rownum rnum, a.* from (
+select count(refid) count from qna q, QNA_COMMENT  qc 
+where qna_id = refid(+) group by qna_id order by length(qna_id)desc, qna_id desc) a) 
+where rnum between #{start} and #{end}
+</select>
+
+<select id="nextNum" resultType="int">
+select qnacomseq.nextval from dual
+</select>
+
+<insert id="insert" parameterType="qna_comment">
+insert into qna_comment values (#{comment_Id}, #{refId}, #{title}, #{content} ,sysdate, #{writer})
+</insert>
+
+<select id="countOne" resultType="int" parameterType="string">
+select count(*) from qna_comment where refId = #{refId}
+</select>
+
+</mapper>

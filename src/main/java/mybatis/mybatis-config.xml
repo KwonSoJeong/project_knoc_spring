@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <typeAliases>
+        <typeAlias type="model.Category" alias="category"/>
+        <typeAlias type="model.Class_Content" alias="class_content"/>
+        <typeAlias type="model.Classes" alias="classes"/>
+        <typeAlias type="model.Knoc_Member" alias="knoc_member"/>
+        <typeAlias type="model.Member_Study_Info" alias="member_study_info"/>
+        <typeAlias type="model.Mentor_Comment" alias="mentor_comment"/>
+        <typeAlias type="model.Mentoring" alias="mentoring"/>
+        <typeAlias type="model.Qna_Comment" alias="qna_comment"/>
+        <typeAlias type="model.Qna" alias="qna"/>
+        <typeAlias type="model.Study_Comment" alias="study_comment"/>
+        <typeAlias type="model.Study" alias="study"/>
+        <typeAlias type="model.WishList" alias="wishlist"/>
+        <typeAlias type="model.WebChat" alias="webchat"/>
+        
+    </typeAliases>
+    <!-- 
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC" />
+            <dataSource type="POOLED">
+                <property name="driver" value="oracle.jdbc.driver.OracleDriver"/>
+                <property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
+                <property name="username" value="knoc"/>
+                <property name="password" value="1111"/>
+            </dataSource>
+        </environment>
+    </environments>
+     -->
+    <mappers>
+        <mapper resource="mybatis/Category.xml"/>
+        <mapper resource="mybatis/Class_Content.xml" />
+        <mapper resource="mybatis/Classes.xml" />
+        <mapper resource="mybatis/Knoc_Member.xml" />
+        <mapper resource="mybatis/Member_Study_Info.xml" />
+        <mapper resource="mybatis/Mentor_Comment.xml" />
+        <mapper resource="mybatis/Mentoring.xml" />
+        <mapper resource="mybatis/Qna_Comment.xml" />
+        <mapper resource="mybatis/Qna.xml" />
+        <mapper resource="mybatis/Study_Comment.xml" />
+        <mapper resource="mybatis/Study.xml" />
+        <mapper resource="mybatis/WishList.xml"/>
+        <mapper resource="mybatis/WebChat.xml"/>
+    </mappers>
+</configuration>

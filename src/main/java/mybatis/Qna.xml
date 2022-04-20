@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="qna">
+
+<select id="nextNum" resultType="int">
+select qnaseq.nextval from dual
+</select>
+
+<select id="selectOne" resultType="qna" parameterType="string">
+select * from qna where qna_Id = #{qna_Id}
+</select>
+
+<insert id="insert" parameterType="qna">
+insert into qna values (#{qna_Id},#{writer},#{secret},#{title},#{content},sysdate)
+</insert>
+
+<select id="qnaList" resultType="qna" parameterType="map">
+select * from (select rownum rnum, a.* from (
+select * from qna order by regDate desc) a) 
+where rnum between #{start} and #{end}
+</select>
+
+<select id="qnaCount" resultType="int">
+select count(*) from qna
+</select>
+
+<delete id="delete" parameterType="string">
+delete from qna where qna_Id = #{qna_Id}
+</delete>
+
+<update id="update" parameterType="map">
+update qna set title = #{title}, content = #{content}, secret = #{secret} where qna_Id = #{qna_Id}
+</update>
+
+
+</mapper>
