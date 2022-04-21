@@ -13,7 +13,7 @@
     <mvc:annotation-driven />
     <mvc:view-controller path="/index" view-name="index" />
     <!-- mvc 태그로 바로 컨트롤러 생성 -->
-    <context:component-scan base-package="controller, service" />
+    <context:component-scan base-package="controller, service, util" />
     <context:annotation-config />
 
     <bean id="multipartResolver" 
@@ -22,25 +22,10 @@
     </bean> 
     
     <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-       <property name="prefix" value="/WEB-INF/view/" />
+       <property name="prefix" value="/WEB-INF/" />
        <property name="suffix" value=".jsp" />
     </bean>
     
-    <bean class="org.mybatis.spring.SqlSessionTemplate">
-        <constructor-arg ref="sqlSession"/>
-    </bean>
-    
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="oracle.jdbc.OracleDriver"/>
-        <property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
-        <property name="username" value="knoc"/>
-        <property name="password" value="1111"/>
-    </bean>
-    
-    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <property name="configLocation" value="classpath:mybatis/mybatis-config.xml"/>
-        <property name="dataSource" ref="dataSource"/>
-    </bean>
     <!-- 
     <mvc:interceptors>
         <mvc:interceptor>
