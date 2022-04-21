@@ -19,7 +19,6 @@
         <typeAlias type="model.WebChat" alias="webchat"/>
         
     </typeAliases>
-    <!-- 
     <environments default="development">
         <environment id="development">
             <transactionManager type="JDBC" />
@@ -31,7 +30,6 @@
             </dataSource>
         </environment>
     </environments>
-     -->
     <mappers>
         <mapper resource="mybatis/Category.xml"/>
         <mapper resource="mybatis/Class_Content.xml" />
