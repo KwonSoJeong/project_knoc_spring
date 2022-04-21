@@ -4,88 +4,76 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import model.Class_Content;
 import util.MyBatisConnection;
+import util.MySqlSessionFactory;
 
+@Component
 public class Class_ContentDao {
 	private final static String ns = "class_content.";
 	private static Map<String, Object> map = new HashMap<>();
-
+	
+	@Autowired
+	MySqlSessionFactory sqlSessionFactory;
+	SqlSession sqlSession;
+	
+	@PostConstruct
+	public void setSqlSession() {
+		this.sqlSession = sqlSessionFactory.sqlmap.openSession();
+	}
+	
 	// 신규 컨텐츠 아이디 생성을 위해 시퀀스 다음 번호 반환
 	public int newContentNum() {
-		SqlSession sqlSession = MyBatisConnection.getConnection();
-
-		try {
-			return sqlSession.selectOne(ns + "newContentNum");
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			MyBatisConnection.close(sqlSession);
-		}
-
-		return 0;
+		
+		return sqlSession.selectOne(ns + "newContentNum");
+		
 	}
 	
 	// 신규 컨텐츠 등록
 	public int contentUpload(Class_Content newContent) {
-		SqlSession sqlSession = MyBatisConnection.getConnection();
 		
 		try {
 			return sqlSession.insert(ns + "contentUpload", newContent);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			MyBatisConnection.close(sqlSession);
+			sqlSession.commit();
 		}
 
 		return 0;
 	}
 	
 	public Class_Content contentOne(String classId, String contentId) {
-		SqlSession sqlSession = MyBatisConnection.getConnection();
-		
 		map.clear();
 		map.put("classId", classId);
 		map.put("contentId", contentId);
 		
-		try {
-			return sqlSession.selectOne(ns + "contentOne", map);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			MyBatisConnection.close(sqlSession);
-		}
-
-		return null;
+		return sqlSession.selectOne(ns + "contentOne", map);
+		
 	}
 	
 	// 클래스 아이디를 매개변수로 해당 클래스의 컨텐츠를 리스트로 반환
 	public List<Class_Content> contentList(String classId) {
-		SqlSession sqlSession = MyBatisConnection.getConnection();
 		
-		try {
-			return sqlSession.selectList(ns + "contentList", classId);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			MyBatisConnection.close(sqlSession);
-		}
-
-		return null;
+		return sqlSession.selectList(ns + "contentList", classId);
+		
 	}
 	
 	// 컨텐츠 수정
 	public int contentUpdate(Class_Content updatedContent) {
-		SqlSession sqlSession = MyBatisConnection.getConnection();
 		
 		try {
 			return sqlSession.update(ns + "contentUpdate", updatedContent);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			MyBatisConnection.close(sqlSession);
+			sqlSession.commit();
 		}
 
 		return 0;
@@ -93,14 +81,13 @@ public class Class_ContentDao {
 	
 	// 컨텐츠 삭제
 	public int contentDelete(String classId) {
-		SqlSession sqlSession = MyBatisConnection.getConnection();
 		
 		try {
 			return sqlSession.delete(ns + "contentDelete", classId);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			MyBatisConnection.close(sqlSession);
+			sqlSession.commit();
 		}
 
 		return 0;

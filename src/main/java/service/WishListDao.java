@@ -4,63 +4,58 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import model.WishList;
 import util.MyBatisConnection;
+import util.MySqlSessionFactory;
 
+@Component
 public class WishListDao {
 	private final static String ns = "wishlist.";
 	private static Map<String, Object> map = new HashMap<>();
 	
+	@Autowired
+	MySqlSessionFactory sqlSessionFactory;
+	SqlSession sqlSession;
+	
+	@PostConstruct
+	public void setSqlSession() {
+		this.sqlSession = sqlSessionFactory.sqlmap.openSession();
+	}
+	
 	public int nextSeq() {
-		SqlSession sqlSession = MyBatisConnection.getConnection();
 		
-		try {
-			return sqlSession.selectOne(ns + "nextSeq");
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			MyBatisConnection.close(sqlSession);
-		}
+		return sqlSession.selectOne(ns + "nextSeq");
 		
-		return 0;
 	}
 	
 	public WishList wishOne(String id, String classId) {
-		SqlSession sqlSession = MyBatisConnection.getConnection();
-		
 		map.clear();
 		map.put("id", id);
 		map.put("classId", classId);
-		try {
-			return sqlSession.selectOne(ns + "wishOne", map);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			MyBatisConnection.close(sqlSession);
-		}
 		
-		return null;
+		return sqlSession.selectOne(ns + "wishOne", map);
+		
 	}
 	
 	public int insertWish(WishList newWish) {
-		SqlSession sqlSession = MyBatisConnection.getConnection();
-		
 		try {
 			return sqlSession.insert(ns + "insertWish", newWish);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			MyBatisConnection.close(sqlSession);
+			sqlSession.commit();
 		}
 		
 		return 0;
 	}
 	
 	public int deleteWish(String id, String classId) {
-		SqlSession sqlSession = MyBatisConnection.getConnection();
-		
 		map.clear();
 		map.put("id", id);
 		map.put("classId", classId);
@@ -69,24 +64,16 @@ public class WishListDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			MyBatisConnection.close(sqlSession);
+			sqlSession.commit();
 		}
 		
 		return 0;
 	}
 	
 	public List<Map<String, Object>> wishListOne(String id) {
-		SqlSession sqlSession = MyBatisConnection.getConnection();
 		
-		try {
-			return sqlSession.selectList(ns + "wishListOne", id);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			MyBatisConnection.close(sqlSession);
-		}
+		return sqlSession.selectList(ns + "wishListOne", id);
 		
-		return null;
 	}
 	
 	/* DAO 테스트 코드 

@@ -9,7 +9,6 @@
         <typeAlias type="model.Classes" alias="classes"/>
         <typeAlias type="model.Knoc_Member" alias="knoc_member"/>
         <typeAlias type="model.Member_Study_Info" alias="member_study_info"/>
-        <typeAlias type="model.Mentor_Comment" alias="mentor_comment"/>
         <typeAlias type="model.Mentoring" alias="mentoring"/>
         <typeAlias type="model.Qna_Comment" alias="qna_comment"/>
         <typeAlias type="model.Qna" alias="qna"/>
@@ -36,7 +35,6 @@
         <mapper resource="mybatis/Classes.xml" />
         <mapper resource="mybatis/Knoc_Member.xml" />
         <mapper resource="mybatis/Member_Study_Info.xml" />
-        <mapper resource="mybatis/Mentor_Comment.xml" />
         <mapper resource="mybatis/Mentoring.xml" />
         <mapper resource="mybatis/Qna_Comment.xml" />
         <mapper resource="mybatis/Qna.xml" />
