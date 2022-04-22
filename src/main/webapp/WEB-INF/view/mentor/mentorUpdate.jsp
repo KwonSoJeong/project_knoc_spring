@@ -30,7 +30,7 @@
 	
 				<div class="form-group">
 					<label>멘토링 주제</label>
-					<textarea class="form-control" rows="3" cols="40" placeholder="멘토링 주제를 작성해 주세요." name="input">${m.title }</textarea>
+					<textarea class="form-control" rows="3" cols="40" placeholder="멘토링 주제를 작성해 주세요." name="title">${m.title }</textarea>
 				</div> 
 				<br>
 				

@@ -11,12 +11,20 @@ select studyseq.nextval from dual
 insert into study values (#{study_Id},#{title},#{leader_Id},#{content},sysdate,1)
 </insert>
 
-<select id="studyCount" resultType="int" parameterType="string">
+<select id="studyCount" resultType="int" parameterType="int">
 select count(*) from study where process = #{process}
+</select>
+
+<select id="studyCountKeyword" resultType="int" parameterType="map">
+select count(*) from study where process = #{process} and title like '%${keyword}%'
 </select>
 
 <select id="studyAllCount" resultType="int">
 select count(*) from study
+</select>
+
+<select id="studyAllCountKeyword" resultType="int" parameterType="map">
+select count(*) from study where title like '%${keyword}%'
 </select>
 
 <select id="studyList" resultType="study" parameterType="map">

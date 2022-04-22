@@ -4,117 +4,80 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.ibatis.session.SqlSession;
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import model.Mentoring;
-import util.MyBatisConnection;
+import util.MySqlSessionFactory;
 
+@Component
 public class MentoringDao {
 	private final static String ns = "mentoring.";
 	private Map<String, Object> map = new HashMap<>();
+
+	@Autowired
+	MySqlSessionFactory sqlSessionFactory;
+	SqlSession sqlSession;
+	@PostConstruct
+	public void setSqlSession() {
+		this.sqlSession=sqlSessionFactory.sqlmap.openSession();
+	} 
 	
 	public int nextNum() {
-		SqlSession sqlSession = MyBatisConnection.getConnection();
-		try {
 			return sqlSession.selectOne(ns + "nextNum");
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			MyBatisConnection.close(sqlSession);
-		}
-		return 0;
 	}
 	
 	public int insert(Mentoring m) {
-		SqlSession sqlSession = MyBatisConnection.getConnection();
 		try {
 			return sqlSession.insert(ns + "insert",m);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			MyBatisConnection.close(sqlSession);
+			sqlSession.commit();
 		}
 		return 0;
 	}
 	
 	public List<Mentoring> selectList() {
-		SqlSession sqlSession = MyBatisConnection.getConnection();
-		try {
 			return sqlSession.selectList(ns + "selectList");
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			MyBatisConnection.close(sqlSession);
-		}
-		return null;
 	}
 	
 	public List<Mentoring> selectListKeyword(String keyword) {
-		SqlSession sqlSession = MyBatisConnection.getConnection();
-		try {
 			map.clear();
 			map.put("keyword", keyword);
 			return sqlSession.selectList(ns + "selectListKeyword",map);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			MyBatisConnection.close(sqlSession);
-		}
-		return null;
 	}
 	
 	public Mentoring selectOne(String mentoring_Id) {
-		SqlSession sqlSession = MyBatisConnection.getConnection();
-		try {
 			return sqlSession.selectOne(ns + "selectOne",mentoring_Id);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			MyBatisConnection.close(sqlSession);
-		}
-		return null;
 	}
 	
 	public List profileList() {
-		SqlSession sqlSession = MyBatisConnection.getConnection();
-		try {
 			return sqlSession.selectList(ns + "profileList");
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			MyBatisConnection.close(sqlSession);
-		}
-		return null;
 	}
 	
 	public List profileListKeyword(String keyword) {
-		SqlSession sqlSession = MyBatisConnection.getConnection();
-		try {
 			map.clear();
 			map.put("keyword", keyword);
 			return sqlSession.selectList(ns + "profileListKeyword",map);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			MyBatisConnection.close(sqlSession);
-		}
-		return null;
 	}
 	
 	public int delete(String mentoring_Id) {
-		SqlSession sqlSession = MyBatisConnection.getConnection();
 		try {
 			return sqlSession.delete(ns + "delete",mentoring_Id);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			MyBatisConnection.close(sqlSession);
+			sqlSession.commit();
 		}
 		return 0;
 	}
 	
 	public int update(String title, String content, String mentoring_Id, String intro) {
-		SqlSession sqlSession = MyBatisConnection.getConnection();
 		try {
 			map.clear();
 			map.put("mentoring_Id", mentoring_Id);
@@ -125,7 +88,7 @@ public class MentoringDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			MyBatisConnection.close(sqlSession);
+			sqlSession.commit();
 		}
 		return 0;
 	}

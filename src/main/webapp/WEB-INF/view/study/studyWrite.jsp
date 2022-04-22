@@ -55,7 +55,7 @@
 								</div>
 
 								<div class="form-group has-feedback">
-									<textarea name="text" id="summernote" rows="20" class="form-control input-block-level"></textarea>
+									<textarea name="content" id="summernote" rows="20" class="form-control input-block-level"></textarea>
 								</div>
 								<input type="hidden" name="textType" value="HTML" id="textType" />
 

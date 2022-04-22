@@ -40,7 +40,7 @@
 				
 				<div>
 					<form action="<%=request.getContextPath()%>/mentor/mentoringEntry" method="post">
-						<input type="hidden" name="mentoringId" value="${m.mentoring_Id }">
+						<input type="hidden" name="mentoring_Id" value="${m.mentoring_Id }">
 						<button id="mentro-bung2" type="submit">멘토링신청</button>
 					</form>	
 				</div>
