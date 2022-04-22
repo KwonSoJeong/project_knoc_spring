@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import model.Knoc_Member;
-import util.MyBatisConnection;
 import util.MySqlSessionFactory;
 
 @Component

@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import model.Class_Content;
-import util.MyBatisConnection;
 import util.MySqlSessionFactory;
 
 @Component

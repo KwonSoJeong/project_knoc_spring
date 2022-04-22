@@ -11,8 +11,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.oreilly.servlet.MultipartRequest;
-import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+//import com.oreilly.servlet.MultipartRequest;
+//import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import model.Class_Content;
 import model.Classes;
@@ -27,8 +33,33 @@ import service.Member_Study_InfoDao;
 import service.WebChatDao;
 import service.WishListDao;
 
-//@WebServlet("/classes/*")
-public class ClassesController extends MskimRequestMapping {
+@Controller
+@RequestMapping("/classes/")
+public class ClassesController {
+	
+	HttpServletRequest request;
+	Model model;
+	HttpSession session;
+	
+	@Autowired
+	CategoryDao cgd;
+	@Autowired
+	Class_ContentDao ccd;
+	@Autowired
+	ClassesDao cd;
+	@Autowired
+	Member_Study_InfoDao msd;
+	@Autowired
+	WebChatDao wcd;
+	@Autowired
+	WishListDao wld;
+	
+	@ModelAttribute
+	void init(HttpServletRequest request, Model model) {
+		this.request = request;
+		this.model = model;
+		this.session = request.getSession();
+	}
 	
 	// main화면 view
 	@RequestMapping("main")
@@ -41,33 +72,33 @@ public class ClassesController extends MskimRequestMapping {
 			groupId = "";
 		}
 		
-		ClassesDao cd = new ClassesDao();
+		//ClassesDao cd = new ClassesDao();
 		
-		WebChatDao wcd = new WebChatDao();
+		//WebChatDao wcd = new WebChatDao();
 		
 		// 일반 사용자의 경우, 문의톡 아이콘을 눌렀을 때 바로 대화 내용 출력
 		List<WebChat> chatList = wcd.chatList(groupId);
 		// 관리자(admin)일 경우, 문의톡 아이콘을 눌렀을 때 우선 문의한 유저 리스트가 먼저 출력
 		List<String> groupList = wcd.groupList();
 		
-		WishListDao wld = new WishListDao();
+		//WishListDao wld = new WishListDao();
 		if (userId != null) {
 			List<Map<String, Object>> wishList = wld.wishListOne(userId);
-			request.setAttribute("wishList", wishList);
+			model.addAttribute("wishList", wishList);
 		}
 		List<Classes> newClassList = cd.sortedClassList("regdate");
 		List<Classes> favoriteClassList = cd.sortedClassList("favorite");
 		
-		request.setAttribute("userId", userId);
-		request.setAttribute("groupId", groupId);
-		request.setAttribute("chatList", chatList);
-		request.setAttribute("groupList", groupList);
-		request.setAttribute("newClassList", newClassList);
-		request.setAttribute("favoriteClassList", favoriteClassList);
+		model.addAttribute("userId", userId);
+		model.addAttribute("groupId", groupId);
+		model.addAttribute("chatList", chatList);
+		model.addAttribute("groupList", groupList);
+		model.addAttribute("newClassList", newClassList);
+		model.addAttribute("favoriteClassList", favoriteClassList);
 		
-		return "/view/main.jsp";
+		return "/view/main";
 	}
-	
+	/*
 	// main화면 문의톡에서 img 업로드 할 때 사용할 페이지 
 	@RequestMapping("imgUpload")
 	public String imgUpload(HttpServletRequest request, HttpServletResponse response) {
@@ -90,11 +121,11 @@ public class ClassesController extends MskimRequestMapping {
 		String groupId = multi.getParameter("groupId");
 		String userId = multi.getParameter("userId");
 		String filename = multi.getFilesystemName("file");
-		request.setAttribute("filename", filename);
+		model.addAttribute("filename", filename);
 		
-		return "/single/imgUpload.jsp";
+		return "/single/imgUpload";
 	}
-	
+	*/
 	// main화면 문의톡에서 admin 계정에서 사용할 문의한 고객 리스트 전달
 	@RequestMapping("adminChat")
 	public String adminChat(HttpServletRequest request, HttpServletResponse response) {
@@ -103,21 +134,21 @@ public class ClassesController extends MskimRequestMapping {
 		String groupId = request.getParameter("groupId");
 		String userId = (String) session.getAttribute("memid");
 		
-		WebChatDao wcd = new WebChatDao();
+		//WebChatDao wcd = new WebChatDao();
 		List<WebChat> chatList = wcd.chatList(groupId);
 		
-		request.setAttribute("groupId", groupId);
-		request.setAttribute("userId", userId);
-		request.setAttribute("chatList", chatList);
+		model.addAttribute("groupId", groupId);
+		model.addAttribute("userId", userId);
+		model.addAttribute("chatList", chatList);
 		
-		return "/single/adminChat.jsp";
+		return "/single/adminChat";
 	}
 	
 	// 클래스 리스트 view
 	@RequestMapping("classList")
 	public String classList(HttpServletRequest request, HttpServletResponse response) {
 		HttpSession session = request.getSession();
-		ClassesDao cd = new ClassesDao();
+		//ClassesDao cd = new ClassesDao();
 		String pageNum = request.getParameter("pageInt");
 		String userId = (String) session.getAttribute("memid");
 		
@@ -148,21 +179,21 @@ public class ClassesController extends MskimRequestMapping {
 			classList = cd.searchedList(title, pageInt, limit);
 		}
 		
-		WishListDao wld = new WishListDao();
+		//WishListDao wld = new WishListDao();
 		if (userId != null) {
 			List<Map<String, Object>> wishList = wld.wishListOne(userId);
-			request.setAttribute("wishList", wishList);
+			model.addAttribute("wishList", wishList);
 		}
 		
-	//	request.setAttribute("pageInt", pageInt);
-	//	request.setAttribute("limit", limit);
-	//	request.setAttribute("size", classList.size());
-		request.setAttribute("userId", userId);
-		request.setAttribute("classList", classList);
+	//	model.addAttribute("pageInt", pageInt);
+	//	model.addAttribute("limit", limit);
+	//	model.addAttribute("size", classList.size());
+		model.addAttribute("userId", userId);
+		model.addAttribute("classList", classList);
 		if (pageInt==1)  {
-			return "/view/classes/classList.jsp";
+			return "/view/classes/classList";
 		} else {
-		return "/single/singleClass.jsp";}
+		return "/single/singleClass";}
 		
 	}
 	
@@ -177,15 +208,15 @@ public class ClassesController extends MskimRequestMapping {
 			String msg = "로그인 정보가 없습니다.";
 			String url = request.getContextPath() + "/member/login";
 			
-			request.setAttribute("msg", msg);
-			request.setAttribute("url", url);
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
 			
-			return "/view/alert.jsp";
+			return "/view/alert";
 		}
 		
-		return "/view/classes/classUpload.jsp";
+		return "/view/classes/classUpload";
 	}
-	
+	/*
 	// 신규 클래스 등록 process
 	@RequestMapping("classUploadPro")
 	public String classUploadPro(HttpServletRequest request, HttpServletResponse response) {
@@ -210,11 +241,11 @@ public class ClassesController extends MskimRequestMapping {
 			e.printStackTrace();
 		}
 		
-		ClassesDao cl_d = new ClassesDao();
+		//ClassesDao cd = new ClassesDao();
 	
 		Classes newClass = new Classes();
 
-		newClass.setClass_id("class" + cl_d.newClassNum());
+		newClass.setClass_id("class" + cd.newClassNum());
 		newClass.setLec_id(id);
 		newClass.setTitle(multi.getParameter("title"));
 		newClass.setIntro(multi.getParameter("intro"));
@@ -223,14 +254,14 @@ public class ClassesController extends MskimRequestMapping {
 		newClass.setPrice(Integer.parseInt(multi.getParameter("price")));
 		newClass.setThumbnail(multi.getParameter("thumbnail"));
 		
-		int classResult = cl_d.classUpload(newClass);
+		int classResult = cd.classUpload(newClass);
 		
 		// 각 차시 별 객체 생성
 		int contentResult = 0;
 		
-		Class_ContentDao con_d = new Class_ContentDao();
+		//Class_ContentDao ccd = new Class_ContentDao();
 		
-		Classes classone = cl_d.classOne(newClass.getClass_id());
+		Classes classone = cd.classOne(newClass.getClass_id());
 		String[] titleArr = multi.getParameterValues("contentTitle");
 		
 		List<String> fileList = new ArrayList<String>();
@@ -265,9 +296,9 @@ public class ClassesController extends MskimRequestMapping {
 				}
 				
 				newContent.setClass_Id(newClass.getClass_id());
-				newContent.setContent_Id("content" + con_d.newContentNum());
+				newContent.setContent_Id("content" + ccd.newContentNum());
 				
-				if (con_d.contentUpload(newContent) > 0) {
+				if (ccd.contentUpload(newContent) > 0) {
 					contentResult++;
 				}
 			}
@@ -281,25 +312,25 @@ public class ClassesController extends MskimRequestMapping {
 			msg = "클래스가 정상적으로 등록되었습니다.";
 			url = request.getContextPath() + "/classes/classInfo?class_id=" + newClass.getClass_id();
 			
-			Member_Study_InfoDao msd = new Member_Study_InfoDao();
+			//Member_Study_InfoDao msd = new Member_Study_InfoDao();
 			Member_Study_Info msi = new Member_Study_Info(newClass.getLec_id(), newClass.getClass_id(), 1, msd.nextSeq());
 			
 			msd.insertInfo(msi);
 		}
 		
-		request.setAttribute("msg", msg);
-		request.setAttribute("url", url);
+		model.addAttribute("msg", msg);
+		model.addAttribute("url", url);
 
-		return "/view/alert.jsp";
+		return "/view/alert";
 	}
-
+	*/
 	// 클래스 썸네일 등록 view
 	@RequestMapping("thumbnailForm")
 	public String thumbnailForm(HttpServletRequest request, HttpServletResponse response) {
 
-		return "/single/thumbnailForm.jsp";
+		return "/single/thumbnailForm";
 	}
-
+	/*
 	// 클래스 썸네일 등록 process
 	@RequestMapping("thumbnailPro")
 	public String thumbnailPro(HttpServletRequest request, HttpServletResponse response) {
@@ -324,33 +355,33 @@ public class ClassesController extends MskimRequestMapping {
 
 		String filename = multi.getFilesystemName("thumbnail");
 
-		request.setAttribute("filename", filename);
+		model.addAttribute("filename", filename);
 
-		return "/single/thumbnailPro.jsp";
+		return "/single/thumbnailPro";
 	}
-
+	*/
 	// 클래스 상세 view 
 	@RequestMapping("classInfo")
 	public String classInfo(HttpServletRequest request, HttpServletResponse response) {
 		String classId = request.getParameter("class_id");
-		ClassesDao cd = new ClassesDao();
+		//ClassesDao cd = new ClassesDao();
 		Classes classone = cd.classOne(classId);
 		
-		CategoryDao cgd = new CategoryDao();
+		//CategoryDao cgd = new CategoryDao();
 		String categoryName = cgd.selectCategoryName(classone.getCategory_id());
 		
-		Class_ContentDao ccd = new Class_ContentDao();
+		//Class_ContentDao ccd = new Class_ContentDao();
 		List<Class_Content> contentList = ccd.contentList(classId);
 		int contentNo = 1;
 		// parameter로 전달된 classId는 session에 저장, content view 출력 시 활용
 		HttpSession session = request.getSession();
 		session.setAttribute("classId", classId);
 		
-		request.setAttribute("contentNo", contentNo);
-		request.setAttribute("classone", classone);
-		request.setAttribute("category", categoryName);
-		request.setAttribute("contentList", contentList);
-		return "/view/classes/classInfo.jsp";
+		model.addAttribute("contentNo", contentNo);
+		model.addAttribute("classone", classone);
+		model.addAttribute("category", categoryName);
+		model.addAttribute("contentList", contentList);
+		return "/view/classes/classInfo";
 	}
 	
 	// 클래스 수강신청 클릭 시 process
@@ -364,10 +395,10 @@ public class ClassesController extends MskimRequestMapping {
 		String msg = "로그인 후 이용 가능합니다.";
 		String url = request.getContextPath() + "/member/login";
 		
-		ClassesDao cd = new ClassesDao();
+		//ClassesDao cd = new ClassesDao();
 		Classes classOne = cd.classOne(class_id);
 		
-		Member_Study_InfoDao msd = new Member_Study_InfoDao();
+		//Member_Study_InfoDao msd = new Member_Study_InfoDao();
 		Member_Study_Info msi = msd.infoOne(id, class_id);
 		
 		if (id != null) {
@@ -385,10 +416,10 @@ public class ClassesController extends MskimRequestMapping {
 			}
 
 		}
-		request.setAttribute("msg", msg);
-		request.setAttribute("url", url);
+		model.addAttribute("msg", msg);
+		model.addAttribute("url", url);
 
-		return "/view/alert.jsp";
+		return "/view/alert";
 		
 	}
 	
@@ -409,15 +440,15 @@ public class ClassesController extends MskimRequestMapping {
 		classId = (String) session.getAttribute("classId");
 		String id = (String) session.getAttribute("memid");
 		
-		Class_ContentDao cd = new Class_ContentDao();
-		List<Class_Content> contentList = cd.contentList(classId);
+		//Class_ContentDao cd = new Class_ContentDao();
+		List<Class_Content> contentList = ccd.contentList(classId);
 		
 		String contentId = request.getParameter("content_id");
 		
 		if (contentId == null) {
 			contentId = contentList.get(0).getContent_Id();
 		}
-		Class_Content contentOne = cd.contentOne(classId, contentId);
+		Class_Content contentOne = ccd.contentOne(classId, contentId);
 		
 		// content화면 완성된 후에 제대로 다시 테스트 할 예정
 		
@@ -425,21 +456,21 @@ public class ClassesController extends MskimRequestMapping {
 			String msg = "로그인 정보가 없습니다.";
 			String url = request.getContextPath() + "/member/login";
 			
-			request.setAttribute("msg", msg);
-			request.setAttribute("url", url);
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
 			
-			return "/view/alert.jsp";
+			return "/view/alert";
 		}
 		
 		int contentNo = 1;
 		
-		request.setAttribute("contentList", contentList);
-		request.setAttribute("content", contentOne);
-		request.setAttribute("contentNo", contentNo);
-		return "/view/classes/classContent.jsp";
+		model.addAttribute("contentList", contentList);
+		model.addAttribute("content", contentOne);
+		model.addAttribute("contentNo", contentNo);
+		return "/view/classes/classContent";
 	}
 	
-	// 클래스 관심등록 process, classInfo.jsp에서 javaScript + ajax로 구현
+	// 클래스 관심등록 process, classInfo에서 javaScript + ajax로 구현
 	@RequestMapping("classFavorite")
 	public String classFavorite(HttpServletRequest request, HttpServletResponse response) {
 		HttpSession session = request.getSession();
@@ -452,19 +483,19 @@ public class ClassesController extends MskimRequestMapping {
 			classId = (String) session.getAttribute("classId");
 		}
 		
-		ClassesDao cd = new ClassesDao();
+		//ClassesDao cd = new ClassesDao();
 		
 		if (id != null) {
-			WishListDao wd = new WishListDao();
-			WishList wishOne =  wd.wishOne(id, classId);
+			//WishListDao wd = new WishListDao();
+			WishList wishOne =  wld.wishOne(id, classId);
 
 			if (wishOne == null) {
-				WishList newWish = new WishList(wd.nextSeq(), id, classId);
-				int num = wd.insertWish(newWish);
+				WishList newWish = new WishList(wld.nextSeq(), id, classId);
+				int num = wld.insertWish(newWish);
 				int cntUp = cd.favoriteCntUp(classId);
 				status = "favorite-Cnt-Up";
 			} else {
-				int num = wd.deleteWish(id, classId);
+				int num = wld.deleteWish(id, classId);
 				int cntDown = cd.favoriteCntDown(classId);
 				status = "favorite-Cnt-Down";
 			}
@@ -474,9 +505,9 @@ public class ClassesController extends MskimRequestMapping {
 		Classes classone = cd.classOne(classId);
 		int favoriteCnt = classone.getFavorite();
 		 
-		request.setAttribute("favoriteCnt", favoriteCnt);
-		request.setAttribute("status", status);
-		return "/single/classFavorite.jsp";
+		model.addAttribute("favoriteCnt", favoriteCnt);
+		model.addAttribute("status", status);
+		return "/single/classFavorite";
 	}
 	
 	// 클래스 수정 view
@@ -490,25 +521,25 @@ public class ClassesController extends MskimRequestMapping {
 			String msg = "로그인 정보가 없습니다.";
 			String url = request.getContextPath() + "/member/login";
 			
-			request.setAttribute("msg", msg);
-			request.setAttribute("url", url);
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
 			
-			return "/view/alert.jsp";
+			return "/view/alert";
 		} 
 		
 		String classId = request.getParameter("class_id");
-		ClassesDao cd = new ClassesDao();
+		//ClassesDao cd = new ClassesDao();
 		Classes classOne = cd.classOne(classId);
 		
-		Class_ContentDao ccd = new Class_ContentDao();
+		//Class_ContentDao ccd = new Class_ContentDao();
 		
 		List<Class_Content> contentList = ccd.contentList(classId);
 		
-		request.setAttribute("classOne", classOne);
-		request.setAttribute("contentList", contentList);
-		return "/view/classes/classUpdate.jsp";
+		model.addAttribute("classOne", classOne);
+		model.addAttribute("contentList", contentList);
+		return "/view/classes/classUpdate";
 	}
-	
+	/*
 	// 클래스 수정 process
 	@RequestMapping("classUpdatePro")
 	public String classUpdatePro(HttpServletRequest request, HttpServletResponse response) {
@@ -541,10 +572,10 @@ public class ClassesController extends MskimRequestMapping {
 		updatedClass.setIntro(multi.getParameter("intro"));
 		updatedClass.setPrice(Integer.parseInt(multi.getParameter("price")));
 		
-		ClassesDao cd = new ClassesDao();
+		//ClassesDao cd = new ClassesDao();
 		int classUpdateCnt = cd.classUpdate(updatedClass);
 		
-		Class_ContentDao ccd = new Class_ContentDao();
+		//Class_ContentDao ccd = new Class_ContentDao();
 		
 		int listSize = (ccd.contentList(classId)).size();
 		
@@ -576,21 +607,21 @@ public class ClassesController extends MskimRequestMapping {
 			url = request.getContextPath() + "/classes/classUpdate?class_id=" + classId;
 		}
 		
-		request.setAttribute("msg", msg);
-		request.setAttribute("url", url);
+		model.addAttribute("msg", msg);
+		model.addAttribute("url", url);
 		
-		return "/view/alert.jsp";
+		return "/view/alert";
 	}
-	
+	*/
 	// 클래스 삭제 process
 	@RequestMapping("classDeletePro")
 	public String classDelete(HttpServletRequest request, HttpServletResponse response) {
 		String classId = request.getParameter("class_id");
 		
-		ClassesDao cd = new ClassesDao();
+		//ClassesDao cd = new ClassesDao();
 		int classDeleteCnt = cd.classDelete(classId);
 		
-		Class_ContentDao ccd = new Class_ContentDao();
+		//Class_ContentDao ccd = new Class_ContentDao();
 		
 		int listSize = (ccd.contentList(classId)).size(); 
 		int contentDeleteCnt = ccd.contentDelete(classId);
@@ -603,8 +634,8 @@ public class ClassesController extends MskimRequestMapping {
 			msg = "클래스 삭제에 실패하였습니다.";
 		}
 		
-		request.setAttribute("msg", msg);
-		request.setAttribute("url", url);
-		return "/view/alert.jsp";
+		model.addAttribute("msg", msg);
+		model.addAttribute("url", url);
+		return "/view/alert";
 	}
 }
