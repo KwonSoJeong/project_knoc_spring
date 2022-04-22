@@ -57,7 +57,7 @@
 										</c:if>
 										<c:if test="${s.process==2 }">list-group-item-text item-tag label label-gray'>모집완료</c:if>
 									</button>
-									<input type="hidden" name="studyId" value="${s.study_Id }">
+									<input type="hidden" name="study_Id" value="${s.study_Id }">
 
 									<c:if test="${memid!=s.leader_Id }">
 										<button type="submit" style="margin-left: 10px; display: inline; background-color: #ffa94d; border-color: #ffa94d; padding: 0.2em 0.6em 0.3em; font-size: 75%; font-weight: bold; line-height: 1; color: #fff; text-align: center; white-space: nowrap; vertical-align: baseline; border-radius: 0.25em;">참가신청</button>
@@ -133,8 +133,8 @@
 												<a href="<%=request.getContextPath()%>/member/login" class="link" style="color: blue;">로그인</a>을 하시면 댓글을 등록할 수 있습니다.</c:when>
 											<c:otherwise>
 												<form action="<%=request.getContextPath()%>/study/writeStudyCommentPro" method="post">
-													<textarea name="text" id="summernote" rows="3" class="form-control input-block-level"></textarea>
-													<input type="submit" name="create" class="create btn btn-success btn-wide pull-right" style="background-color: #37d3c0; border-color: #37d3c0; margin-top: 5px;" value="댓글등록" id="create" /> <input type="hidden" name="study_Id" value="${s.study_Id}"> <input type="button" onclick="location.href='studyList'" name="create" class="create btn btn-success btn-wide pull-right" style="background-color: #37d3c0; border-color: #37d3c0; margin-top: 5px; margin-right: 10px;" value="목록으로" id="create" /> <input type="hidden" name="study_Id" value="${s.study_Id}">
+													<textarea name="content" id="summernote" rows="3" class="form-control input-block-level"></textarea>
+													<input type="submit" name="create" class="create btn btn-success btn-wide pull-right" style="background-color: #37d3c0; border-color: #37d3c0; margin-top: 5px;" value="댓글등록" id="create" /> <input type="hidden" name="RefId" value="${s.study_Id}"> <input type="button" onclick="location.href='studyList'" name="create" class="create btn btn-success btn-wide pull-right" style="background-color: #37d3c0; border-color: #37d3c0; margin-top: 5px; margin-right: 10px;" value="목록으로" id="create" />
 
 												</form>
 											</c:otherwise>

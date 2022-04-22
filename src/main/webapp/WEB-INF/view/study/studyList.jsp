@@ -34,7 +34,7 @@
 						<div class="category-filter-wrapper">
 							<div class="category-filter-query pull-right">
 								<div class="input-group input-group-sm">
-
+									<c:if test="${process!=null }"><input type="hidden" name="process" value="${process}"></c:if>
 									<input type="search" name="keyword" id="search-field" class="form-control" placeholder="검색어" value="" /> <span class="input-group-btn">
 										<button type="submit" class="btn btn-default">
 											<i class="fa fa-search">검색</i>
