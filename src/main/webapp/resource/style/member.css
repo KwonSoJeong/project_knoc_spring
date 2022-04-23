@@ -1,0 +1,276 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans KR';
+}
+
+#header {
+    height: 70px;
+    border-bottom: 2px solid #B8E6E1;
+}
+
+.container {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.center-align {
+	margin: 0 auto;
+}
+
+#member-login-h1 {
+    display: inline-block;
+    font-size: 24px;
+    font-weight: normal;
+    padding-top: 50px;
+    width: 70%;
+    margin: 0 auto;
+}
+
+#member-login {
+    text-align: center;
+    width: 380px;
+    height: 430px;
+    margin-top: 150px;
+    margin-bottom: 100px;
+    border: 2px solid #B8E6E1;
+    border-radius: 3%;
+}
+
+#member-login input {
+    font-size: 16px;
+    margin-top: 30px;
+    width: 320px;
+    height: 40px;
+    padding: 5px;
+    border: none;
+    background-color: lightgray;
+}
+
+#member-login button {
+    margin-top: 40px;
+    font-size: 16px;
+    border: none;
+    width: 150px;
+    height: 30px;
+    border-radius: 3%;
+    background-color: #B8E6E1;
+}
+
+#member-login button:hover{
+    cursor: pointer;
+}
+
+#member-login a {
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+}
+
+#member-login a span {
+    margin-top: 20px;
+    display: inline-block;
+}
+
+#minput-main{
+    width: 70%;
+    margin: 15px auto 0;
+}
+
+#member-input {
+    width: 100%;	
+    margin: 0 auto;
+}
+#member-input-h1 {
+    font-size: 24px;
+    font-weight: normal;
+    padding-left: 3px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #B8E6E1;
+    margin-bottom: 0px;
+}
+
+#member-input-profile {
+    width: 100%;
+    height: 220px;
+    text-align: center;
+}
+
+#member-input-profile img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-top: 15px;
+}
+
+#member-input-profile input {
+	display: none;
+}
+
+#member-input-profile button {
+    display: inline-block;
+    margin-top: 10px;
+    width: 100px;
+    height: 30px;
+    cursor: pointer;
+    border-radius: 13px;
+    border: 2px solid #B8E6E1;
+    background-color: #B8E6E1;
+}
+
+#member-input-info {
+    padding-top: 15px;
+    display: inline-block;
+    width: 100%;
+    margin: 0 auto;
+    height: 419px;
+}
+
+#member-input-info label {
+	display: inline-block;
+	width: 23%;
+}
+
+#member-input-info input {
+    margin-top: 50px;
+    width: 51vw;
+    height: 30px;
+    font-family: 'Noto Sans KR';
+    font-size: 16px;
+    padding-left: 5px;
+    border: 1px solid lightgray;
+}
+
+#member-input-submit {
+	margin-top: 10px;
+	text-align: center;
+}
+
+#member-input-submit button {
+	font-family: 'Noto Sans KR';
+    font-size: 16px;
+	width: 150px;
+    height: 30px;
+    border-radius: 13px;
+	border: 2px solid #B8E6E1;
+	background-color : #B8E6E1;
+}
+
+#member-input-submit button:hover{
+    cursor: pointer;
+}
+
+#member-input-password {
+	text-align: center;
+    margin-bottom: 60px;
+}
+
+#member-input-password label {
+	display: inline-block;
+	width: 100px;
+}
+
+#member-input-password input {
+	margin-top: 50px;
+    width: 300px;
+    height: 30px;
+    font-family: 'Noto Sans KR';
+    font-size: 16px;
+    padding-left: 5px;
+    border: 1px solid lightgray;
+}
+
+#input-id-chk, #input-pwd-chk {
+    width: 100%;
+    font-size: 11px;
+    text-align: center;
+}
+
+.user-input {
+    width: 75%;
+    display: inline-block;
+    height: 9vh;
+}
+
+
+
+
+
+@media all and (min-width:768px) {
+
+	#minput-main{
+	    width: 1180px;
+	    margin: 70px auto 0;
+	}
+
+	#member-input {
+	    width: 725px;	
+	    margin: 0 auto;
+	}
+	#member-input-profile {
+		width: 30%;;
+		height: 450px;
+		float: left;
+		text-align: center;
+	}
+	#member-input-h1 {
+	    font-size: 24px;
+	    font-weight: normal;
+	    padding-left: 3px;
+	    padding-bottom: 6px;
+	    border-bottom: 2px solid #B8E6E1;
+	    margin-bottom: 20px;
+	}
+	#member-input-profile img {
+		width: 200px;
+		height: 200px;
+		border-radius: 50%;
+		margin-top: 60px;
+	}
+	#member-input-profile button {
+		display: inline-block;
+		margin-top: 40px;
+		width: 150px;
+	    height: 30px;
+	    cursor: pointer;
+	    border-radius: 13px;
+	    border: 2px solid #B8E6E1;
+	    background-color : #B8E6E1;
+	}
+	#member-input-info {
+		display: inline-block;
+	    width: 70%;
+	    height: 450px;
+	    /* clear: left; */
+	    padding-left: 15%;
+	}
+	#member-input-info input {
+		margin-top: 50px;
+		width: 300px;
+		height: 30px;
+		font-family: 'Noto Sans KR';
+		font-size: 16px;
+		padding-left: 5px;
+		border: 1px solid lightgray;
+	}
+	#member-input-info label {
+	display: inline-block;
+	width: 70px;
+	}
+	
+	#input-id-chk, #input-pwd-chk {
+	    font-size: 14px;
+	    text-align: center;
+	}
+	.user-input {
+	    display : inline-block;
+	    height: 80px;
+	}	
+}

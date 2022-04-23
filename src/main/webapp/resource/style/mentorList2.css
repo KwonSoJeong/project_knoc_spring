@@ -1,0 +1,152 @@
+@charset "UTF-8";
+*{
+box-sizing: border-box;
+
+}
+#font{
+font-size: 24px;
+border-bottom : solid 2px #B8E6E1;
+margin-left: 400px;
+margin-right: 400px;
+margin-top: 200px;
+}
+
+.center{
+position: absolute;
+left:22.5%;
+top:38%;
+width: auto;
+transform :translate(-50%, -50%);
+}
+
+.fnete{
+position: absolute;
+left:40.8%;
+top:38%;
+width: auto;
+transform :translate(-50%, -50%);
+}
+
+.ingte{
+position: absolute;
+left:59.2%;
+top:38%;
+width: auto;
+transform :translate(-50%, -50%);
+}
+
+.sing{
+position: absolute;
+left:77.7%;
+top:38%;
+width: auto;
+transform :translate(-50%, -50%);
+}
+
+.hello{
+position: absolute;
+left:22.5%;
+top:73%;
+width: auto;
+transform :translate(-50%, -50%);
+}
+
+.poss{
+position: absolute;
+left:40.8%;
+top:73%;
+width: auto;
+transform :translate(-50%, -50%);
+}
+
+.movie{
+position: absolute;
+left:59.2%;
+top:73%;
+width: auto;
+transform :translate(-50%, -50%);
+}
+
+.week{
+position: absolute;
+left:77.7%;
+top:73%;
+width: auto;
+transform :translate(-50%, -50%);
+}
+
+.item-wrap{
+position: relative;
+}
+
+.card{
+display : inline-block;
+padding:30px;
+color:black;
+width:460px;
+height:450px;
+font-size: 15px;
+text-align: left;
+border-radius: 8px;
+background: #eee;
+transition:0.3s;
+margin:30px;
+text-align: center;
+}
+.card > img{
+width:100px;
+}
+
+.card h1{
+font-size: 25px;
+line-height: 28px;
+font-weight: bold;
+margin-top: 10px;
+margin-bottom: 10px;
+}
+.card p{
+font-size: 14px;
+line-height: 20px;
+margin-bottom: 20px;
+}
+.card-info{
+display: flex;
+flex-direction: row;
+flex-wrap: wrap;
+justify-content: space-between;
+}
+.user-name{
+font-size: 15px;
+}
+.chat, favorite{
+display: inline-block;
+}
+.chat{
+margin-right:10px;
+}
+button{
+width : 100px;
+height: 35px;
+background-color: #B8E6E1;
+/* 0: x축, 4px : y축 */ 
+font-size : 13px;
+border:none;
+text-align:center;
+font-size: 15px;
+}
+.form-control{
+width : 200px;
+height: 35px;
+transform : translate(1045%, 660%);
+}
+#bung{
+width : 100px;
+height: 35px;
+background-color: #B8E6E1;
+/* 0: x축, 4px : y축 */ 
+font-size : 13px;
+border:none;
+text-align:center;
+transform : translate(2100%, 660%);
+font-size: 15px;
+}

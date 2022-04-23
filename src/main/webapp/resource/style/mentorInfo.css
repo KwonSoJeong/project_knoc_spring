@@ -1,0 +1,90 @@
+@charset "UTF-8";
+
+a{
+text-decoration: none ;
+}
+
+.mti-wrapper{
+	margin: 6.7vh auto 0;
+	min-height: 50vh;
+	width: 1180px;
+}
+
+.mentor_header h2{
+	font-size: 24px;
+}
+
+.bottom-line{
+	border-bottom: solid 2px #B8E6E1;
+    margin: 10px auto 25px;
+}
+
+
+.mti-wrapper2{
+	display: flex;
+	justify-content: space-between;
+}
+
+.mti-intro{
+    width: 825px;
+    min-height: 700px;
+    line-height: 100px;
+    border: 3px dashed #c7c7c7;
+    border-radius: 45px;
+    padding: 35px 55px;
+    font-size: 15px;
+}
+
+.mti-lh{
+	line-height: 60px;
+}
+
+.mti-wrapper3{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.mti-profile{
+    width: 315px;
+/*     height: 435px; */
+    text-align: center;
+    border: solid 2px #B8E6E1;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 30px;
+    background-color: #d4fff9;
+    /* box-shadow: rgb(0 0 0 / 43%) 8px 9px 7px -3px !important; */
+}
+
+.mti-pro-img img{
+    border-radius: 100px;
+    width: 120px;
+    height: 120px;
+    outline-style: solid;
+    outline-color: #5e5e5e;
+    border: 6px solid #5e5e5e;	
+}
+
+.mti-pro-name{
+	margin: 20px 0;
+	font-weight: 700;
+}
+
+#mentro-bung2{
+    margin-top: 20px;
+    width: 195px;
+    background-color: #B8E6E1;
+    font-size: 15px;
+    border: none;
+    text-align: center;
+    height: 45px;
+    box-shadow: rgb(0 0 0 / 43%) 4px 9px 7px -3px !important;
+    border-radius: 25px;
+}
+
+#mentro-bung2:hover{
+	background-color: #d4fff9;
+}
