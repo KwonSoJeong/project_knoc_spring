@@ -11,8 +11,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.oreilly.servlet.MultipartRequest;
-import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import model.Knoc_Member;
 import model.Member_Study_Info;
@@ -20,16 +23,33 @@ import service.Knoc_MemberDao;
 import service.Member_Study_InfoDao;
 import service.WishListDao;
 
-//@WebServlet("/member/*")
-public class MemberController extends MskimRequestMapping {
-	static String msg = "";
-	static String url = "";
+@Controller
+@RequestMapping("/member/")
+public class MemberController {
+	
+	HttpServletRequest request;
+	Model model;
+	HttpSession session;
+	
+	@Autowired
+	Knoc_MemberDao md;
+	@Autowired
+	Member_Study_InfoDao msd;
+	@Autowired
+	WishListDao wd;
+	
+	@ModelAttribute
+	void init(HttpServletRequest request, Model model) {
+		this.request = request;
+		this.model = model;
+		this.session = request.getSession();
+	}
 	
 	// 회원가입 view
 	@RequestMapping("memberInput")
 	public String memberInput(HttpServletRequest request, HttpServletResponse response) {
 
-		return "/view/member/memberInput.jsp";
+		return "/view/member/memberInput";
 	}
 	
 	// 회원가입 process
@@ -41,9 +61,12 @@ public class MemberController extends MskimRequestMapping {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Knoc_MemberDao md = new Knoc_MemberDao();
+		
 		Knoc_Member m = new Knoc_Member();
 		Knoc_Member chk = new Knoc_Member();
+		
+		String msg = "";
+		String url = "";
 		
 		chk = md.selectOne(request.getParameter("id"));
 		if (chk == null) {
@@ -65,19 +88,19 @@ public class MemberController extends MskimRequestMapping {
 			msg = "이미 존재하는 ID 입니다";
 			url = request.getContextPath() + "/member/memberInput";
 		}
-
-		request.setAttribute("msg", msg);
-		request.setAttribute("url", url);
-		return "/view/alert.jsp";
+		
+		model.addAttribute("msg", msg);
+		model.addAttribute("url", url);
+		return "/view/alert";
 	}
 	
 	// 회원가입, 수정 시 프로필 사진 등록 view
 	@RequestMapping("pictureForm")
 	public String pictureForm(HttpServletRequest request, HttpServletResponse response) {
 		
-		return "/single/pictureForm.jsp";
+		return "/single/pictureForm";
 	}
-	
+	/*
 	// 프로필 사진 등록 process
 	@RequestMapping("picturePro")
 	public String picturePro(HttpServletRequest request, HttpServletResponse response) {
@@ -102,18 +125,17 @@ public class MemberController extends MskimRequestMapping {
 		
 		String filename = multi.getFilesystemName("profile");
 		
-		request.setAttribute("filename", filename);
+		model.addAttribute("filename", filename);
 		
-		return "/single/picturePro.jsp";
+		return "/single/picturePro";
 	}
-	
+	*/
 	// 회원가입 시 아이디 유효성 확인
 	@RequestMapping("idChk")
 	public String idChk(HttpServletRequest request, HttpServletResponse response) {
 		String chk = "";
 		String id = request.getParameter("id");
 		
-		Knoc_MemberDao md = new Knoc_MemberDao();
 		Knoc_Member member = md.selectOne(id);
 		
 		if (member == null) {
@@ -122,8 +144,8 @@ public class MemberController extends MskimRequestMapping {
 			chk = "alreadyExistId";
 		}
 		
-		request.setAttribute("chk", chk);
-		return "/single/userInputChk.jsp";
+		model.addAttribute("chk", chk);
+		return "/single/userInputChk";
 	}
 	
 	// 회원가입 시 비밀번호 유효성 체크
@@ -141,14 +163,14 @@ public class MemberController extends MskimRequestMapping {
 			chk = "true";
 		}
 		
-		request.setAttribute("chk", chk);
-		return "/single/userInputChk.jsp";
+		model.addAttribute("chk", chk);
+		return "/single/userInputChk";
 	}
 	
 	@RequestMapping("login")
 	public String login(HttpServletRequest request, HttpServletResponse response) {
 
-		return "/view/member/login.jsp";
+		return "/view/member/login";
 	}
 
 	@RequestMapping("loginPro")
@@ -163,9 +185,11 @@ public class MemberController extends MskimRequestMapping {
 			e.printStackTrace();
 		}
 
-		Knoc_MemberDao md = new Knoc_MemberDao();
 		Knoc_Member m = md.selectOne(id);
-
+		
+		String msg = "";
+		String url = "";
+		
 		if (m != null) { // 계정이 존재함
 			if (m.getPwd().equals(pwd)) { // 패스워드가 일치함
 				request.getSession().setAttribute("memid", id);
@@ -179,19 +203,20 @@ public class MemberController extends MskimRequestMapping {
 			msg = "아이디를 확인해 주세요";
 			url = request.getContextPath() + "/member/login";
 		}
-		request.setAttribute("msg", msg);
-		request.setAttribute("url", url);
-		return "/view/alert.jsp";
+		model.addAttribute("msg", msg);
+		model.addAttribute("url", url);
+		return "/view/alert";
 	}
 
 	@RequestMapping("logout")
 	public String logout(HttpServletRequest request, HttpServletResponse response) {
+		
 		request.getSession().invalidate();
-		msg = "로그아웃 되었습니다.";
-		url = request.getContextPath() + "/classes/main";
-		request.setAttribute("msg", msg);
-		request.setAttribute("url", url);
-		return "/view/alert.jsp";
+		String msg = "로그아웃 되었습니다.";
+		String url = request.getContextPath() + "/classes/main";
+		model.addAttribute("msg", msg);
+		model.addAttribute("url", url);
+		return "/view/alert";
 	}
 	
 	// 회원정보 수정 view
@@ -205,18 +230,17 @@ public class MemberController extends MskimRequestMapping {
 		String url = request.getContextPath()+"/member/login";
 		
 		if (memid != null) {
-			Knoc_MemberDao md = new Knoc_MemberDao();
 			
 			Knoc_Member member = md.selectOne(memid);
-			request.setAttribute("member", member);
+			model.addAttribute("member", member);
 			
-			return "/view/member/memberUpdate.jsp";
+			return "/view/member/memberUpdate";
 		}
 		
-		request.setAttribute("msg", msg);
-		request.setAttribute("url", url);
+		model.addAttribute("msg", msg);
+		model.addAttribute("url", url);
 		
-		return "/view/alert.jsp";
+		return "/view/alert";
 	}
 
 	// 회원정보 수정 process
@@ -236,7 +260,6 @@ public class MemberController extends MskimRequestMapping {
 		String msg = "비밀번호가 일치하지 않습니다.";
 		String url = request.getContextPath() + "/member/memberUpdate";
 		
-		Knoc_MemberDao md = new Knoc_MemberDao();
 		Knoc_Member mem = md.selectOne(id);
 
 		if (mem.getPwd().equals(pwd)) {
@@ -255,10 +278,10 @@ public class MemberController extends MskimRequestMapping {
 			}
 		}
 		
-		request.setAttribute("msg", msg);
-		request.setAttribute("url", url);
+		model.addAttribute("msg", msg);
+		model.addAttribute("url", url);
 		
-		return "/view/alert.jsp";
+		return "/view/alert";
 	}
 	
 	// 비밀번호 수정 view
@@ -272,14 +295,14 @@ public class MemberController extends MskimRequestMapping {
 			String msg = "로그인 정보가 없습니다.";
 			String url = request.getContextPath() + "/member/login";
 			
-			request.setAttribute("msg", msg);
-			request.setAttribute("url", url);
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
 			
-			return "/view/alert.jsp";
+			return "/view/alert";
 			
 		}
 		
-		return "/view/member/password.jsp";
+		return "/view/member/password";
 	}
 	
 	// 비밀번호 수정 process
@@ -291,7 +314,6 @@ public class MemberController extends MskimRequestMapping {
 		String pwd = request.getParameter("pwd");
 		String newPwd = request.getParameter("newpwd");
 
-		Knoc_MemberDao md = new Knoc_MemberDao();
 		Knoc_Member mem = md.selectOne(id);
 		
 		String msg = "비밀번호가 일치하지 않습니다.";
@@ -310,10 +332,10 @@ public class MemberController extends MskimRequestMapping {
 			}
 		}
 		
-		request.setAttribute("msg", msg);
-		request.setAttribute("url", url);
+		model.addAttribute("msg", msg);
+		model.addAttribute("url", url);
 
-		return "/view/alert.jsp";
+		return "/view/alert";
 	}
 
 	// 회원탈퇴 view
@@ -327,18 +349,17 @@ public class MemberController extends MskimRequestMapping {
 			String msg = "로그인 정보가 없습니다.";
 			String url = request.getContextPath() + "/member/login";
 
-			request.setAttribute("msg", msg);
-			request.setAttribute("url", url);
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
 
-			return "/view/alert.jsp";
+			return "/view/alert";
 
 		}
-		Knoc_MemberDao md = new Knoc_MemberDao();
 		Knoc_Member member = md.selectOne(id);
 
-		request.setAttribute("member", member);
+		model.addAttribute("member", member);
 
-		return "/view/member/memberDelete.jsp";
+		return "/view/member/memberDelete";
 	}
 	
 	// 회원탈퇴 process
@@ -349,7 +370,6 @@ public class MemberController extends MskimRequestMapping {
 		String id = request.getParameter("id");
 		String pwd = request.getParameter("pwd");
 
-		Knoc_MemberDao md = new Knoc_MemberDao();
 		Knoc_Member mem = md.selectOne(id);
 		
 		String msg = "비밀번호가 일치하지 않습니다.";
@@ -368,10 +388,10 @@ public class MemberController extends MskimRequestMapping {
 			}
 		}
 
-		request.setAttribute("msg", msg);
-		request.setAttribute("url", url);
+		model.addAttribute("msg", msg);
+		model.addAttribute("url", url);
 
-		return "/view/alert.jsp";
+		return "/view/alert";
 	}
 	
 	// mypage view, 참여하는 클래스, 스터디, 관심 클래스, 멘토링, 회원 정보 전달
@@ -385,35 +405,33 @@ public class MemberController extends MskimRequestMapping {
 			String msg = "로그인 정보가 없습니다.";
 			String url = request.getContextPath() + "/member/login";
 
-			request.setAttribute("msg", msg);
-			request.setAttribute("url", url);
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
 
-			return "/view/alert.jsp";
+			return "/view/alert";
 
 		}
 		
 		// 1) 회원 정보 가져오기
-		Knoc_MemberDao md = new Knoc_MemberDao();
 		Knoc_Member member = md.selectOne(id);
 		
-		Member_Study_InfoDao msd = new Member_Study_InfoDao();
 		// 2) 내가 개설한/수강중인 클래스 리스트 가져오기
 		List<Map<String, Object>> classList = msd.infoClassList(id);
 		// 3) 참여중인 스터디 리스트 가져오기
 		List<Map<String, Object>> studyList = msd.infoStudyList(id);
 		// 4) 참여중인 멘토링 리스트 가져오기
 		List<Map<String, Object>> mentoringList = msd.infoMentoringList(id);
+		
 		// 5) 관심등록한 클래스 리스트 가져오기
-		WishListDao wd = new WishListDao();
 		List<Map<String, Object>> wishList = wd.wishListOne(id);
 		
-		request.setAttribute("member", member);
-		request.setAttribute("classList", classList);
-		request.setAttribute("studyList", studyList);
-		request.setAttribute("mentoringList", mentoringList);
-		request.setAttribute("wishList", wishList);
+		model.addAttribute("member", member);
+		model.addAttribute("classList", classList);
+		model.addAttribute("studyList", studyList);
+		model.addAttribute("mentoringList", mentoringList);
+		model.addAttribute("wishList", wishList);
 		
-		return "/view/member/myPage.jsp";
+		return "/view/member/myPage";
 	}
 	
 }
