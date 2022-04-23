@@ -15,7 +15,9 @@
     <!-- mvc 태그로 바로 컨트롤러 생성 -->
     <context:component-scan base-package="controller, service, util" />
     <context:annotation-config />
-
+    
+    <mvc:resources location="/resource/" mapping="/resource/**" cache-period="60" />
+    
     <bean id="multipartResolver" 
           class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <property name="defaultEncoding" value="utf-8"/>
@@ -25,6 +27,7 @@
        <property name="prefix" value="/WEB-INF/" />
        <property name="suffix" value=".jsp" />
     </bean>
+    
     
     <!-- 
     <mvc:interceptors>
