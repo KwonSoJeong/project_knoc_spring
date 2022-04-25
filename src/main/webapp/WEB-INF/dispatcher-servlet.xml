@@ -17,6 +17,7 @@
     <context:annotation-config />
     
     <mvc:resources location="/resource/" mapping="/resource/**" cache-period="60" />
+    <mvc:resources location="/js/" mapping="/js/**" cache-period="60" />
     
     <bean id="multipartResolver" 
           class="org.springframework.web.multipart.commons.CommonsMultipartResolver">

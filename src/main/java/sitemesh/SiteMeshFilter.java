@@ -11,6 +11,14 @@ public class SiteMeshFilter extends ConfigurableSiteMeshFilter{
 	@Override
 	protected void applyCustomConfiguration(SiteMeshFilterBuilder builder) {
 		//builder.addDecoratorPath("/*", "/layout/head.jsp").addExcludedPath("/single/*");
-		builder.addDecoratorPath("/*", "/layout/layout.jsp").addExcludedPath("/single/*");;
+		//builder.addDecoratorPath("/*", "/layout/layout.jsp").addExcludedPath("/single/*");;
+		builder.addDecoratorPath("/*", "/layout/layout.jsp")
+		.addExcludedPath("/*/adminChat")
+		.addExcludedPath("/*/classFavorite")
+		.addExcludedPath("/*/imgUpload")
+		.addExcludedPath("/*/picture*")
+		.addExcludedPath("/*/single*")
+		.addExcludedPath("/*/thumbnail*")
+		.addExcludedPath("/*/*Chk");
 	}
 }
