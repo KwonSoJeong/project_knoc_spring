@@ -1,7 +1,9 @@
 package controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
 
 import model.Knoc_Member;
 import model.Member_Study_Info;
@@ -47,36 +50,25 @@ public class MemberController {
 	
 	// 회원가입 view
 	@RequestMapping("memberInput")
-	public String memberInput(HttpServletRequest request, HttpServletResponse response) {
-
+	public String memberInput() {
+		
 		return "/view/member/memberInput";
 	}
 	
 	// 회원가입 process
 	@RequestMapping("memberInputPro")
-	public String memberInputPro(HttpServletRequest request, HttpServletResponse response) {
-		try {
-			request.setCharacterEncoding("UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		Knoc_Member m = new Knoc_Member();
+	public String memberInputPro(Knoc_Member newMember) {
+		// Knoc_Member m = new Knoc_Member();
 		Knoc_Member chk = new Knoc_Member();
 		
-		String msg = "";
-		String url = "";
+		String msg = "이미 존재하는 ID 입니다";
+		String url = request.getContextPath() + "/member/memberInput";
 		
-		chk = md.selectOne(request.getParameter("id"));
+		// 동일한 아이디 존재하는지 확인
+		chk = md.selectOne(newMember.getId());
+		
 		if (chk == null) {
-			m.setId(request.getParameter("id"));
-			m.setEmail(request.getParameter("email"));
-			m.setName(request.getParameter("name"));
-			m.setProfile(request.getParameter("profile"));
-			m.setPwd(request.getParameter("pwd"));
-			m.setTel(request.getParameter("tel"));
-			int num = md.insertMember(m);
+			int num = md.insertMember(newMember);
 			if (num > 0) { // 회원가입 성공
 				msg = "회원 가입이 완료되었습니다.";
 				url = request.getContextPath() + "/member/login";
@@ -84,58 +76,51 @@ public class MemberController {
 				msg = "회원 가입이 실패 하였습니다.";
 				url = request.getContextPath() + "/member/login";
 			}
-		} else {
-			msg = "이미 존재하는 ID 입니다";
-			url = request.getContextPath() + "/member/memberInput";
 		}
 		
 		model.addAttribute("msg", msg);
 		model.addAttribute("url", url);
+		
 		return "/view/alert";
 	}
 	
 	// 회원가입, 수정 시 프로필 사진 등록 view
 	@RequestMapping("pictureForm")
-	public String pictureForm(HttpServletRequest request, HttpServletResponse response) {
+	public String pictureForm() {
 		
 		return "/single/pictureForm";
 	}
-	/*
+	
 	// 프로필 사진 등록 process
 	@RequestMapping("picturePro")
-	public String picturePro(HttpServletRequest request, HttpServletResponse response) {
-		
-		try {
-			request.setCharacterEncoding("UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+	public String picturePro(MultipartFile profile) {
 		String path = request.getServletContext().getRealPath("/")+"profile/";
 		
-		MultipartRequest multi = null;
+		// 파일 이름 중복 방지를 위해 원본 파일 이름, 확장자 사이에 저장 일자, 0-999의 임의의 난수 붙임
+		String oriFileName = profile.getOriginalFilename();
+		String ext = oriFileName.substring(oriFileName.indexOf("."));
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmssSSS");
+		int randomNum = (int) (Math.random() * 1000);
+		
+		String newFileName = oriFileName + sdf.format(System.currentTimeMillis()) + "_" + randomNum + ext;
 		
 		try {
-			multi = new MultipartRequest(request, path, 10*1024*1024, "UTF-8", new DefaultFileRenamePolicy());
+			profile.transferTo(new File(path, newFileName));
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		String filename = multi.getFilesystemName("profile");
-		
-		model.addAttribute("filename", filename);
+		model.addAttribute("filename", newFileName);
 		
 		return "/single/picturePro";
 	}
-	*/
+	
 	// 회원가입 시 아이디 유효성 확인
 	@RequestMapping("idChk")
-	public String idChk(HttpServletRequest request, HttpServletResponse response) {
+	public String idChk(String id) {
 		String chk = "";
-		String id = request.getParameter("id");
-		
 		Knoc_Member member = md.selectOne(id);
 		
 		if (member == null) {
@@ -145,14 +130,14 @@ public class MemberController {
 		}
 		
 		model.addAttribute("chk", chk);
+		
 		return "/single/userInputChk";
 	}
 	
 	// 회원가입 시 비밀번호 유효성 체크
 	@RequestMapping("pwdChk")
-	public String pwdChk(HttpServletRequest request, HttpServletResponse response) {
+	public String pwdChk(String pwd) {
 		String chk = "";
-		String pwd = request.getParameter("pwd");
 		
 		Pattern pwdPattern = Pattern.compile("^(?=.*[a-zA-Z])(?=.*\\d)(?=.*\\W)");
 		Matcher pwdMatcher = pwdPattern.matcher(pwd);
@@ -164,66 +149,61 @@ public class MemberController {
 		}
 		
 		model.addAttribute("chk", chk);
+		
 		return "/single/userInputChk";
 	}
 	
 	@RequestMapping("login")
-	public String login(HttpServletRequest request, HttpServletResponse response) {
+	public String login() {
 
 		return "/view/member/login";
 	}
 
 	@RequestMapping("loginPro")
-	public String loginPro(HttpServletRequest request, HttpServletResponse response) {
-		String id = request.getParameter("id");
-		String pwd = request.getParameter("pwd");
-		
-		try {
-			request.setCharacterEncoding("utf-8");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+	public String loginPro(String id, String pwd) {
 		Knoc_Member m = md.selectOne(id);
 		
-		String msg = "";
-		String url = "";
+		String msg = "아이디를 확인해 주세요";
+		String url = request.getContextPath() + "/member/login";
 		
 		if (m != null) { // 계정이 존재함
 			if (m.getPwd().equals(pwd)) { // 패스워드가 일치함
-				request.getSession().setAttribute("memid", id);
+				//request.getSession().setAttribute("memid", id);
+				session.setAttribute("memid", id);
 				msg = "로그인 되었습니다.";
 				url = request.getContextPath() + "/classes/main";
 			} else { // 패스워드 불일치
 				msg = "비밀번호를 확인해 주세요";
 				url = request.getContextPath() + "/member/login";
 			}
-		} else { // 계정이 존재하지 않음
-			msg = "아이디를 확인해 주세요";
-			url = request.getContextPath() + "/member/login";
 		}
+			
 		model.addAttribute("msg", msg);
 		model.addAttribute("url", url);
+		
 		return "/view/alert";
 	}
 
 	@RequestMapping("logout")
-	public String logout(HttpServletRequest request, HttpServletResponse response) {
+	public String logout() {
 		
-		request.getSession().invalidate();
+		//request.getSession().invalidate();
+		session.invalidate();
+		
 		String msg = "로그아웃 되었습니다.";
 		String url = request.getContextPath() + "/classes/main";
+		
 		model.addAttribute("msg", msg);
 		model.addAttribute("url", url);
+		
 		return "/view/alert";
 	}
 	
 	// 회원정보 수정 view
 	@RequestMapping("memberUpdate")
-	public String memberUpdate(HttpServletRequest request, HttpServletResponse response) {
+	public String memberUpdate() {
 		
-		HttpSession session = request.getSession();
+		// HttpSession session = request.getSession();
 		String memid = (String) session.getAttribute("memid");
 		
 		String msg = "로그인 정보가 없습니다.";
@@ -245,31 +225,16 @@ public class MemberController {
 
 	// 회원정보 수정 process
 	@RequestMapping("memberUpdatePro")
-	public String memberUpdatePro(HttpServletRequest request, HttpServletResponse response) {
-		
-		try {
-			request.setCharacterEncoding("utf-8");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		String pwd = request.getParameter("pwd");
-		String id = request.getParameter("id");
-		
+	public String memberUpdatePro(Knoc_Member member) {
 		String msg = "비밀번호가 일치하지 않습니다.";
 		String url = request.getContextPath() + "/member/memberUpdate";
 		
-		Knoc_Member mem = md.selectOne(id);
-
-		if (mem.getPwd().equals(pwd)) {
-
-			mem.setName(request.getParameter("name"));
-			mem.setEmail(request.getParameter("email"));
-			mem.setTel(request.getParameter("tel"));
-			mem.setProfile(request.getParameter("profile"));
-
-			int num = md.updateMember(mem);
+		// 비밀번호 일치 여부 확인하기 위해 아이디에 해당하는 회원 객체 생성
+		Knoc_Member mem = md.selectOne(member.getId());
+		
+		// 비밀번호 일치 여부 확인
+		if (mem.getPwd().equals(member.getPwd())) {
+			int num = md.updateMember(member);
 
 			if (num > 0) {
 				msg = "회원정보가 수정되었습니다.";
@@ -286,8 +251,8 @@ public class MemberController {
 	
 	// 비밀번호 수정 view
 	@RequestMapping("password")
-	public String password(HttpServletRequest request, HttpServletResponse response) {
-		HttpSession session = request.getSession();
+	public String password() {
+		//HttpSession session = request.getSession();
 		
 		String id = (String) session.getAttribute("memid");
 		
@@ -307,20 +272,17 @@ public class MemberController {
 	
 	// 비밀번호 수정 process
 	@RequestMapping("passwordPro")
-	public String passwordPro(HttpServletRequest request, HttpServletResponse response) {
-		HttpSession session = request.getSession();
+	public String passwordPro(String pwd, String newpwd) {
+		//HttpSession session = request.getSession();
 
 		String id = (String) session.getAttribute("memid");
-		String pwd = request.getParameter("pwd");
-		String newPwd = request.getParameter("newpwd");
-
 		Knoc_Member mem = md.selectOne(id);
 		
 		String msg = "비밀번호가 일치하지 않습니다.";
 		String url = request.getContextPath() + "/member/password";
 		
 		if (mem.getPwd().equals(pwd)) {
-			mem.setPwd(newPwd);
+			mem.setPwd(newpwd);
 			int num = md.updatePwd(mem);
 			
 			if (num > 0) {
@@ -340,8 +302,8 @@ public class MemberController {
 
 	// 회원탈퇴 view
 	@RequestMapping("memberDelete")
-	public String memberDelete(HttpServletRequest request, HttpServletResponse response) {
-		HttpSession session = request.getSession();
+	public String memberDelete() {
+		//HttpSession session = request.getSession();
 
 		String id = (String) session.getAttribute("memid");
 
@@ -364,12 +326,7 @@ public class MemberController {
 	
 	// 회원탈퇴 process
 	@RequestMapping("memberDeletePro")
-	public String memberDeletePro(HttpServletRequest request, HttpServletResponse response) {
-		HttpSession session = request.getSession();
-
-		String id = request.getParameter("id");
-		String pwd = request.getParameter("pwd");
-
+	public String memberDeletePro(String id, String pwd) {
 		Knoc_Member mem = md.selectOne(id);
 		
 		String msg = "비밀번호가 일치하지 않습니다.";
@@ -396,8 +353,8 @@ public class MemberController {
 	
 	// mypage view, 참여하는 클래스, 스터디, 관심 클래스, 멘토링, 회원 정보 전달
 	@RequestMapping("myPage")
-	public String myPage(HttpServletRequest request, HttpServletResponse response) {
-		HttpSession session = request.getSession();
+	public String myPage() {
+		//HttpSession session = request.getSession();
 
 		String id = (String) session.getAttribute("memid");
 
