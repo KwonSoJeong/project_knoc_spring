@@ -1,0 +1,117 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
+
+html, body {
+	height:100%;
+	font-family: "Noto Sans KR";
+	margin: 0;
+	padding: 0;
+	background-color: #EEE;
+}
+
+a{
+	text-decoration: none;
+}
+
+.wrapper{
+	min-height: 94vh;
+    padding: 20px 10px 20px 340px;
+}
+
+
+.white{
+	min-height: 96vh;
+	background-color: #fff;
+    border-radius: 15px;
+}
+
+.title{
+    font-size: 24px;
+    padding: 23px 11px;
+}
+
+.table{
+    width: 100%;
+    border-top: 3px solid #ededed;
+    border-collapse: collapse;
+}
+
+th, td {
+	text-align: center;
+	border-bottom: 3px solid #ededed;
+	padding: 10px;
+}
+
+tr{
+	height: 55px;
+}
+
+td a{
+	color: #000;
+}
+
+td a:hover{
+	color: #858585;
+}
+
+.btn{
+	cursor:pointer;
+    width: 80px;
+    height: 25px;
+    border: none;
+
+    color: #fff;
+    border-radius: 8px;
+    box-shadow: rgb(0 0 0 / 31%) 2px 3px 1px 0px;
+}
+
+.green{
+    background-color: #32988c;	
+}
+
+.red{
+    background-color: #ff6757;	
+}
+
+.container{
+	padding: 35px;
+}
+
+.pagination{
+	margin: 0;
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+    border-radius: 0.25rem;
+}
+
+.justify-content-center{
+	justify-content: center;
+}
+
+.page-item a{
+	background-color: #32988c;
+	color: #fff;
+}
+
+.page-item.disabled .page-link {
+    color: #6c757d;
+    pointer-events: none;
+    cursor: auto;
+    background-color: #fff;
+    border-color: #dee2e6;
+}
+
+.page-item:first-child .page-link {
+    margin-left: 0;
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+}
+
+.page-link {
+    position: relative;
+    display: block;
+    padding: 0.5rem 0.75rem;
+    line-height: 1.25;
+    border: 1px solid #dee2e6;
+}
