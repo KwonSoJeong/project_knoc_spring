@@ -1,10 +1,8 @@
 package controller;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,14 +41,8 @@ public class HelpController {
 
 	// qnalsit view
 	@RequestMapping("qnaList")
-	public String qnaList(@RequestParam(value = "pageNum", defaultValue = "1")int pageInt) {
-		try {
-			request.setCharacterEncoding("UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+	public String qnaList(@RequestParam(value = "pageNum", defaultValue = "1") int pageInt) {
+		
 		int limit = 3; // 한 페이지에 보이는 게시글 수
 
 		List<Qna> list = qd.qnaList(pageInt, limit);
@@ -80,12 +72,6 @@ public class HelpController {
 	// qnaboard view
 	@RequestMapping("qnaInfo")
 	public String qnaInfo(@RequestParam(value = "qna_Id", required = false)String qnaId) {
-		try {
-			request.setCharacterEncoding("UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		Qna q = new Qna();
 		
@@ -155,13 +141,7 @@ public class HelpController {
 	// qnaboardwrite process
 	@RequestMapping("qnaWritePro")
 	public String qnaWritePro(Qna q) {
-		try {
-			request.setCharacterEncoding("UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+
 		//로그인 체크
 		String memid = (String) request.getSession().getAttribute("memid");
 		if (memid == null) {
@@ -197,12 +177,6 @@ public class HelpController {
 	// qnaboarcomment process
 		@RequestMapping("commentWritePro")
 		public String commentPro(String qna_Id, Qna_Comment qc) {
-			try {
-				request.setCharacterEncoding("UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			
 			//어드민 계정 체크
 			String memid = (String) request.getSession().getAttribute("memid");
@@ -242,12 +216,6 @@ public class HelpController {
 		//qna 게시글 수정
 		@RequestMapping("qnaUpdate")
 		public String qnaUpdate(String qna_Id) {
-			try {
-				request.setCharacterEncoding("UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 					
 			Qna q = new Qna();
 			String id = (String)request.getSession().getAttribute("memid");
@@ -268,12 +236,6 @@ public class HelpController {
 		//qna 게시글 수정 pro
 		@RequestMapping("qnaUpdatePro")
 		public String qnaUpdatePro(Qna q) {
-			try {
-				request.setCharacterEncoding("UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 					
 			int num = qd.update(q.getTitle(),q.getContent(),q.getQna_Id(),q.getSecret());
 					
@@ -293,12 +255,6 @@ public class HelpController {
 		//qna 게시글 삭제
 		@RequestMapping("qnaDeletePro")
 		public String qnaDeletePro(String qna_Id) {
-			try {
-				request.setCharacterEncoding("UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 					
 			Qna q = new Qna();
 			q = qd.selectOne(qna_Id);

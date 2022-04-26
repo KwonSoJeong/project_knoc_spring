@@ -1,9 +1,9 @@
 package model;
 
 public class Knoc_Member {
-	private String id, pwd, name, email, tel, profile;
+	private String id, pwd, name, email, tel, profile, blacklist;
 
-	public Knoc_Member(String id, String pwd, String name, String email, String tel, String profile) {
+	public Knoc_Member(String id, String pwd, String name, String email, String tel, String profile, String blacklist) {
 		super();
 		this.id = id;
 		this.pwd = pwd;
@@ -11,6 +11,7 @@ public class Knoc_Member {
 		this.email = email;
 		this.tel = tel;
 		this.profile = profile;
+		this.blacklist = blacklist;
 	}
 
 	public Knoc_Member() {
@@ -63,6 +64,14 @@ public class Knoc_Member {
 
 	public void setProfile(String profile) {
 		this.profile = profile;
+	}
+	
+	public String getBlacklist() {
+		return blacklist;
+	}
+
+	public void setBlacklist(String blacklist) {
+		this.blacklist = blacklist;
 	}
 
 	@Override

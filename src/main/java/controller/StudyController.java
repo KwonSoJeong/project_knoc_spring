@@ -1,10 +1,8 @@
 package controller;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,12 +46,7 @@ public class StudyController {
 	// 스터디 게시글 작성 view
 	@RequestMapping("studyWrite")
 	public String studyWrite() {
-		try {
-			request.setCharacterEncoding("UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 		if (request.getSession().getAttribute("memid") == null) {
 			msg = "로그인이 필요한 서비스 입니다.";
 			url = request.getContextPath() + "/member/login";
@@ -72,12 +65,7 @@ public class StudyController {
 	// 스터디 게시글 작성 process
 	@RequestMapping("studyWritePro")
 	public String studyWritePro(Study s) {
-		try {
-			request.setCharacterEncoding("UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 		String writerId = (String) request.getSession().getAttribute("memid");
 		String id = "study" + sd.nextNum();
 
@@ -109,47 +97,55 @@ public class StudyController {
 
 	// 스터디 게시판 view
 	@RequestMapping("studyList")
-	public String studyList(@RequestParam(value = "process", defaultValue = "3")int process,
-			@RequestParam(value = "pageNum", defaultValue = "1")int pageInt,
-			@RequestParam(value = "keyword", required = false)String keyword) {
-		try {
-			request.setCharacterEncoding("UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		//process = 1 :모집중, process = 2 : 모집완료, process = 3 : 전체
-		request.getSession().setAttribute("process",process);
-	//	System.out.println("porcess="+process);
-		int limit = 10; //한 페이지에 보이는 게시글 수
-		
+	public String studyList(@RequestParam(value = "process", defaultValue = "3") int process,
+			@RequestParam(value = "pageNum", defaultValue = "1") int pageInt,
+			@RequestParam(value = "keyword", required = false) String keyword) {
+
+		// process = 1 :모집중, process = 2 : 모집완료, process = 3 : 전체
+		request.getSession().setAttribute("process", process);
+		// System.out.println("porcess="+process);
+		int limit = 10; // 한 페이지에 보이는 게시글 수
+
 		List<Study> list;
 		List<String> profileList;
 		int studyCount;
-	//	System.out.println("keyword="+keyword);
-		if(process==3) {	//전체 선택되면 모든 게시글 출력
-			studyCount = sd.studyAllCount(keyword);
-			list = sd.studyAllList(pageInt,limit,keyword);
-			profileList = sd.callProfileList(pageInt,limit,keyword);
-		}else {				//선택된 게시글만 출력
-			studyCount = sd.studyCount(process,keyword);
-			list = sd.studyList(pageInt,limit,process,keyword); 
-			profileList = sd.callProfileList(pageInt,limit,process,keyword);
+		
+		/*
+		// 페이지 저장
+		int pageInt = 1;
+		if (request.getParameter("pageNum") != null) {
+			session.setAttribute("pageNum", request.getParameter("pageNum"));
 		}
+		String pageNum = (String) session.getAttribute("pageNum");
+		if (pageNum == null) {
+			pageNum = "1";
+		}
+		pageInt = Integer.parseInt(pageNum);
+		*/
 		
-		
-		int bottomLine = 5; //최대 페이징 수
-		
-		
-		int startPage = (pageInt - 1)/bottomLine * bottomLine + 1;
-		int endPage = startPage + bottomLine -1;
-		int maxPage = (studyCount/limit)+(studyCount%limit == 0?0:1);
-		if(endPage>maxPage) endPage = maxPage;
-		
+		// System.out.println("keyword="+keyword);
+		if (process == 3) { // 전체 선택되면 모든 게시글 출력
+			studyCount = sd.studyAllCount(keyword);
+			list = sd.studyAllList(pageInt, limit, keyword);
+			profileList = sd.callProfileList(pageInt, limit, keyword);
+		} else { // 선택된 게시글만 출력
+			studyCount = sd.studyCount(process, keyword);
+			list = sd.studyList(pageInt, limit, process, keyword);
+			profileList = sd.callProfileList(pageInt, limit, process, keyword);
+		}
+
+		int bottomLine = 5; // 최대 페이징 수
+
+		int startPage = (pageInt - 1) / bottomLine * bottomLine + 1;
+		int endPage = startPage + bottomLine - 1;
+		int maxPage = (studyCount / limit) + (studyCount % limit == 0 ? 0 : 1);
+		if (endPage > maxPage)
+			endPage = maxPage;
+
 		/*
 		 * for (String q : profileList) { System.out.println(q); }
 		 */
-		
+
 		m.addAttribute("profileList", profileList);
 		m.addAttribute("pageInt", pageInt);
 		m.addAttribute("studyCount", studyCount);
@@ -165,12 +161,6 @@ public class StudyController {
 	// 스터디 게시글 정보 view
 	@RequestMapping("studyInfo")
 	public String studyInfo(String study_Id) {
-		try {
-			request.setCharacterEncoding("UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 		// session에 info위치 저장
 		if (study_Id == null) {
@@ -204,12 +194,6 @@ public class StudyController {
 
 	@RequestMapping("writeStudyCommentPro")
 	public String writeStudyComment(Study_Comment sc) {
-		try {
-			request.setCharacterEncoding("UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 		String id = (String) request.getSession().getAttribute("memid");
 		String commentId = "studycomment" + scd.nextNum();
@@ -235,12 +219,6 @@ public class StudyController {
 	// ``
 	@RequestMapping("studyEntry")
 	public String studyEntry(String study_Id) {
-		try {
-			request.setCharacterEncoding("UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 		if (request.getSession().getAttribute("memid") == null) { // 로그인체크
 			msg = "로그인이 필요한 서비스 입니다.";
@@ -251,14 +229,10 @@ public class StudyController {
 		}
 
 		Member_Study_Info msi = new Member_Study_Info();
-		Study s = new Study();
 
 		String id = (String) request.getSession().getAttribute("memid");
-		s = sd.selectOne(study_Id); // 스터디 정보 불러오기
-
 		// 중복신청체크
-
-		if (sd.infoChk(id, study_Id) != 0) {
+		if (msid.infoOne(id, study_Id) != null) {
 			msg = "이미 참가신청한 스터디 입니다.";
 			url = request.getContextPath() + "/study/studyInfo";
 			m.addAttribute("msg", msg);
@@ -267,7 +241,7 @@ public class StudyController {
 		}
 
 		msi.setId(id);
-		msi.setMember_study_id(s.getStudy_Id());
+		msi.setMember_study_id(study_Id);
 		msi.setType(2);
 		msi.setNo(msid.nextSeq());
 
@@ -284,12 +258,6 @@ public class StudyController {
 	// 스터디 info에서 모집전환 버튼 클릭시 모집전환 프로세스
 	@RequestMapping("studyChangeProcess")
 	public String studyChangeProcess(String study_Id) {
-		try {
-			request.setCharacterEncoding("UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 		Study s = new Study();
 		s = sd.selectOne(study_Id);
@@ -324,12 +292,6 @@ public class StudyController {
 	// 스터디 게시글 수정
 	@RequestMapping("studyUpdate")
 	public String studyUpdate(String study_Id) {
-		try {
-			request.setCharacterEncoding("UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 		Study s = new Study();
 		String id = (String) request.getSession().getAttribute("memid");
@@ -353,12 +315,6 @@ public class StudyController {
 	// 스터디 게시글 수정 pro
 	@RequestMapping("studyUpdatePro")
 	public String studyUpdatePro(Study s) {
-		try {
-			request.setCharacterEncoding("UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 		int num = sd.update(s.getTitle(), s.getContent(), s.getStudy_Id());
 
@@ -378,12 +334,6 @@ public class StudyController {
 	// 스터디 게시글 삭제
 	@RequestMapping("stydyDeletePro")
 	public String studyDeletePro(String study_Id) {
-		try {
-			request.setCharacterEncoding("UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 		Study s = new Study();
 		s = sd.selectOne(study_Id);

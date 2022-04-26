@@ -8,9 +8,9 @@
 <meta charset="UTF-8">
 <title>QnA</title>
 <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-<link rel="stylesheet" href="/Project_KNOC/resource/style/qnaList.css" />
-<link rel="stylesheet" href="/Project_KNOC/resource/style/swiper-bundle.min.css" />
-<link href="/Project_KNOC/resource/style/main.css" rel='stylesheet' type='text/css' />
+<link rel="stylesheet" href="<%=request.getContextPath() %>/resource/style/qnaList.css" />
+<link rel="stylesheet" href="<%=request.getContextPath() %>C/resource/style/swiper-bundle.min.css" />
+<link href="<%=request.getContextPath() %>/resource/style/main.css" rel='stylesheet' type='text/css' />
 </head>
 <script>
 	if (document.getElementById("input_Check2").checked) {

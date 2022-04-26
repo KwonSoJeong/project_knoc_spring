@@ -6,9 +6,9 @@
 <meta charset="UTF-8">
 <title>QnA Info</title>
 <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-<link rel="stylesheet" href="/Project_KNOC/resource/style/qnaInfo.css" />
-<link rel="stylesheet" href="/Project_KNOC/resource/style/swiper-bundle.min.css" />
-<link href="/Project_KNOC/resource/style/main.css" rel='stylesheet' type='text/css' />
+<link rel="stylesheet" href="<%=request.getContextPath() %>/resource/style/qnaInfo.css" />
+<link rel="stylesheet" href="<%=request.getContextPath() %>/resource/style/swiper-bundle.min.css" />
+<link href="<%=request.getContextPath() %>/resource/style/main.css" rel='stylesheet' type='text/css' />
 </head>
 <body>
 

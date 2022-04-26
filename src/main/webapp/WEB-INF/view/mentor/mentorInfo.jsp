@@ -21,7 +21,7 @@
 
 		<div class="mti-wrapper2">
 			<div class="mti-intro">
-				<div class="mti-lh">${m.content}</div>
+				<div class="mti-lh">${mt.content}</div>
 			</div>
 			
 			
@@ -34,19 +34,19 @@
 							<c:otherwise><img src="<%=request.getContextPath() %>/resource/image/profile.png" width="110" height="90"></c:otherwise>
 						</c:choose>
 					</div>	
-					<div class="mti-pro-name">MENTOR : ${m.mentor_Id}</div>
-					<div>${m.intro}</div>	
+					<div class="mti-pro-name">MENTOR : ${mt.mentor_Id}</div>
+					<div>${mt.intro}</div>	
 				</div>
 				
 				<div>
 					<form action="<%=request.getContextPath()%>/mentor/mentoringEntry" method="post">
-						<input type="hidden" name="mentoring_Id" value="${m.mentoring_Id }">
+						<input type="hidden" name="mentoring_Id" value="${mt.mentoring_Id }">
 						<button id="mentro-bung2" type="submit">멘토링신청</button>
 					</form>	
 				</div>
 				<c:if test="${memid==m.mentor_Id }">
-				<button id="mentro-bung2" onclick="location.href='mentorUpdate?mentoring_Id=${m.mentoring_Id}'" type="button">수정</button>
-				<button id="mentro-bung2" onclick="location.href='mentorDeletePro?mentoring_Id=${m.mentoring_Id}'" type="button">삭제</button>
+				<button id="mentro-bung2" onclick="location.href='mentorUpdate?mentoring_Id=${mt.mentoring_Id}'" type="button">수정</button>
+				<button id="mentro-bung2" onclick="location.href='mentorDeletePro?mentoring_Id=${mt.mentoring_Id}'" type="button">삭제</button>
 				</c:if>
 			</div>		
 		</div>

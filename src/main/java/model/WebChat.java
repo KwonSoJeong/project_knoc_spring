@@ -5,11 +5,13 @@ public class WebChat {
 	private String groupId;
 	private String userId;
 	private String message;
+	private String readChk;
 	
 	public WebChat(String[] msgArr) {
 		this.groupId = msgArr[0];
 		this.userId = msgArr[1];
 		this.message = msgArr[2];
+		this.readChk = msgArr[3];
 	}
 	
 	public WebChat() {}
@@ -44,6 +46,14 @@ public class WebChat {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	public String getReadChk() {
+		return readChk;
+	}
+
+	public void setReadChk(String readChk) {
+		this.readChk = readChk;
 	}
 
 	@Override
