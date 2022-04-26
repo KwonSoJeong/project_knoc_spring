@@ -1,10 +1,8 @@
 package controller;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,12 +86,7 @@ public class MentorController {
 	// 멘토링 등록 process
 	@RequestMapping("mentorRegisterPro")
 	public String mentorRegisterPro(Mentoring mt) {
-		try {
-			request.setCharacterEncoding("UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 		Knoc_Member mem = new Knoc_Member();
 
 		String id = (String) request.getSession().getAttribute("memid");
@@ -132,12 +125,6 @@ public class MentorController {
 	// 멘토링 상세정보 view
 	@RequestMapping("mentorInfo")
 	public String mentorInfo(String mentoring_Id) {
-		try {
-			request.setCharacterEncoding("UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		//session에 info위치 저장
 		if(mentoring_Id == null) {
@@ -160,12 +147,6 @@ public class MentorController {
 	// 멘토링 참가신청 pro
 	@RequestMapping("mentoringEntry")
 	public String mentoringEntry(String mentoring_Id) {
-		try {
-			request.setCharacterEncoding("UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		if(request.getSession().getAttribute("memid")==null) { //로그인체크
 			msg = "로그인이 필요한 서비스 입니다.";
@@ -174,10 +155,10 @@ public class MentorController {
 			m.addAttribute("url", url);
 			return "/view/alert";
 		}
-		
+		System.out.println("mentoring_Id="+mentoring_Id);
 		//중복신청체크
 		String id = (String) request.getSession().getAttribute("memid");
-		if(sd.infoChk(id,mentoring_Id)!=0) {
+		if(msid.infoOne(id,mentoring_Id)!=null) {
 			msg = "이미 참가신청한 스터디 입니다.";
 			url = request.getContextPath()+"/mentor/mentorInfo";
 			m.addAttribute("msg", msg);
@@ -185,13 +166,10 @@ public class MentorController {
 			return "/view/alert";
 		}
 		
-		Member_Study_Info msi = new Member_Study_Info();
-		Mentoring mt = new Mentoring();
-		
-		mt = mtd.selectOne(mentoring_Id);
-		
+		Member_Study_Info msi = new Member_Study_Info();;
+
 		msi.setId(id);
-		msi.setMember_study_id(mt.getMentoring_Id());
+		msi.setMember_study_id(mentoring_Id);
 		msi.setType(2);
 		msi.setNo(msid.nextSeq());
 		
@@ -208,12 +186,6 @@ public class MentorController {
 	//멘토링 게시글 수정
 	@RequestMapping("mentorUpdate")
 	public String mentorUpdate(String mentoring_Id) {
-		try {
-			request.setCharacterEncoding("UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 						
 		Mentoring mt = new Mentoring();
 		String id = (String)request.getSession().getAttribute("memid");
@@ -233,13 +205,7 @@ public class MentorController {
 					
 	//qna 게시글 수정 pro
 	@RequestMapping("mentorUpdatePro")
-	public String mentorUpdatePro(Mentoring mt) {
-		try {
-			request.setCharacterEncoding("UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}				
+	public String mentorUpdatePro(Mentoring mt) {			
 		
 		int num = mtd.update(mt.getTitle(),mt.getContent(),mt.getMentoring_Id(),mt.getIntro());
 						
@@ -259,12 +225,6 @@ public class MentorController {
 	//qna 게시글 삭제
 	@RequestMapping("mentorDeletePro")
 	public String mentorDeletePro(String mentoring_Id) {
-		try {
-			request.setCharacterEncoding("UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 						
 		Mentoring mt = new Mentoring();
 		mt = mtd.selectOne(mentoring_Id);			

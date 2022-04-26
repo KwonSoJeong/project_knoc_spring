@@ -30,19 +30,19 @@
 	
 				<div class="form-group">
 					<label>멘토링 주제</label>
-					<textarea class="form-control" rows="3" cols="40" placeholder="멘토링 주제를 작성해 주세요." name="title">${m.title }</textarea>
+					<textarea class="form-control" rows="3" cols="40" placeholder="멘토링 주제를 작성해 주세요." name="title">${mt.title }</textarea>
 				</div> 
 				<br>
 				
 	            <div class="form-group">
 					<label>멘토 소개글</label>
-					<textarea class="form-control" rows="5" cols="40" placeholder="멘토에 대해 작성해 주세요." name="intro">${m.intro }</textarea>
+					<textarea class="form-control" rows="5" cols="40" placeholder="멘토에 대해 작성해 주세요." name="intro">${mt.intro }</textarea>
 				</div> 
 				<br>
 				
 				<div class="form-group">
 					<label>멘토링 내용</label>
-					<textarea class="form-control" rows="15" cols="60" placeholder="멘토링 내용에 대해 상세하게 적어주세요"  name="content">${m.content }</textarea>
+					<textarea class="form-control" rows="15" cols="60" placeholder="멘토링 내용에 대해 상세하게 적어주세요"  name="content">${mt.content }</textarea>
 				</div>
 				
 				<div id="center" >

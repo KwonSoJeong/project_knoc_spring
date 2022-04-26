@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <title>모델2 스터디 구합니다</title>
 <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-<link rel="stylesheet" href="/Project_KNOC/resource/style/studyInfo.css" />
+<link rel="stylesheet" href="<%=request.getContextPath() %>/resource/style/studyInfo.css" />
 </head>
 <body>
 	<div class="layout-container" style="padding-top: 34px;">
