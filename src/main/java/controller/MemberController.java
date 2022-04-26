@@ -96,13 +96,12 @@ public class MemberController {
 	public String picturePro(MultipartFile profile) {
 		String path = request.getServletContext().getRealPath("/")+"profile/";
 		
-		// 파일 이름 중복 방지를 위해 원본 파일 이름, 확장자 사이에 저장 일자, 0-999의 임의의 난수 붙임
+		// 파일 이름 중복 방지를 위해 원본 파일 이름 앞에 저장일시, 임의의 난수 붙임
 		String oriFileName = profile.getOriginalFilename();
-		String ext = oriFileName.substring(oriFileName.indexOf("."));
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmssSSS");
 		int randomNum = (int) (Math.random() * 1000);
 		
-		String newFileName = oriFileName + sdf.format(System.currentTimeMillis()) + "_" + randomNum + ext;
+		String newFileName = sdf.format(System.currentTimeMillis()) + "_" + randomNum + "_" + oriFileName;
 		
 		try {
 			profile.transferTo(new File(path, newFileName));
