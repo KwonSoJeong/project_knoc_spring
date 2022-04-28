@@ -12,7 +12,7 @@ insert into notification values (#{no}, #{noti_Code}, #{noti_Content},'1', sysda
 </insert>
 
 <select id="selectList" parameterType="string" resultType="notification">
-select * from notification where to_Id = #{to_Id}
+select * from notification where to_Id = #{to_Id} order by noti_date desc
 </select>
 
 <select id="unreadCnt" parameterType="string" resultType="int">

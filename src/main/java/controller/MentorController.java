@@ -159,11 +159,11 @@ public class MentorController {
 			m.addAttribute("url", url);
 			return "/view/alert";
 		}
-		System.out.println("mentoring_Id="+mentoring_Id);
+//		System.out.println("mentoring_Id="+mentoring_Id);
 		//중복신청체크
 		String id = (String) request.getSession().getAttribute("memid");
-		if(msid.infoOne(id,mentoring_Id)!=null) {
-			msg = "이미 참가신청한 스터디 입니다.";
+		if(notid.EntryCheck(id,mentoring_Id)!=0) {
+			msg = "이미 참가신청한 멘토링 입니다.";
 			url = request.getContextPath()+"/mentor/mentorInfo";
 			m.addAttribute("msg", msg);
 			m.addAttribute("url", url);
@@ -181,22 +181,22 @@ public class MentorController {
 		//알람보내기
 		Notification noti = new Notification();
 		Mentoring mt = new Mentoring();
-		
-		String noti_Content = id+"님이 스터디 참가 신청을 보냈습니다.";
 		mt = mtd.selectOne(mentoring_Id);
+		String noti_Content = id+"님이 ["+ mt.getTitle() +"] 멘토링 참가를 희망합니다.";
 		
 		noti.setNo(notid.nextNum());
 		noti.setNoti_Code(mentoring_Id);
 		noti.setNoti_Content(noti_Content);
 		noti.setFrom_Id(id);
 		noti.setTo_Id(mt.getMentor_Id());
+		noti.setType(1);
 		int num = notid.insertNoti(noti);
 		
 		url = request.getContextPath()+"/mentor/mentorInfo";
 		if(num==0) {
 			msg = "참가신청 오류 발생";
 		}else {
-			msg = "참가 신청을 보넀습니다. 잠시만 기다려주세요!"; 
+			msg = "참가 신청을 보냈습니다. 상대방이 확인할 때까지 잠시만 기다려주세요!"; 
 		}
 		
 		m.addAttribute("msg", msg);

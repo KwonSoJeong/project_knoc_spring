@@ -253,9 +253,8 @@ public class StudyController {
 		//알람 보내기
 		Notification noti = new Notification();
 		Study s = new Study();
-		
-		String noti_Content = id+"님이 스터디 참가 신청을 보냈습니다.";
 		s = sd.selectOne(study_Id);
+		String noti_Content = id+"님이 ["+s.getTitle()+"] 스터디에 참가를 희망합니다.";
 		
 		noti.setNo(notid.nextNum());
 		noti.setNoti_Code(study_Id);

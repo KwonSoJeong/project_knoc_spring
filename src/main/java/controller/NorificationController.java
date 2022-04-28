@@ -15,7 +15,9 @@ import model.Member_Study_Info;
 import model.Notification;
 import model.Study;
 import service.Member_Study_InfoDao;
+import service.MentoringDao;
 import service.NotificationDao;
+import service.StudyDao;
 
 @Controller
 @RequestMapping("/noti/")
@@ -30,6 +32,10 @@ public class NorificationController {
 	NotificationDao notid;
 	@Autowired
 	Member_Study_InfoDao msid;
+	@Autowired
+	StudyDao sd;
+	@Autowired
+	MentoringDao mtd;
 	
 	@ModelAttribute
 	void init(HttpServletRequest request, Model m) {
@@ -95,7 +101,14 @@ public class NorificationController {
 		
 		//신청자에게 알람 보내기
 		String id = (String) session.getAttribute("memid");
-		String noti_Content = "스터디 참가 신청이 수락되었습니다.";
+		String title="";
+		String category = noti.getNoti_Code().charAt(0)=='s'?"스터디":"멘토링";
+		if(category.equals("스터디")) {
+			title = sd.selectOne(noti.getNoti_Code()).getTitle();
+		}else {
+			title = mtd.selectOne(noti.getNoti_Code()).getTitle();
+		}
+		String noti_Content = "["+title+"] "+category+" 참가 신청이 수락되었습니다.";
 		
 		Notification noti2 = new Notification();
 		noti2.setNo(notid.nextNum());
@@ -133,7 +146,14 @@ public class NorificationController {
 		Notification noti2 = new Notification();
 				
 		String id = (String) session.getAttribute("memid");
-		String noti_Content = "스터디 참가 신청이 거절되었습니다.";
+		String title="";
+		String category = noti.getNoti_Code().charAt(0)=='s'?"스터디":"멘토링";
+		if(category.equals("스터디")) {
+			title = sd.selectOne(noti.getNoti_Code()).getTitle();
+		}else {
+			title = mtd.selectOne(noti.getNoti_Code()).getTitle();
+		}
+		String noti_Content = "["+title+"] "+category+" 참가 신청이 거절되었습니다.";
 						
 		noti2.setNo(notid.nextNum());
 		noti2.setNoti_Code(noti.getNoti_Code());
