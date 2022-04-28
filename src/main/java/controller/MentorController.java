@@ -178,7 +178,7 @@ public class MentorController {
 		
 		msid.insertInfo(msi);
 	*/	
-		//알람보내기
+		//알람보내기 
 		Notification noti = new Notification();
 		Mentoring mt = new Mentoring();
 		mt = mtd.selectOne(mentoring_Id);
