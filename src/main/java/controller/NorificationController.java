@@ -138,7 +138,7 @@ public class NorificationController {
 
 		//type 전환 
 		notid.typeChange(no);
-		
+		 
 		//읽음체크
 		notid.readChk(no);
 						
