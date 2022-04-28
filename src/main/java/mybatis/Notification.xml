@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="notification">
+
+<select id="nextNum" resultType="int">
+select notiseq.nextval from dual 
+</select>
+
+<insert id="insertNoti" parameterType="notification">
+insert into notification values (#{no}, #{noti_Code}, #{noti_Content},'1', sysdate, #{from_Id}, #{to_Id}, #{type})
+</insert>
+
+<select id="selectList" parameterType="string" resultType="notification">
+select * from notification where to_Id = #{to_Id}
+</select>
+
+<select id="unreadCnt" parameterType="string" resultType="int">
+select count(*) from notification where to_Id = #{to_Id} and readChk = '1'
+</select>
+
+<update id="allReadChk" parameterType="string">
+update notification set readChk = '0' where to_Id = #{to_Id}
+</update>
+
+<select id="EntryCheck" parameterType="map" resultType="int">
+select count(*) from notification where from_Id = #{from_Id} and noti_Code = #{noti_Code}
+</select>
+
+<update id="typeChange" parameterType="int">
+update notification set type = 0 where no = #{no}
+</update>
+
+<select id="selectOne" parameterType="int" resultType="notification">
+select * from notification where no = #{no}
+</select>
+
+<update id="readChk" parameterType="int" >
+update notification set readChk = '0' where no = #{no}
+</update>
+
+
+
+</mapper>

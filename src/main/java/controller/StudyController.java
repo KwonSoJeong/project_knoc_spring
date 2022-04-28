@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import model.Member_Study_Info;
+import model.Notification;
 import model.Study;
 import model.Study_Comment;
 import service.Member_Study_InfoDao;
+import service.NotificationDao;
 import service.StudyDao;
 import service.Study_CommentDao;
 
@@ -35,6 +37,8 @@ public class StudyController {
 	Study_CommentDao scd;
 	@Autowired
 	Member_Study_InfoDao msid = new Member_Study_InfoDao();
+	@Autowired
+	NotificationDao notid;
 
 	@ModelAttribute
 	void init(HttpServletRequest request, Model m) {
@@ -228,28 +232,46 @@ public class StudyController {
 			return "/view/alert";
 		}
 
-		Member_Study_Info msi = new Member_Study_Info();
-
 		String id = (String) request.getSession().getAttribute("memid");
 		// 중복신청체크
-		if (msid.infoOne(id, study_Id) != null) {
+		if (notid.EntryCheck(id, study_Id)!=0) {
 			msg = "이미 참가신청한 스터디 입니다.";
 			url = request.getContextPath() + "/study/studyInfo";
 			m.addAttribute("msg", msg);
 			m.addAttribute("url", url);
 			return "/view/alert";
 		}
-
+	/*
+	   	Member_Study_Info msi = new Member_Study_Info();
 		msi.setId(id);
 		msi.setMember_study_id(study_Id);
 		msi.setType(2);
 		msi.setNo(msid.nextSeq());
 
 		msid.insertInfo(msi);
-
-		msg = "신청이 완료되었습니다.";
+	*/
+		//알람 보내기
+		Notification noti = new Notification();
+		Study s = new Study();
+		
+		String noti_Content = id+"님이 스터디 참가 신청을 보냈습니다.";
+		s = sd.selectOne(study_Id);
+		
+		noti.setNo(notid.nextNum());
+		noti.setNoti_Code(study_Id);
+		noti.setNoti_Content(noti_Content);
+		noti.setFrom_Id(id);
+		noti.setTo_Id(s.getLeader_Id());
+		noti.setType(1);
+		int num = notid.insertNoti(noti);
+		
 		url = request.getContextPath() + "/study/studyInfo";
-
+		if(num==0) {
+			msg = "참가신청 오류 발생";
+		}else {
+			msg = "참가 신청을 보냈습니다. 상대방이 확인할 때까지 잠시만 기다려주세요!"; 
+		}
+		
 		m.addAttribute("msg", msg);
 		m.addAttribute("url", url);
 		return "/view/alert";

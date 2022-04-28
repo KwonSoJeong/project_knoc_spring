@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import model.Knoc_Member;
 import model.Member_Study_Info;
 import model.Mentoring;
+import model.Notification;
 import service.Knoc_MemberDao;
 import service.Member_Study_InfoDao;
 import service.MentoringDao;
+import service.NotificationDao;
 import service.StudyDao;
 
 
@@ -38,6 +40,8 @@ public class MentorController {
 	StudyDao sd = new StudyDao();
 	@Autowired
 	Knoc_MemberDao memdao = new Knoc_MemberDao();
+	@Autowired
+	NotificationDao notid;
 	
 	@ModelAttribute
 	void init(HttpServletRequest request, Model m) {
@@ -165,18 +169,35 @@ public class MentorController {
 			m.addAttribute("url", url);
 			return "/view/alert";
 		}
-		
+	/*	
 		Member_Study_Info msi = new Member_Study_Info();;
-
 		msi.setId(id);
 		msi.setMember_study_id(mentoring_Id);
 		msi.setType(2);
 		msi.setNo(msid.nextSeq());
 		
 		msid.insertInfo(msi);
+	*/	
+		//알람보내기
+		Notification noti = new Notification();
+		Mentoring mt = new Mentoring();
 		
-		msg = "신청이 완료되었습니다.";
+		String noti_Content = id+"님이 스터디 참가 신청을 보냈습니다.";
+		mt = mtd.selectOne(mentoring_Id);
+		
+		noti.setNo(notid.nextNum());
+		noti.setNoti_Code(mentoring_Id);
+		noti.setNoti_Content(noti_Content);
+		noti.setFrom_Id(id);
+		noti.setTo_Id(mt.getMentor_Id());
+		int num = notid.insertNoti(noti);
+		
 		url = request.getContextPath()+"/mentor/mentorInfo";
+		if(num==0) {
+			msg = "참가신청 오류 발생";
+		}else {
+			msg = "참가 신청을 보넀습니다. 잠시만 기다려주세요!"; 
+		}
 		
 		m.addAttribute("msg", msg);
 		m.addAttribute("url", url);

@@ -8,11 +8,12 @@ public class Notification {
 	private String noti_Code, noti_Content, readChk;
 	private Date noti_Date;
 	private String from_Id, to_Id;
+	private int type;	//type=1 : 수락,거절 버튼 O   type=0 : 수락,거절 버튼 X
 	
 	public Notification() {}
 	
 	public Notification(int no, String noti_Code, String noti_Content, String readChk, Date noti_Date, String from_Id,
-			String to_Id) {
+			String to_Id, int type) {
 		this.no = no;
 		this.noti_Code = noti_Code;
 		this.noti_Content = noti_Content;
@@ -20,6 +21,7 @@ public class Notification {
 		this.noti_Date = noti_Date;
 		this.from_Id = from_Id;
 		this.to_Id = to_Id;
+		this.type = type;
 	}
 
 	public int getNo() {
@@ -78,12 +80,22 @@ public class Notification {
 		this.to_Id = to_Id;
 	}
 
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+
 	@Override
 	public String toString() {
 		return "{\"no\":\"" + no + "\", \"noti_Code\":\"" + noti_Code + "\", \"noti_Content\":\"" + noti_Content
 				+ "\", \"readChk\":\"" + readChk + "\", \"noti_Date\":\"" + noti_Date + "\", \"from_Id\":\"" + from_Id
-				+ "\", \"to_Id\":\"" + to_Id + "\"}";
+				+ "\", \"to_Id\":\"" + to_Id + "\", \"type\":\"" + type + "\"}";
 	}
+
+
 	
 	
 	
