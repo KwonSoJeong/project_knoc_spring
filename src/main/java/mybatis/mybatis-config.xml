@@ -16,6 +16,7 @@
         <typeAlias type="model.Study" alias="study"/>
         <typeAlias type="model.WishList" alias="wishlist"/>
         <typeAlias type="model.WebChat" alias="webchat"/>
+        <typeAlias type="model.Notification" alias="notification"/>
         
     </typeAliases>
     <environments default="development">
@@ -42,5 +43,6 @@
         <mapper resource="mybatis/Study.xml" />
         <mapper resource="mybatis/WishList.xml"/>
         <mapper resource="mybatis/WebChat.xml"/>
+        <mapper resource="mybatis/Notification.xml"/>
     </mappers>
 </configuration>
