@@ -240,15 +240,15 @@ function favoriteCntUp(class_id, cnt) {
 const msgArea = document.querySelector(".m-cht-msg-win")
 const inputArea = document.querySelector(".m-cht-input-msg")
 let groupId = '${groupId}'
-const webSocket = new WebSocket('ws://#//Project_KNOC/groupchat')
+const webSocket = new WebSocket('ws://#/<%=request.getContextPath()%>/groupchat')
 
 webSocket.onopen = function(event) {onOpen(event)}
 webSocket.onerror = function(event) {onError(event)}
 webSocket.onmessage = function(event) {onMessage(event)}
 
 function onOpen(event) {
-    // alert(new Date() + "연결 성공")
     msgArea.innerHTML += "<p style='font-size: 13px; text-align: center;'>" + new Date() +"</p>"
+    webSocket.send(groupId + ':${userId}:connected')
 }
 
 function onMessage(event) {
@@ -257,7 +257,7 @@ function onMessage(event) {
     let filenameArr = [".jpg", ".png", ".gif", ".JPG", ".PNG", ".GIF"]
     let fileChk = event.data.split(":")[4].toLowerCase()
     console.log(fileChk)
-    //event.data.includes(filenameArr.some(i => filename.includes(i)))
+    
     if (fileChk.includes('.jpg') || fileChk.includes('.png') || fileChk.includes('.gif') || fileChk.includes('.jpeg')) {
         let filename = event.data.split(":")[4]
         
@@ -315,7 +315,7 @@ function imgUpload(files) {
     
     let httpreq = new XMLHttpRequest()
     
-    httpreq.open("POST", "/Project_KNOC/classes/imgUpload", true)
+    httpreq.open("POST", "/project_knoc_spring/classes/imgUpload", true)
     
     httpreq.send(inputImg)
     
@@ -330,7 +330,7 @@ function imgUpload(files) {
 
 function sendImg(filename) {
     msgArea.innerHTML += "<div class='right'><div id='me'>"
-           + "<img src='/Project_KNOC/chatimg/" + filename + "' width='200px'/>"
+           + "<img src='/project_knoc_spring/chatimg/" + filename + "' width='200px'/>"
            + "</div></div>"
            
     webSocket.send(groupId + ':${userId}:'+filename)
@@ -344,8 +344,8 @@ function adminChatLink(user){
     let httpreq = new XMLHttpRequest()
     let param = "?groupId="+encodeURIComponent(user)
 
-    let url = "/Project_KNOC/classes/adminChat" 
-    httpreq.open("GET", "/Project_KNOC/classes/adminChat"+param, true)
+    let url = "/project_knoc_spring/classes/adminChat" 
+    httpreq.open("GET", "/project_knoc_spring/classes/adminChat"+param, true)
     
     httpreq.send()
     
@@ -359,7 +359,7 @@ function adminChatLink(user){
     }
     
     groupId = user
-    //webSocket.send(groupId + ':${userId}:${userId}님이 입장하였습니다.')
+    webSocket.send(groupId + ':${userId}:connected')
     
 }
 
