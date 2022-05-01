@@ -94,6 +94,16 @@ public class Member_Study_InfoDao {
 		
 	}
 	
+	public void deleteInfo(String id) {
+		try {
+			sqlSession.delete(ns + "deleteInfo", id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.commit();
+		}
+	}
+	
 	/* DAO 테스트 코드 
 	public static void main(String[] args) {
 		SqlSession sqlSession = MyBatisConnection.getConnection();

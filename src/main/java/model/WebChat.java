@@ -11,7 +11,7 @@ public class WebChat {
 		this.groupId = msgArr[0];
 		this.userId = msgArr[1];
 		this.message = msgArr[2];
-		this.readChk = msgArr[3];
+		//this.readChk = msgArr[3];
 	}
 	
 	public WebChat() {}
