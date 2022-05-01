@@ -128,10 +128,12 @@ function thumbnail_upload() {
             <c:forEach var="content" items="${contentList}">
                 <c:set var="no" value="${no+1}"/>
                 <div class="form-group">
-                    <input type="hidden" name="content_id${no}" value="${content.content_Id}" />
-                    제목을 입력하세요<input type="text" name="contentTitle${no}" class="form-control" value="${content.title}">
-                    컨텐츠 파일을 입력하세요.<input type="file" name="newFile${no}" class="form-control">
-                    <input type="hidden" name="file${no}" value="${content.file1}"/>
+                    <input type="hidden" name="content_id" value="${content.content_Id}" />
+                    제목을 입력하세요<input type="text" name="contentTitle" class="form-control" value="${content.title}">
+                    컨텐츠 파일을 입력하세요. <br />
+                    (입력하지 않을 시 원본 파일이 유지됩니다.)
+                    <input type="text" name="originalFile" readonly="readonly" class="form-control" value="${content.file1}"/>
+                    <input type="file" name="newFile" class="form-control" value="${content.file1}">
                 </div>
             </c:forEach>
             <div id="center" style="padding: 25px;">

@@ -4,7 +4,6 @@ public class Class_Content {
 	private String content_Id, class_Id, title, file1;
 	
 	public Class_Content(String content_Id, String class_Id, String title, String file1) {
-		super();
 		this.content_Id = content_Id;
 		this.class_Id = class_Id;
 		this.title = title;
@@ -12,7 +11,6 @@ public class Class_Content {
 	}
 
 	public Class_Content() {
-		super();
 	}
 
 	public String getContent_Id() {

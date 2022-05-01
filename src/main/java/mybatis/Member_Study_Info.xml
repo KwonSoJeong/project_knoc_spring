@@ -29,5 +29,7 @@ select infoseq.nextval from dual
 select * from (select title, m.* from member_study_info m, ${table} c where m.member_study_id = c.${id}) where id = '${value}'
 </select>
 
-
+<delete id="deleteInfo" parameterType="String">
+delete from member_study_info where member_study_id = #{value}
+</delete>
 </mapper>

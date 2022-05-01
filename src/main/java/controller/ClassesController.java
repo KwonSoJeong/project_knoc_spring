@@ -97,40 +97,38 @@ public class ClassesController {
 		
 		return "/view/main";
 	}
-	/*
+	
 	// main화면 문의톡에서 img 업로드 할 때 사용할 페이지 
 	@RequestMapping("imgUpload")
-	public String imgUpload(HttpServletRequest request, HttpServletResponse response) {
-		String path = getServletContext().getRealPath("/") + "chatimg/";
-		MultipartRequest multi = null;
+	public String imgUpload(MultipartFile file) {
+		String path = request.getServletContext().getRealPath("/") + "chatimg/";
+		
+		// 파일 이름 중복 방지를 위해 원본 파일 이름 앞에 저장일시, 임의의 난수 붙임
+		String oriFileName = file.getOriginalFilename();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmssSSS");
+		int randomNum = (int) (Math.random() * 1000);
+		
+		String newFileName = sdf.format(System.currentTimeMillis()) + "_" + randomNum + "_" + oriFileName;
 		
 		try {
-			request.setCharacterEncoding("utf-8");
-		} catch (UnsupportedEncodingException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		try {
-			multi = new MultipartRequest(request, path, 10*1024*1024, "utf-8", new DefaultFileRenamePolicy());
+			file.transferTo(new File(path, newFileName));
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		String groupId = multi.getParameter("groupId");
-		String userId = multi.getParameter("userId");
-		String filename = multi.getFilesystemName("file");
-		model.addAttribute("filename", filename);
+		model.addAttribute("filename", newFileName);
 		
 		return "/single/imgUpload";
 	}
-	*/
+	
 	// main화면 문의톡에서 admin 계정에서 사용할 문의한 고객 리스트 전달
 	@RequestMapping("adminChat")
-	public String adminChat(HttpServletRequest request, HttpServletResponse response) {
-		HttpSession session = request.getSession();
+	public String adminChat(String groupId) {
+		//HttpSession session = request.getSession();
 		
-		String groupId = request.getParameter("groupId");
+		//String groupId = request.getParameter("groupId");
 		String userId = (String) session.getAttribute("memid");
 		
 		//WebChatDao wcd = new WebChatDao();
@@ -213,48 +211,32 @@ public class ClassesController {
 	public String classUploadPro(Classes newClass, String[] contentTitle, MultipartFile[] contentFile) {
 		String id = (String) session.getAttribute("memid");
 		
-		// 클래스 객체 생성
-		String path = request.getServletContext().getRealPath("/") + "/contentfile/";
-		
-		//ClassesDao cd = new ClassesDao();
-	
-		//Classes newClass = new Classes();
-
+		// 사용자에게 입력받지 않는 pk값, 공유자 아이디 지정
 		newClass.setClass_id("class" + cd.newClassNum());
 		newClass.setLec_id(id);
-		//newClass.setTitle(multi.getParameter("title"));
-		//newClass.setIntro(multi.getParameter("intro"));
-		//newClass.setCategory_id(multi.getParameter("caterory_id"));
-		//newClass.setType(Integer.parseInt(multi.getParameter("type")));
-		//newClass.setPrice(Integer.parseInt(multi.getParameter("price")));
-		//newClass.setThumbnail(multi.getParameter("thumbnail"));
 		
 		String msg = "클래스 등록에 실패하였습니다.";
 		String url = request.getContextPath() + "/classes/classUpload";
 		
+		// 클래스 업로드
 		int classResult = cd.classUpload(newClass);
 		
-		// 각 차시 별 객체 생성
+		// 차시별 컨텐츠 파일 업로드 경로
+		String path = request.getServletContext().getRealPath("/") + "/contentfile/";
+		
+		// 컨텐츠 업로드 정상적으로 되었는지 확인 위한 변수
 		int contentResult = 0;
+
+		String[] fileNameArr = new String[contentFile.length];
 		
-		//Class_ContentDao ccd = new Class_ContentDao();
-		
-		//Classes classone = cd.classOne(newClass.getClass_id());
-		for (int i = 0; i < contentTitle.length; i++) {
-			
-			Class_Content newContent = new Class_Content();
-			
-			newContent.setClass_Id(newClass.getClass_id());
-			newContent.setContent_Id("content" + ccd.newContentNum());
-			newContent.setTitle(contentTitle[i]);
-			
+		// 입력한 컨텐츠 파일 서버에 저장하고, 파일 이름을 따로 배열에 저장
+		for (int i = 0; i < contentFile.length; i++) {
 			// 파일 이름 중복 방지를 위해 원본 파일 이름 앞에 저장일시, 임의의 난수 붙임
 			String oriFileName = contentFile[i].getOriginalFilename();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmssSSS");
 			int randomNum = (int) (Math.random() * 1000);
-			
+
 			String newFileName = sdf.format(System.currentTimeMillis()) + "_" + randomNum + "_" + oriFileName;
-			
 			try {
 				contentFile[i].transferTo(new File(path, newFileName));
 			} catch (IllegalStateException e) {
@@ -263,18 +245,28 @@ public class ClassesController {
 				e.printStackTrace();
 			}
 			
-			newContent.setFile1(newFileName);
+			fileNameArr[i] = newFileName;
+		}
+		
+		for (int i = 0; i < contentTitle.length; i++) {
+			
+			Class_Content newContent = new Class_Content();
+			
+			newContent.setClass_Id(newClass.getClass_id());
+			newContent.setContent_Id("content" + ccd.newContentNum());
+			newContent.setTitle(contentTitle[i]);
+			newContent.setFile1(fileNameArr[i]);
 			
 			if (ccd.contentUpload(newContent) > 0) {
 				contentResult++;
 			}
 		}
 		
+		// 클래스와 각 차시별 컨텐츠가 정상적으로 DB에 저장되면
 		if (classResult > 0 && contentResult == contentTitle.length) {
 			msg = "클래스가 정상적으로 등록되었습니다.";
 			url = request.getContextPath() + "/classes/classInfo?class_id=" + newClass.getClass_id();
 			
-			//Member_Study_InfoDao msd = new Member_Study_InfoDao();
 			Member_Study_Info msi = new Member_Study_Info(newClass.getLec_id(), newClass.getClass_id(), 1, msd.nextSeq());
 			
 			msd.insertInfo(msi);
@@ -285,68 +277,6 @@ public class ClassesController {
 
 		return "/view/alert";
 		
-		/*
-		String[] titleArr = multi.getParameterValues("contentTitle");
-		
-		List<String> fileList = new ArrayList<String>();
-		int num = 1;
-		
-		while(fileList.size() < titleArr.length) {
-			String filename = multi.getFilesystemName("file"+num);
-			System.out.println(filename);
-			
-			if (filename == null) {
-				num++;
-				continue;
-			}
-			
-			fileList.add(filename);
-			
-			num++;
-		}
-		
-		
-		int lastNum = titleArr.length;
-		if (classone != null) {
-			// 현재는 최대 10차시 까지 입력받도록 되어있음
-			for (int i = 0; i < titleArr.length; i++) {
-				Class_Content newContent = new Class_Content();
-				
-				newContent.setTitle(titleArr[i]);				
-				newContent.setFile1(fileList.get(i));
-				
-				if(newContent.getFile1() == null) {
-					newContent.setFile1("");
-				}
-				
-				newContent.setClass_Id(newClass.getClass_id());
-				newContent.setContent_Id("content" + ccd.newContentNum());
-				
-				if (ccd.contentUpload(newContent) > 0) {
-					contentResult++;
-				}
-			}
-		}
-		
-		String msg = "클래스 등록에 실패하였습니다.";
-		String url = request.getContextPath() + "/classes/classUpload";
-		
-		// 클래스, 컨텐츠까지 정상 등록일 경우
-		if (classResult > 0 && contentResult == lastNum) {
-			msg = "클래스가 정상적으로 등록되었습니다.";
-			url = request.getContextPath() + "/classes/classInfo?class_id=" + newClass.getClass_id();
-			
-			//Member_Study_InfoDao msd = new Member_Study_InfoDao();
-			Member_Study_Info msi = new Member_Study_Info(newClass.getLec_id(), newClass.getClass_id(), 1, msd.nextSeq());
-			
-			msd.insertInfo(msi);
-		}
-		
-		model.addAttribute("msg", msg);
-		model.addAttribute("url", url);
-
-		return "/view/alert";
-		*/
 	}
 	
 	// 클래스 썸네일 등록 view
@@ -384,14 +314,10 @@ public class ClassesController {
 	// 클래스 상세 view 
 	@RequestMapping("classInfo")
 	public String classInfo(String class_id) {
-		//  String class_id = request.getParameter("class_id");
-		//ClassesDao cd = new ClassesDao();
 		Classes classone = cd.classOne(class_id);
 		
-		//CategoryDao cgd = new CategoryDao();
 		String categoryName = cgd.selectCategoryName(classone.getCategory_id());
 		
-		//Class_ContentDao ccd = new Class_ContentDao();
 		List<Class_Content> contentList = ccd.contentList(class_id);
 		int contentNo = 1;
 		// parameter로 전달된 classId는 session에 저장, content view 출력 시 활용
@@ -408,18 +334,14 @@ public class ClassesController {
 	// 클래스 수강신청 클릭 시 process
 	@RequestMapping("classRegister")
 	public String classRegister() {
-		//HttpSession session = request.getSession();
-
 		String id = (String) session.getAttribute("memid");
 		String class_id = (String) session.getAttribute("classId");
 		// 수강신청을 눌렀을 때 로그인이 안되어있으면 로그인 화면으로 이동
 		String msg = "로그인 후 이용 가능합니다.";
 		String url = request.getContextPath() + "/member/login";
 		
-		//ClassesDao cd = new ClassesDao();
 		Classes classOne = cd.classOne(class_id);
 		
-		//Member_Study_InfoDao msd = new Member_Study_InfoDao();
 		Member_Study_Info msi = msd.infoOne(id, class_id);
 		
 		if (id != null) {
@@ -446,14 +368,12 @@ public class ClassesController {
 	
 	// 클래스 수강 view
 	@RequestMapping("classContent")
-	public String classContent(HttpServletRequest request, HttpServletResponse response) {
+	public String classContent(@RequestParam(value = "class_id", required = false) String classId,
+							   @RequestParam(value = "content_id", required = false) String contentId) {
 		HttpSession session = request.getSession();
 		
-		String classId = null;
-		
 		// mypage를 통해서 content 페이지로 왔을 때는 세션에 url에서 classid 받아오고, session에 저장
-		if (request.getParameter("class_id") != null) {
-			classId = request.getParameter("class_id");
+		if (classId != null) {
 			session.setAttribute("classId", classId);
 		} 
 		
@@ -461,17 +381,12 @@ public class ClassesController {
 		classId = (String) session.getAttribute("classId");
 		String id = (String) session.getAttribute("memid");
 		
-		//Class_ContentDao cd = new Class_ContentDao();
 		List<Class_Content> contentList = ccd.contentList(classId);
-		
-		String contentId = request.getParameter("content_id");
 		
 		if (contentId == null) {
 			contentId = contentList.get(0).getContent_Id();
 		}
 		Class_Content contentOne = ccd.contentOne(classId, contentId);
-		
-		// content화면 완성된 후에 제대로 다시 테스트 할 예정
 		
 		if (id == null) {
 			String msg = "로그인 정보가 없습니다.";
@@ -493,21 +408,16 @@ public class ClassesController {
 	
 	// 클래스 관심등록 process, classInfo에서 javaScript + ajax로 구현
 	@RequestMapping("classFavorite")
-	public String classFavorite(HttpServletRequest request, HttpServletResponse response) {
+	public String classFavorite(@RequestParam(value = "class_id", required = false) String classId) {
 		HttpSession session = request.getSession();
 		String id = (String) session.getAttribute("memid");
 		String status = "login-null";
-		
-		String classId = request.getParameter("class_id");
 		
 		if (classId == null) {
 			classId = (String) session.getAttribute("classId");
 		}
 		
-		//ClassesDao cd = new ClassesDao();
-		
 		if (id != null) {
-			//WishListDao wd = new WishListDao();
 			WishList wishOne =  wld.wishOne(id, classId);
 
 			if (wishOne == null) {
@@ -533,9 +443,7 @@ public class ClassesController {
 	
 	// 클래스 수정 view
 	@RequestMapping("classUpdate")
-	public String classUpdate(HttpServletRequest request, HttpServletResponse response) {
-		HttpSession session = request.getSession();
-		
+	public String classUpdate(@RequestParam("class_id") String classId) {
 		String id = (String) session.getAttribute("memid");
 		
 		if (id == null) {
@@ -547,12 +455,7 @@ public class ClassesController {
 			
 			return "/view/alert";
 		} 
-		
-		String classId = request.getParameter("class_id");
-		//ClassesDao cd = new ClassesDao();
 		Classes classOne = cd.classOne(classId);
-		
-		//Class_ContentDao ccd = new Class_ContentDao();
 		
 		List<Class_Content> contentList = ccd.contentList(classId);
 		
@@ -560,67 +463,57 @@ public class ClassesController {
 		model.addAttribute("contentList", contentList);
 		return "/view/classes/classUpdate";
 	}
-	/*
+	
 	// 클래스 수정 process
 	@RequestMapping("classUpdatePro")
-	public String classUpdatePro(HttpServletRequest request, HttpServletResponse response) {
+	public String classUpdatePro(Classes updatedClass, String[] content_id,
+								String[] contentTitle, String[] originalFile,
+								 MultipartFile[] newFile) {
 		
 		// 수정가능 요소 : 클래스 소개글, 가격, 썸네일, 각 차시별 제목, 각 차시별 컨텐츠
 		// 수정 불가능 : 클래스 아이디, 강사 아이디, 클래스 제목, 카테고리, 타입, 관심수, 등록일
-
-		try {
-			request.setCharacterEncoding("utf-8");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
-		// 클래스 객체 생성
-		MultipartRequest multi = null;
-		
-		String path = request.getServletContext().getRealPath("/") + "/contentfile/";
-		try {
-			multi = new MultipartRequest(request, path, 300 * 1024 * 1024, "UTF-8", new DefaultFileRenamePolicy());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		String classId = multi.getParameter("class_id");
-		Classes updatedClass = new Classes();
-		updatedClass.setClass_id(classId);
-		updatedClass.setThumbnail(multi.getParameter("thumbnail"));
-		updatedClass.setIntro(multi.getParameter("intro"));
-		updatedClass.setPrice(Integer.parseInt(multi.getParameter("price")));
-		
-		//ClassesDao cd = new ClassesDao();
 		int classUpdateCnt = cd.classUpdate(updatedClass);
+		String classId = updatedClass.getClass_id();
 		
-		//Class_ContentDao ccd = new Class_ContentDao();
-		
-		int listSize = (ccd.contentList(classId)).size();
-		
+		String path = request.getServletContext().getRealPath("/") + "contentfile";
 		int contentUpdateCnt = 0;
-		
-		for (int i = 1; i <= listSize; i++) {
+
+		for (int i = 0; i < content_id.length; i++) {
 			Class_Content updatedContent = new Class_Content();
 			updatedContent.setClass_Id(classId);
-			updatedContent.setContent_Id(multi.getParameter("content_id"+i));
-			updatedContent.setTitle(multi.getParameter("contentTitle"+i));
-			updatedContent.setFile1(multi.getFilesystemName("newFile"+i));
+			updatedContent.setContent_Id(content_id[i]);
+			updatedContent.setTitle(contentTitle[i]);
 			
-			if (updatedContent.getFile1() == null) {
-				updatedContent.setFile1(multi.getParameter("file"+i));
+			// 새로운 컨텐츠 파일이 업로드 된 경우 서버에 새로 업로드한 후 업데이트
+			if (newFile[i] != null) {
+				// 파일 이름 중복 방지를 위해 원본 파일 이름 앞에 저장일시, 임의의 난수 붙임
+				String oriFileName = newFile[i].getOriginalFilename();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmssSSS");
+				int randomNum = (int) (Math.random() * 1000);
+
+				String newFileName = sdf.format(System.currentTimeMillis()) + "_" + randomNum + "_" + oriFileName;
+
+				try {
+					newFile[i].transferTo(new File(path, newFileName));
+				} catch (IllegalStateException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				updatedContent.setFile1(newFileName);
+			} else {
+				updatedContent.setFile1(originalFile[i]);
 			}
 			
-			
 			contentUpdateCnt += ccd.contentUpdate(updatedContent);
-			
+
 		}
 		
 		String msg = "";
 		String url = "";
-		if (classUpdateCnt > 0 && contentUpdateCnt == listSize) {
+		
+		if (classUpdateCnt > 0 && contentUpdateCnt == content_id.length) {
 			msg = "클래스 수정이 정상적으로 처리되었습니다.";
 			url = request.getContextPath() + "/classes/classInfo?class_id=" + classId;
 		} else {
@@ -633,22 +526,20 @@ public class ClassesController {
 		
 		return "/view/alert";
 	}
-	*/
+	
 	// 클래스 삭제 process
 	@RequestMapping("classDeletePro")
-	public String classDelete(HttpServletRequest request, HttpServletResponse response) {
-		String classId = request.getParameter("class_id");
-		
-		//ClassesDao cd = new ClassesDao();
+	public String classDelete(@RequestParam("class_id") String classId) {
 		int classDeleteCnt = cd.classDelete(classId);
-		
-		//Class_ContentDao ccd = new Class_ContentDao();
-		
 		int listSize = (ccd.contentList(classId)).size(); 
 		int contentDeleteCnt = ccd.contentDelete(classId);
 				
 		String msg = "";
 		String url = request.getContextPath() + "/member/myPage";
+		
+		msd.deleteInfo(classId);
+		
+		// 클래스와 차시별 객체 전체가 정상적으로 삭제되면
 		if (classDeleteCnt > 0 && contentDeleteCnt == listSize) {
 			msg = "클래스 삭제가 정상적으로 처리되었습니다.";
 		} else {
