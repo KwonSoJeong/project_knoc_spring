@@ -10,37 +10,43 @@
 <div class="wrapper">
 
 	<div class="white">
-		<div class="title">멘토링 신고 내역</div>
+		<div class="flex">
+			<div class="title">전체 회원 목록</div>
+			<form action="">
+				<input class="form-control form-content" type="text" placeholder="아이디로 검색" name="#">
+			</form>
+		</div>
+		
 		<table class="table">
 			<colgroup>
-				<col width="6%"/>
-				<col width="15%"/>
-				<col width="19%"/>
-				<col width="15%"/>
 				<col width="10%"/>
-				<col width="25%"/>
+				<col width="20%"/>
+				<col width="10%"/>
+				<col width="24%"/>
+				<col width="10%"/>
+				<col width="16%"/>
 				<col width="10%"/>
 			</colgroup>
 		
 			<tr>
 				<th>번호</th>
-				<th>신고한 ID</th>
-				<th>신고 게시물</th>
-				<th>신고된 ID</th>
-				<th>접수일자</th>
-				<th>신고사유</th>
+				<th>ID</th>
+				<th>이름</th>
+				<th>이메일</th>
+				<th>BlackList</th>
+				<th></th>
 				<th></th>
 			</tr>	
 			
 			<c:forEach begin="1" end="12" varStatus="status">
 			<tr>
 			    <td>${status.count}</td>
-			    <td>신고자</td>
-			    <td><a href="#">게시물 제목</a></td>
-			    <td>abcd123</td>
-			    <td>2022.03.11</td>
-			    <td>맘에안들어서</td>
-			    <td><button class="btn green" type="submit">제재</button></td>
+			    <td>에이비씨12</td>
+			    <td>홍길동</td>
+			    <td>gildong@gmail.com</td>
+			    <td>N</td>
+			    <td><button class="btn1 green" type="submit">블랙리스트 등록</button></td>
+			    <td><button class="btn red" type="submit">정보 삭제</button></td>
 			</tr>
 			</c:forEach>
 			
@@ -51,17 +57,17 @@
 			<ul class="pagination justify-content-center"  >
 			
 				<li class='page-item <c:if test="${startPage <= bottomLine}"> disabled </c:if>'>
-					<a class="page-link" href="<%=request.getContextPath()%>/admin/report?pageNum=${startPage-bottomLine}">이전</a>
+					<a class="page-link" href="<%=request.getContextPath()%>/admin/suspendedList?pageNum=${startPage-bottomLine}">이전</a>
 				</li>
 		   
 		   		<c:forEach var="i" begin="${startPage}" end="${endPage}">
 				  <li class='page-item <c:if test="${i==pageInt}">  active </c:if>'>
-				  	<a class="page-link" href="<%=request.getContextPath()%>/admin/report?pageNum=${i}"> ${i}</a>
+				  	<a class="page-link" href="<%=request.getContextPath()%>/admin/suspendedList?pageNum=${i}"> ${i}</a>
 				  </li>
 				</c:forEach>
 		
 				<li class='page-item <c:if test="${endPage >= maxPage}"> disabled </c:if>'>
-					<a class="page-link" href="<%=request.getContextPath()%>/admin/report?pageNum=${startPage+bottomLine}">다음</a>
+					<a class="page-link" href="<%=request.getContextPath()%>/admin/suspendedList?pageNum=${startPage+bottomLine}">다음</a>
 				</li>
 			</ul> 
 		</div>
