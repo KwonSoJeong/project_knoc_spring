@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="report">
+
+<select id="nextNum" resultType="int">
+select reportseq.nextval from dual
+</select>
+
+<insert id="insertReport" parameterType="report">
+insert into report values (#{no},#{id},#{report_Id},sysdate,#{reason})
+</insert>
+
+
+</mapper>

@@ -77,14 +77,14 @@ public class HelpController {
 		
 		//session에 info위치 저장
 		if(qnaId == null) {
-			qnaId = (String) request.getSession().getAttribute("qna_Id");
+			qnaId = (String) session.getAttribute("qna_Id");
 		}
-		request.getSession().setAttribute("qna_Id", qnaId);
+		session.setAttribute("qna_Id", qnaId);
 		
 		//qna 상세정보 불러오기
 		q = qd.selectOne(qnaId);
 		
-		String memid = (String) request.getSession().getAttribute("memid");
+		String memid = (String) session.getAttribute("memid");
 		if(memid==null) {
 			memid = "";
 		}
@@ -143,7 +143,7 @@ public class HelpController {
 	public String qnaWritePro(Qna q) {
 
 		//로그인 체크
-		String memid = (String) request.getSession().getAttribute("memid");
+		String memid = (String) session.getAttribute("memid");
 		if (memid == null) {
 			msg = "로그인이 필요한 서비스 입니다.";
 			url = request.getContextPath()+"/member/login";
@@ -152,7 +152,7 @@ public class HelpController {
 			return "/view/alert";
 		}
 
-		String writerId = (String) request.getSession().getAttribute("memid");
+		String writerId = (String) session.getAttribute("memid");
 		String qnaId = "qna" + qd.nextNum();
 
 		q.setQna_Id(qnaId);
@@ -179,7 +179,7 @@ public class HelpController {
 		public String commentPro(String qna_Id, Qna_Comment qc) {
 			
 			//어드민 계정 체크
-			String memid = (String) request.getSession().getAttribute("memid");
+			String memid = (String) session.getAttribute("memid");
 			if (!memid.equals("admin")) {
 				msg = "어드민 계정만 답글을 등록하실 수 있습니다.";
 				url = request.getContextPath()+"/help/qnaInfo";
@@ -218,7 +218,7 @@ public class HelpController {
 		public String qnaUpdate(String qna_Id) {
 					
 			Qna q = new Qna();
-			String id = (String)request.getSession().getAttribute("memid");
+			String id = (String)session.getAttribute("memid");
 			q = qd.selectOne(qna_Id);
 					
 			if(id==null || !id.equals(q.getWriter())) { //작성자인지 체크
@@ -258,7 +258,7 @@ public class HelpController {
 					
 			Qna q = new Qna();
 			q = qd.selectOne(qna_Id);
-			String id = (String)request.getSession().getAttribute("memid");
+			String id = (String)session.getAttribute("memid");
 
 			if(id==null || !id.equals(q.getWriter())) { //작성자인지 체크
 				msg = "게시글 삭제는 작성자만 할 수 있습니다.";

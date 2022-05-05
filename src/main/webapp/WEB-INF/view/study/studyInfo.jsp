@@ -9,8 +9,40 @@
 <link rel="stylesheet" href="<%=request.getContextPath() %>/resource/style/studyInfo.css" />
 </head>
 <body>
-	<div class="layout-container" style="padding-top: 34px;">
 
+<!-- The Modal -->
+<div class="modal" id="myModal" style="z-index: 1500;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">신고</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <form action="<%=request.getContextPath()%>/study/report">
+      <div class="modal-body">
+      <div class="form-group">
+        <label>신고 사유</label>
+        <textarea name="reason" class="form-control" style="height: 180px; placeholder="신고 사유를 입력해 주세요"></textarea>
+        <input type="hidden" name="id" value="${memid }">
+        <input type="hidden" name="report_Id" value="${s.study_Id}">
+        </div>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+      <button type="submit" class="btn btn-danger">신고하기</button>
+        <button type="button" class="btn" style="background-color: #37d3c0; color: white;" data-dismiss="modal">닫기</button>
+      </div>
+		</form>
+    </div>
+  </div>
+</div>
+
+	<div class="layout-container" style="padding-top: 34px;">
 		<div class="class_header">
 
 			<div class="bottom-line">
@@ -67,7 +99,7 @@
 										<button type="button" onclick="location.href='studyUpdate?study_Id=${s.study_Id}'" style="margin-left: 10px; display: inline; background-color: #4dabf7; border-color: #4dabf7; padding: 0.2em 0.6em 0.3em; font-size: 75%; font-weight: bold; line-height: 1; color: #fff; text-align: center; white-space: nowrap; vertical-align: baseline; border-radius: 0.25em;">수정</button>
 										<button type="button" onclick="location.href='stydyDeletePro?study_Id=${s.study_Id}'" style="margin-left: 10px; display: inline; background-color: #ced4da; border-color: #ced4da; padding: 0.2em 0.6em 0.3em; font-size: 75%; font-weight: bold; line-height: 1; color: #fff; text-align: center; white-space: nowrap; vertical-align: baseline; border-radius: 0.25em;">삭제</button>
 									</c:if>
-
+									<button type="button" data-toggle="modal" data-target="#myModal" style="margin-left: 10px; display: inline; background-color: #ff3333; border-color: #ff3333; padding: 0.2em 0.6em 0.3em; font-size: 75%; font-weight: bold; line-height: 1; color: #fff; text-align: center; white-space: nowrap; vertical-align: baseline; border-radius: 0.25em;">신고</button>
 									<h2 class="panel-title">${s.title }</h2>
 
 									<hr />
