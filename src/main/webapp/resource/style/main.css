@@ -213,7 +213,21 @@ h1{
     height: 67px;
 }
 
-
+.m-cht-badge {
+	display: inline-block;
+	position: relative;
+    right: -50px;
+    top: 25px;
+    padding: 0 5px;
+    width: auto;
+    height: 20px;
+    background-color: #f76a5a;
+    color: white;
+    border-radius: 20px;
+    line-height: 19px;
+    text-align: center;
+    font-size: 14px;
+}
 
 .m-cht:hover{
 	cursor: pointer;
