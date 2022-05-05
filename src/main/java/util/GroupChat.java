@@ -46,8 +46,6 @@ public class GroupChat implements ApplicationContextAware {
 			if (webChat.getGroupId() != "") {
 				// 로그인 정보가 없을 때는 db에 메세지 데이터를 추가시키지 않음
 				int no = wcd.nextSeq();
-				
-				
 				webChat.setNo(no);
 				webChat.setReadChk("N");
 				wcd.insertChat(webChat);
@@ -56,6 +54,15 @@ public class GroupChat implements ApplicationContextAware {
 			for (Session client : clients.keySet()) {
 				if (!client.equals(session) && clients.get(client).equals(webChat.getGroupId())) {
 					client.getBasicRemote().sendText(webChat.toString());
+					/*
+					// 상대방이 연결상태일 경우 readchk 업데이트
+					if (!webChat.getUserId().equals("admin")) {
+						wcd.adminReadChkUpdate();
+					} else {
+						wcd.userReadChkUpdate(webChat.getGroupId());
+					}
+					*/
+					
 				}
 			}
 		}

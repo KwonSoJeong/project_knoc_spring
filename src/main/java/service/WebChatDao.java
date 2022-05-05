@@ -59,4 +59,35 @@ public class WebChatDao {
 		return sqlSession.selectList(ns + "groupList");
 		
 	}
+	
+	public int userChatCount(String userId) {
+		
+		return sqlSession.selectOne(ns + "userChatCount", userId);
+				
+	}
+	
+	public int adminChatCount() {
+		
+		return sqlSession.selectOne(ns + "adminChatCount");
+	}
+	
+	public void userReadChkUpdate(String userId) {
+		try {
+			sqlSession.update(ns + "userReadChkUpdate", userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.commit();
+		}
+	}
+	
+	public void adminReadChkUpdate() {
+		try {
+			sqlSession.update(ns + "adminReadChkUpdate");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.commit();
+		}
+	}
 }

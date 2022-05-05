@@ -186,6 +186,9 @@ function favoriteCntUp(class_id, cnt) {
 	
 	<!-- ㅡㅡㅡㅡㅡㅡㅡㅡ채널톡ㅡㅡㅡㅡㅡㅡㅡㅡㅡ -->	
 	<div class="no m-cht">
+	   <c:if test="${userId != null}">
+	    <span class="m-cht-badge">0</span>
+	    </c:if>
 		<img src="<%=request.getContextPath()%>/resource/image/talk.png">
 	</div>
 
@@ -239,8 +242,36 @@ function favoriteCntUp(class_id, cnt) {
 <script>
 const msgArea = document.querySelector(".m-cht-msg-win")
 const inputArea = document.querySelector(".m-cht-input-msg")
+const chatButton = document.querySelector(".m-cht")
+
 let groupId = '${groupId}'
 const webSocket = new WebSocket('ws://#/<%=request.getContextPath()%>/groupchat')
+// 읽지 않은 채팅 개수 표시를 위해 별도로 소켓 연결
+const countSocket = new WebSocket('ws://#/<%=request.getContextPath()%>/chatCount')
+
+countSocket.onopen = function(event) {
+	if ('${userId}' !== '') {
+		countSocket.send('${userId}:open')
+	}
+}
+countSocket.onerror = function(event) {
+	
+}
+countSocket.onmessage = function(event) {
+	let count = document.querySelector(".m-cht-badge");
+	count.innerHTML = event.data;
+}
+
+chatButton.addEventListener('click', function() {
+	// 채팅 아이콘 클릭하는 시점에 서버로 메세지 보내고 groupId 설정
+	// 관리자는 답장할 유저 선택할 때 설정
+	/*
+	if ('${userId}' !== 'admin'){
+	    webSocket.send(groupId + ':${userId}:connected')
+	}
+	*/
+	countSocket.send('${userId}:read')
+})
 
 webSocket.onopen = function(event) {onOpen(event)}
 webSocket.onerror = function(event) {onError(event)}

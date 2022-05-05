@@ -7,7 +7,7 @@ select webchatseq.nextval from dual
 </select>
 
 <insert id="insertChat" parameterType="webchat">
-insert into webchat (no, groupid, userid, message) values (#{no}, #{groupId}, #{userId}, #{message})
+insert into webchat (no, groupid, userid, message, readchk) values (#{no}, #{groupId}, #{userId}, #{message}, #{readChk})
 </insert>
 
 <select id="chatList" parameterType="string" resultType="webchat">
@@ -17,4 +17,22 @@ select * from webchat where groupid = #{value} order by no
 <select id="groupList" resultType="string">
 select distinct groupid from webchat
 </select>
+
+<select id="userChatCount" parameterType="string" resultType="int">
+select count(*) from webchat where groupid = #{value} and userid != groupid and readchk='N'
+</select>
+
+<select id="adminChatCount" resultType="int">
+select count(*) from webchat where userid=groupid and readchk='N'
+</select>
+
+<update id="userReadChkUpdate">
+update webchat set readchk='Y'
+where groupid = #{value} and userid != groupid and readchk='N'
+</update>
+
+<update id="adminReadChkUpdate">
+update webchat set readchk='Y'
+where userid=groupid and readchk='N'
+</update>
 </mapper>
