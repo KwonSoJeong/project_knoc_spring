@@ -16,10 +16,12 @@ import model.Knoc_Member;
 import model.Member_Study_Info;
 import model.Mentoring;
 import model.Notification;
+import model.Report;
 import service.Knoc_MemberDao;
 import service.Member_Study_InfoDao;
 import service.MentoringDao;
 import service.NotificationDao;
+import service.ReportDao;
 import service.StudyDao;
 
 
@@ -42,6 +44,8 @@ public class MentorController {
 	Knoc_MemberDao memdao = new Knoc_MemberDao();
 	@Autowired
 	NotificationDao notid;
+	@Autowired
+	ReportDao rd;
 	
 	@ModelAttribute
 	void init(HttpServletRequest request, Model m) {
@@ -76,7 +80,7 @@ public class MentorController {
 	@RequestMapping("mentorRegister")
 	public String mentorRegister() {
 
-		String memid = (String) request.getSession().getAttribute("memid");
+		String memid = (String) session.getAttribute("memid");
 		if (memid == null) {
 			msg = "로그인이 필요한 서비스 입니다.";
 			url = request.getContextPath()+"/member/login";
@@ -93,7 +97,7 @@ public class MentorController {
 		
 		Knoc_Member mem = new Knoc_Member();
 
-		String id = (String) request.getSession().getAttribute("memid");
+		String id = (String) session.getAttribute("memid");
 		mem = memdao.selectOne(id);
 
 		String mentoringId = "mentoring" + mtd.nextNum();
@@ -132,11 +136,11 @@ public class MentorController {
 		
 		//session에 info위치 저장
 		if(mentoring_Id == null) {
-			mentoring_Id = (String) request.getSession().getAttribute("mentoring_Id");
+			mentoring_Id = (String) session.getAttribute("mentoring_Id");
 		}
-		request.getSession().setAttribute("mentoring_Id", mentoring_Id);
+		session.setAttribute("mentoring_Id", mentoring_Id);
 		
-	//	System.out.println(mentoring_Id);
+		System.out.println("session.mid="+session.getAttribute("mentoring_Id"));
 		Mentoring mt = new Mentoring();
 		
 		mt = mtd.selectOne(mentoring_Id);
@@ -152,7 +156,7 @@ public class MentorController {
 	@RequestMapping("mentoringEntry")
 	public String mentoringEntry(String mentoring_Id) {
 		
-		if(request.getSession().getAttribute("memid")==null) { //로그인체크
+		if(session.getAttribute("memid")==null) { //로그인체크
 			msg = "로그인이 필요한 서비스 입니다.";
 			url = request.getContextPath()+"/member/login";
 			m.addAttribute("msg", msg);
@@ -161,7 +165,7 @@ public class MentorController {
 		}
 //		System.out.println("mentoring_Id="+mentoring_Id);
 		//중복신청체크
-		String id = (String) request.getSession().getAttribute("memid");
+		String id = (String) session.getAttribute("memid");
 		if(notid.EntryCheck(id,mentoring_Id)!=0) {
 			msg = "이미 참가신청한 멘토링 입니다.";
 			url = request.getContextPath()+"/mentor/mentorInfo";
@@ -209,7 +213,7 @@ public class MentorController {
 	public String mentorUpdate(String mentoring_Id) {
 						
 		Mentoring mt = new Mentoring();
-		String id = (String)request.getSession().getAttribute("memid");
+		String id = (String)session.getAttribute("memid");
 		mt = mtd.selectOne(mentoring_Id);
 						
 		if(id==null || !id.equals(mt.getMentor_Id())) { //작성자인지 체크
@@ -249,7 +253,7 @@ public class MentorController {
 						
 		Mentoring mt = new Mentoring();
 		mt = mtd.selectOne(mentoring_Id);			
-		String id = (String)request.getSession().getAttribute("memid");
+		String id = (String) session.getAttribute("memid");
 
 		if(id==null || !id.equals(mt.getMentor_Id())) { //작성자인지 체크
 			msg = "게시글 삭제는 작성자만 할 수 있습니다.";
@@ -271,6 +275,33 @@ public class MentorController {
 //		m.addAttribute(attributeValue)
 		m.addAttribute("msg", msg);
 		m.addAttribute("url", url);
+		return "/view/alert";
+	}
+	
+	@RequestMapping("report")
+	public String report(Report report) {
+		
+		if (session.getAttribute("memid") == null) { // 로그인체크
+			msg = "로그인이 필요한 서비스 입니다.";
+			url = request.getContextPath() + "/member/login";
+			m.addAttribute("msg", msg);
+			m.addAttribute("url", url);
+			return "/view/alert";
+		}
+		
+		//프론트 화면에서 
+		report.setNo(rd.nextNum());
+		
+		int num = rd.insertReport(report);
+		
+		if(num > 0) { 
+			msg = "신고접수가 완료되었습니다.";
+		}else {
+			msg = "신고 접수 오류";
+		}
+		url = request.getContextPath()+"/mentor/mentorInfo";
+		m.addAttribute("msg",msg);
+		m.addAttribute("url",url);
 		return "/view/alert";
 	}
 	

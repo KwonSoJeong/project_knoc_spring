@@ -9,6 +9,39 @@
 <link rel="stylesheet" href="<%=request.getContextPath()%>/resource/style/mentorInfo.css">
 </head>
 <body>
+
+<!-- The Modal -->
+<div class="modal" id="myModal" style="z-index: 1500;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">신고</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <form action="<%=request.getContextPath()%>/mentor/report">
+      <div class="modal-body">
+      <div class="form-group">
+        <label>신고 사유</label>
+        <textarea name="reason" class="form-control" style="height: 180px; placeholder="신고 사유를 입력해 주세요"></textarea>
+        <input type="hidden" name="id" value="${memid }">
+        <input type="hidden" name="report_Id" value="${mt.mentoring_Id}">
+        </div>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+      <button type="submit" class="btn btn-danger">신고하기</button>
+        <button type="button" class="btn" style="background-color: #37d3c0; color: white;" data-dismiss="modal">닫기</button>
+      </div>
+		</form>
+    </div>
+  </div>
+</div>
+
 	<div class="mti-wrapper">
 	
 	
@@ -44,10 +77,11 @@
 						<button id="mentro-bung2" type="submit">멘토링신청</button>
 					</form>	
 				</div>
-				<c:if test="${memid==m.mentor_Id }">
+				<c:if test="${memid==mt.mentor_Id }">
 				<button id="mentro-bung2" onclick="location.href='mentorUpdate?mentoring_Id=${mt.mentoring_Id}'" type="button">수정</button>
 				<button id="mentro-bung2" onclick="location.href='mentorDeletePro?mentoring_Id=${mt.mentoring_Id}'" type="button">삭제</button>
 				</c:if>
+				<button id="mentro-bung2" data-toggle="modal" data-target="#myModal" type="button">신고</button>
 			</div>		
 		</div>
 	</div>

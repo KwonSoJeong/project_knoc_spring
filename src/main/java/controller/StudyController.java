@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import model.Member_Study_Info;
 import model.Notification;
+import model.Report;
 import model.Study;
 import model.Study_Comment;
 import service.Member_Study_InfoDao;
 import service.NotificationDao;
+import service.ReportDao;
 import service.StudyDao;
 import service.Study_CommentDao;
 
@@ -39,6 +41,8 @@ public class StudyController {
 	Member_Study_InfoDao msid = new Member_Study_InfoDao();
 	@Autowired
 	NotificationDao notid;
+	@Autowired
+	ReportDao rd;
 
 	@ModelAttribute
 	void init(HttpServletRequest request, Model m) {
@@ -51,14 +55,14 @@ public class StudyController {
 	@RequestMapping("studyWrite")
 	public String studyWrite() {
 		
-		if (request.getSession().getAttribute("memid") == null) {
+		if (session.getAttribute("memid") == null) {
 			msg = "로그인이 필요한 서비스 입니다.";
 			url = request.getContextPath() + "/member/login";
 			m.addAttribute("msg", msg);
 			m.addAttribute("url", url);
 			return "/view/alert";
 		}
-		String id = (String) request.getSession().getAttribute("memid");
+		String id = (String) session.getAttribute("memid");
 		String profile = sd.callProfile(id);
 
 		m.addAttribute("profile", profile);
@@ -70,7 +74,7 @@ public class StudyController {
 	@RequestMapping("studyWritePro")
 	public String studyWritePro(Study s) {
 
-		String writerId = (String) request.getSession().getAttribute("memid");
+		String writerId = (String) session.getAttribute("memid");
 		String id = "study" + sd.nextNum();
 
 		s.setStudy_Id(id);
@@ -106,7 +110,7 @@ public class StudyController {
 			@RequestParam(value = "keyword", required = false) String keyword) {
 
 		// process = 1 :모집중, process = 2 : 모집완료, process = 3 : 전체
-		request.getSession().setAttribute("process", process);
+		session.setAttribute("process", process);
 		// System.out.println("porcess="+process);
 		int limit = 10; // 한 페이지에 보이는 게시글 수
 
@@ -168,9 +172,9 @@ public class StudyController {
 
 		// session에 info위치 저장
 		if (study_Id == null) {
-			study_Id = (String) request.getSession().getAttribute("study_Id");
+			study_Id = (String) session.getAttribute("study_Id");
 		}
-		request.getSession().setAttribute("study_Id", study_Id);
+		session.setAttribute("study_Id", study_Id);
 
 		Study s = new Study();
 
@@ -199,7 +203,7 @@ public class StudyController {
 	@RequestMapping("writeStudyCommentPro")
 	public String writeStudyComment(Study_Comment sc) {
 
-		String id = (String) request.getSession().getAttribute("memid");
+		String id = (String) session.getAttribute("memid");
 		String commentId = "studycomment" + scd.nextNum();
 
 		sc.setComment_Id(commentId);
@@ -224,7 +228,7 @@ public class StudyController {
 	@RequestMapping("studyEntry")
 	public String studyEntry(String study_Id) {
 
-		if (request.getSession().getAttribute("memid") == null) { // 로그인체크
+		if (session.getAttribute("memid") == null) { // 로그인체크
 			msg = "로그인이 필요한 서비스 입니다.";
 			url = request.getContextPath() + "/member/login";
 			m.addAttribute("msg", msg);
@@ -232,7 +236,7 @@ public class StudyController {
 			return "/view/alert";
 		}
 
-		String id = (String) request.getSession().getAttribute("memid");
+		String id = (String) session.getAttribute("memid");
 		// 중복신청체크
 		if (notid.EntryCheck(id, study_Id)!=0) {
 			msg = "이미 참가신청한 스터디 입니다.";
@@ -282,7 +286,7 @@ public class StudyController {
 
 		Study s = new Study();
 		s = sd.selectOne(study_Id);
-		String id = (String) request.getSession().getAttribute("memid");
+		String id = (String) session.getAttribute("memid");
 
 		if (id == null || !id.equals(s.getLeader_Id())) { // 작성자인지 체크
 			msg = "모집전환은 작성자 본인만 전환할 수 있습니다.";
@@ -315,7 +319,7 @@ public class StudyController {
 	public String studyUpdate(String study_Id) {
 
 		Study s = new Study();
-		String id = (String) request.getSession().getAttribute("memid");
+		String id = (String) session.getAttribute("memid");
 		s = sd.selectOne(study_Id);
 
 		if (id == null || !id.equals(s.getLeader_Id())) { // 작성자인지 체크
@@ -358,7 +362,7 @@ public class StudyController {
 
 		Study s = new Study();
 		s = sd.selectOne(study_Id);
-		String id = (String) request.getSession().getAttribute("memid");
+		String id = (String) session.getAttribute("memid");
 
 		if (id == null || !id.equals(s.getLeader_Id())) { // 작성자인지 체크
 			msg = "게시글 삭제는 작성자만 할 수 있습니다.";
@@ -382,4 +386,32 @@ public class StudyController {
 		m.addAttribute("url", url);
 		return "/view/alert";
 	}
+	
+	@RequestMapping("report")
+	public String report(Report report) {
+		
+		if (session.getAttribute("memid") == null) { // 로그인체크
+			msg = "로그인이 필요한 서비스 입니다.";
+			url = request.getContextPath() + "/member/login";
+			m.addAttribute("msg", msg);
+			m.addAttribute("url", url);
+			return "/view/alert";
+		}
+		
+		//프론트 화면에서 
+		report.setNo(rd.nextNum());
+		
+		int num = rd.insertReport(report);
+		
+		if(num > 0) { 
+			msg = "신고접수가 완료되었습니다.";
+		}else {
+			msg = "신고 접수 오류";
+		}
+		url = request.getContextPath()+"/study/studyInfo";
+		m.addAttribute("msg",msg);
+		m.addAttribute("url",url);
+		return "/view/alert";
+	}
+	
 }
