@@ -78,8 +78,14 @@
 
 						<c:if test="${memid!=null}">
 							<li class="nav-it"><a id="fsfc" class="nav-link" href="<%=request.getContextPath()%>/member/logout">로그아웃</a></li>
+							<c:choose>
+							<c:when test="${memid!='admin'}">
 							<li class="nav-it"><a id="fsfc" class="nav-link" href="<%=request.getContextPath()%>/member/myPage">마이페이지</a></li>
-
+							</c:when>
+							<c:otherwise>
+							<li class="nav-it"><a id="fsfc" class="nav-link" href="<%=request.getContextPath()%>/admin/memberList">관리자페이지</a></li>
+							</c:otherwise>
+							</c:choose>
 							<li class="nav-it">
 								<div class="navbar-item">
 									<span class="message-hoverable"> <span class="message_modal_btn icon-hover"> <a href="<%=request.getContextPath()%>/noti/notiList" id="fsfc" class="nav-link"><i class="fa fa-bell"></i></a>
