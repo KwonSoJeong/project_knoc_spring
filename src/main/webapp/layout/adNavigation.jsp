@@ -20,16 +20,16 @@
 	<div id="tog1" class="bar">
 		<div class="menu">회원관리</div>
 		<ul class="submenu">
-			<li><a href="<%=request.getContextPath()%>/admin/memberList.jsp">회원정보 관리</a></li>
-			<li><a href="<%=request.getContextPath()%>/admin/blackList.jsp">블랙리스트 관리</a></li>
-			<li><a href="<%=request.getContextPath()%>/admin/suspendedList.jsp">제제 회원 관리</a></li>
+			<li><a href="<%=request.getContextPath()%>/admin/memberList">회원정보 관리</a></li>
+			<li><a href="<%=request.getContextPath()%>/admin/blackList">블랙리스트 관리</a></li>
+			<li><a href="<%=request.getContextPath()%>/admin/suspendedList">제제 회원 관리</a></li>
 		</ul>
 	</div>
 	<div id="tog2" class="bar">
 		<div class="menu">신고관리</div>
 		<ul class="submenu2">
-			<li><a href="<%=request.getContextPath()%>/admin/report.jsp">멘토링 신고내역</a></li>
-			<li><a href="<%=request.getContextPath()%>/admin/report.jsp">스터디 신고내역</a></li>
+			<li><a href="<%=request.getContextPath()%>/admin/report">멘토링 신고내역</a></li>
+			<li><a href="<%=request.getContextPath()%>/admin/report">스터디 신고내역</a></li>
 		</ul>
 	</div>
 </div>

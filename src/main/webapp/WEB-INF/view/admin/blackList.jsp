@@ -3,8 +3,10 @@
 <!-- ㅡㅡㅡㅡㅡㅡㅡㅡReportㅡㅡㅡㅡㅡㅡㅡㅡㅡ -->
 <!DOCTYPE html>
 <html>
-<head><meta charset="UTF-8"><title></title></head>
+<head><meta charset="UTF-8"><title></title>
 <link href="<%=request.getContextPath() %>/resource/style/admin/admin.css" rel='stylesheet' type='text/css'/>
+</head>
+
 
 <body>
 <div class="wrapper">
