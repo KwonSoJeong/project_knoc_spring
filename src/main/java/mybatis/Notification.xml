@@ -12,7 +12,7 @@ insert into notification values (#{no}, #{noti_Code}, #{noti_Content},'1', sysda
 </insert>
 
 <select id="selectList" parameterType="string" resultType="notification">
-select * from notification where to_Id = #{to_Id} order by noti_date desc
+select * from notification where to_Id = #{to_Id} order by no desc
 </select>
 
 <select id="unreadCnt" parameterType="string" resultType="int">
@@ -20,7 +20,7 @@ select count(*) from notification where to_Id = #{to_Id} and readChk = '1'
 </select>
 
 <update id="allReadChk" parameterType="string">
-update notification set readChk = '0' where to_Id = #{to_Id}
+update notification set readChk = '0', type = 0 where to_Id = #{to_Id}
 </update>
 
 <select id="EntryCheck" parameterType="map" resultType="int">

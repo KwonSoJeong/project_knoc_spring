@@ -47,6 +47,8 @@ public class NorificationController {
 	@RequestMapping("notiList")
 	public String notiList() {
 		String id = (String) session.getAttribute("memid");
+		System.out.println("id:::"+id);
+		System.out.println("DBG001");
 		List<Notification> notiList = notid.selectList(id);
 		int unreadNoti = notid.unreadCnt(id);
 		
@@ -63,10 +65,16 @@ public class NorificationController {
 		String id = (String) session.getAttribute("memid");
 		int num = notid.allReadChk(id);
 		
-		System.out.println("num="+num);
-		
 		return "redirect:/noti/notiList";
 		
+	}
+	
+	@RequestMapping("readChk")
+	public String readChk(int no) {
+		Notification noti = new Notification();
+		notid.readChk(no);
+		
+		return "redirect:/noti/notiList";
 	}
 	
 	@RequestMapping("accept")
@@ -95,7 +103,7 @@ public class NorificationController {
 		
 		//type 전환 
 		notid.typeChange(no);
-		
+		System.out.println("no:::"+no);
 		//읽음체크
 		notid.readChk(no);
 		

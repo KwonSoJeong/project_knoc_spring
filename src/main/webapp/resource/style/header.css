@@ -230,3 +230,46 @@ h1{
 	}
 }
 
+.message-hoverable {
+	    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.message_modal_btn {
+		    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.message_modal_cover {
+	display: none;
+    position: absolute;
+    width: 400px;
+    border-radius: 3px;
+    background-color: #fff;
+    top: 55px;
+		right: 54px;
+    z-index: 10;
+    border: 1px solid #e0e0e0;
+}
+
+.icon-hover:hover + .message_modal_cover {
+	/* display: block; */
+}
+
+.message_modal_cover:after {
+    display: inline-block;
+    position: absolute;
+    content: "";
+    width: 24px;
+    height: 24px;
+    top: -12px;
+    right: 15px;
+    transform: rotate(45deg);
+    border: 1px solid #e0e0e0;
+    border-right: none;
+    border-bottom: none;
+}
