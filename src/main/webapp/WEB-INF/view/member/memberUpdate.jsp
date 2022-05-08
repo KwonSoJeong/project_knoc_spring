@@ -17,7 +17,7 @@ function pic_upload() {
 </script>
 </head>
 <body>
-    <main>
+    <main id ="minput-main">
         <div class="container">
             <div id="member-input" class="center-align">
             <h1 id="member-input-h1">회원정보수정</h1>

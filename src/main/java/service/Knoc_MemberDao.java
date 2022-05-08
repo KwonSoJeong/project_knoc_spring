@@ -1,6 +1,7 @@
 package service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -45,6 +46,17 @@ public class Knoc_MemberDao {
 		
 	}
 	
+	public List<Knoc_Member> selectMemberAll() {
+		
+		return sqlSession.selectList(ns + "selectMemberAll");
+	}
+	
+	public List<Knoc_Member> selectBlackList() {
+		
+		return	sqlSession.selectList(ns + "selectBlackList");
+				
+	}
+	
 	// 회원 정보 수정
 	public int updateMember(Knoc_Member member) {
 		try {
@@ -70,6 +82,26 @@ public class Knoc_MemberDao {
 		}
 		
 		return 0;
+	}
+	
+	public void addBlackList(String id) {
+		try {
+			sqlSession.update(ns + "addBlackList", id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.commit();
+		}
+	}
+	
+	public void deleteBlackList(String id) {
+		try {
+			sqlSession.update(ns + "deleteBlackList", id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.commit();
+		}
 	}
 	
 	public int deleteMember(Knoc_Member member) {

@@ -4,11 +4,19 @@
 <mapper namespace="knoc_member">
 
 <insert id="insertMember" parameterType="knoc_member">
-insert into knoc_member values(#{id},#{pwd},#{name},#{email},#{tel},#{profile})
+insert into knoc_member values(#{id},#{pwd},#{name},#{email},#{tel},#{profile},#{blacklist})
 </insert>
 
 <select id="selectOne" resultType="knoc_member" parameterType="string">
 select * from knoc_member where id = #{id}
+</select>
+
+<select id="selectMemberAll" resultType="knoc_member">
+select * from knoc_member where id != 'admin'
+</select>
+
+<select id="selectBlackList" resultType="knoc_member">
+select * from knoc_member where blacklist = 'Y'
 </select>
 
 <update id="updateMember" parameterType="knoc_member">
@@ -21,6 +29,14 @@ where id = #{id}
 update knoc_member
 set pwd = #{pwd}
 where id = #{id}
+</update>
+
+<update id="addBlackList" parameterType="string">
+update knoc_member set blacklist = 'Y' where id=#{value}
+</update>
+
+<update id="deleteBlackList" parameterType="string">
+update knoc_member set blacklist = 'N' where id=#{value}
 </update>
 
 <delete id="deleteMember" parameterType="knoc_member">
