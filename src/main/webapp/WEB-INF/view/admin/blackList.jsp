@@ -12,13 +12,12 @@
 <div class="wrapper">
 
 	<div class="white">
-		<div class="title">제제 회원 등록 내역</div>
+		<div class="title">블랙리스트 목록</div>
 		<table class="table">
 			<colgroup>
 				<col width="10%"/>
 				<col width="15%"/>
 				<col width="15%"/>
-				<col width="17%"/>
 				<col width="28%"/>
 				<col width="15%"/>
 			</colgroup>
@@ -27,18 +26,16 @@
 				<th>번호</th>
 				<th>ID</th>
 				<th>이름</th>
-				<th>등록일자</th>
 				<th>이메일</th>
 				<th></th>
 			</tr>	
 			
-			<c:forEach begin="1" end="12" varStatus="status">
+			<c:forEach var="member" items="${blackList}">
 			<tr>
-			    <td>${status.count}</td>
-			    <td>abc12</td>
-			    <td>홍길동</td>
-			    <td>2022.03.11</td>
-			    <td>gildong@gmail.com</td>
+			    <td>0</td>
+			    <td>${member.id}</td>
+                <td>${member.name}</td>
+                <td>${member.email}</td>
 			    <td><button class="btn red" type="submit">등록 해제</button></td>
 			</tr>
 			</c:forEach>

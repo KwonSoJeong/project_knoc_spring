@@ -40,15 +40,15 @@
 				<th></th>
 			</tr>	
 			
-			<c:forEach begin="1" end="12" varStatus="status">
+			<c:forEach var="member" items="${memberList}">
 			<tr>
-			    <td>${status.count}</td>
-			    <td>에이비씨12</td>
-			    <td>홍길동</td>
-			    <td>gildong@gmail.com</td>
-			    <td>N</td>
-			    <td><button class="btn1 green" type="submit">블랙리스트 등록</button></td>
-			    <td><button class="btn red" type="submit">정보 삭제</button></td>
+			    <td>0</td>
+			    <td>${member.id}</td>
+			    <td>${member.name}</td>
+			    <td>${member.email}</td>
+			    <td>${member.blacklist}</td>
+			    <td><button class="btn1 green" type="button" onclick="addBlackList('${member.id}')">블랙리스트 등록</button></td>
+			    <td><button class="btn red" type="button">정보 삭제</button></td>
 			</tr>
 			</c:forEach>
 			
@@ -59,17 +59,17 @@
 			<ul class="pagination justify-content-center"  >
 			
 				<li class='page-item <c:if test="${startPage <= bottomLine}"> disabled </c:if>'>
-					<a class="page-link" href="<%=request.getContextPath()%>/admin/suspendedList?pageNum=${startPage-bottomLine}">이전</a>
+					<a class="page-link" href="<%=request.getContextPath()%>/admin/memberList?pageNum=${startPage-bottomLine}">이전</a>
 				</li>
 		   
 		   		<c:forEach var="i" begin="${startPage}" end="${endPage}">
 				  <li class='page-item <c:if test="${i==pageInt}">  active </c:if>'>
-				  	<a class="page-link" href="<%=request.getContextPath()%>/admin/suspendedList?pageNum=${i}"> ${i}</a>
+				  	<a class="page-link" href="<%=request.getContextPath()%>/admin/memberList?pageNum=${i}"> ${i}</a>
 				  </li>
 				</c:forEach>
 		
 				<li class='page-item <c:if test="${endPage >= maxPage}"> disabled </c:if>'>
-					<a class="page-link" href="<%=request.getContextPath()%>/admin/suspendedList?pageNum=${startPage+bottomLine}">다음</a>
+					<a class="page-link" href="<%=request.getContextPath()%>/admin/memberList?pageNum=${startPage+bottomLine}">다음</a>
 				</li>
 			</ul> 
 		</div>
@@ -77,6 +77,10 @@
 		
 	</div>
 </div>
-
+<script>
+function addBlackList(id) {
+	location.href="<%=request.getContextPath()%>/admin/blackListPro?member_id=" + id;
+}
+</script>
 </body>
 </html>

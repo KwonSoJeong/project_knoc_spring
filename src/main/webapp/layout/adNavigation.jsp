@@ -13,8 +13,8 @@
 
 <div class="navi">
 	<!-- logo -->
-	<div class="logo_bar">
-		<img class="logo" src="<%=request.getContextPath() %>/resource/image/Wlogo.png">
+	<div class="logo_bar"><a href="<%=request.getContextPath()%>/classes/main">
+		<img class="logo" src="<%=request.getContextPath() %>/resource/image/Wlogo.png"></a>
 	</div>
 	
 	<div id="tog1" class="bar">

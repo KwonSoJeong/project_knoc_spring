@@ -64,6 +64,8 @@ public class MemberController {
 		String msg = "이미 존재하는 ID 입니다";
 		String url = request.getContextPath() + "/member/memberInput";
 		
+		newMember.setBlacklist("N");
+		
 		// 동일한 아이디 존재하는지 확인
 		chk = md.selectOne(newMember.getId());
 		
