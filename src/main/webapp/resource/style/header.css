@@ -92,6 +92,7 @@ h1{
     padding-top: 5px;
     flex-wrap: nowrap;
     flex-direction: column;
+    
 }
 
 .hdiv{
@@ -177,7 +178,7 @@ h1{
   
 	#navbar-nav2 {
 	    padding-right: 5vw;
-	    padding-left: 18vw;
+	    /* padding-left: 18vw; */
 	    /* flex-direction: row; */
 	}
 	#subnav {
@@ -203,12 +204,13 @@ h1{
 	
 	.hdiv {
     	height: 57px;
-    	width: auto;
+    	width: 100%;
 		display: flex !important;
     	flex-direction: row;
     	background-color: #fff;
     	margin-top: 0px;
     	position: initial;
+		justify-content: space-between;
 	}
 	
 	.nav-it {

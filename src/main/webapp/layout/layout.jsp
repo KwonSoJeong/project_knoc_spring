@@ -86,6 +86,9 @@
 							<li class="nav-it"><a id="fsfc" class="nav-link" href="<%=request.getContextPath()%>/admin/memberList">관리자페이지</a></li>
 							</c:otherwise>
 							</c:choose>
+							
+							<li class="nav-it"><a id="fsfc" class="nav-link" href="<%=request.getContextPath()%>/help/qnaList">고객센터</a></li>
+							
 							<li class="nav-it">
 								<div class="navbar-item">
 									<span class="message-hoverable"> <span class="message_modal_btn icon-hover"> <a href="<%=request.getContextPath()%>/noti/notiList" id="fsfc" class="nav-link"><i class="fa fa-bell"></i></a>
@@ -116,7 +119,7 @@
 
 
 
-							<li class="nav-it"><a id="fsfc" class="nav-link" href="<%=request.getContextPath()%>/help/qnaList">고객센터</a></li>
+							
 						</c:if>
 					</ul>
 				</div>
