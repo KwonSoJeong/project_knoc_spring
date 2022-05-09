@@ -28,8 +28,8 @@
 	<div id="tog2" class="bar">
 		<div class="menu">신고관리</div>
 		<ul class="submenu2">
-			<li><a href="<%=request.getContextPath()%>/admin/report">멘토링 신고내역</a></li>
-			<li><a href="<%=request.getContextPath()%>/admin/report">스터디 신고내역</a></li>
+			<li><a href="<%=request.getContextPath()%>/admin/report?subject=mentoring">멘토링 신고내역</a></li>
+			<li><a href="<%=request.getContextPath()%>/admin/report?subject=study">스터디 신고내역</a></li>
 		</ul>
 	</div>
 </div>
