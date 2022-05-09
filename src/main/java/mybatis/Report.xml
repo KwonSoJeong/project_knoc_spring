@@ -2,11 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="report">
+<resultMap type="HashMap" id="reportTitleList">
+    <id column="no" property="no"/>
+    <id column="id" property="id"/>
+    <id column="title" property="title"/>
+    <id column="regdate" property="regdate"/>
+    <id column="reason" property="reason"/>
+</resultMap>
 
 <select id="nextNum" resultType="int">
 select reportseq.nextval from dual
 </select>
 
+<select id="reportList" parameterType="string" resultType="report">
+select * from report where report_id like '${value}*'
+</select>
+<!-- 
+<select id="reportList" parameterType="string" resultMap="reportTitleList">
+select r.*, m.title from report r, ${table} m where ${value}_id like '${value}'
+</select> 
+ -->
 <insert id="insertReport" parameterType="report">
 insert into report values (#{no},#{id},#{report_Id},sysdate,#{reason})
 </insert>

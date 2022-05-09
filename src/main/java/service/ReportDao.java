@@ -1,5 +1,8 @@
 package service;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.annotation.PostConstruct;
 
 import org.apache.ibatis.session.SqlSession;
@@ -36,5 +39,9 @@ public class ReportDao {
 			sqlSession.commit();
 		}
 		return 0;
+	}
+	
+	public List<Map<String, Object>> reportList(String subject) {
+		return sqlSession.selectList(ns + "reportList", subject);
 	}
 }
