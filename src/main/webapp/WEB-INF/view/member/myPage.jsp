@@ -45,9 +45,9 @@
 							</c:forEach>
 							</ul>
 						</div>	
-						<div class="mp-justf">
+						<!-- <div class="mp-justf">
 							<div class="cur" onclick="#">관리</div>
-						</div>					
+						</div>	 -->				
 					</div>				
 				</div>
 				<span></span>
@@ -63,9 +63,9 @@
                             </c:forEach>
 							</ul>
 						</div>	
-						<div class="mp-justf">
+						<!-- <div class="mp-justf">
 							<div class="cur" onclick="#">바로가기</div>
-						</div>					
+						</div>	 -->				
 					</div>									
 				</div>
 			</div>
