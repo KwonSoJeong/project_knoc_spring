@@ -46,15 +46,42 @@ public class Knoc_MemberDao {
 		
 	}
 	
-	public List<Knoc_Member> selectMemberAll() {
+	public List<Knoc_Member> memberList(int pageInt, int limit) {
+		map.clear();
+		map.put("start", (pageInt - 1) * limit + 1);
+		map.put("end", pageInt * limit);
 		
-		return sqlSession.selectList(ns + "selectMemberAll");
+		return sqlSession.selectList(ns + "memberList", map);
 	}
 	
-	public List<Knoc_Member> selectBlackList() {
+	public int memberCount() {
+		return sqlSession.selectOne(ns + "memberCount");
+	}
+	
+	public List<Knoc_Member> memberListWithKeyword(int pageInt, int limit, String keyword) {
+		map.clear();
+		map.put("start", (pageInt - 1) * limit + 1);
+		map.put("end", pageInt * limit);
+		map.put("keyword", keyword);
 		
-		return	sqlSession.selectList(ns + "selectBlackList");
+		return sqlSession.selectList(ns + "memberListWithKeyword", map);
+	}
+	
+	public int memberCountWithKeyword(String keyword) {
+		return sqlSession.selectOne(ns + "memberCountWithKeyword", keyword);
+	}
+	
+	public List<Knoc_Member> selectBlackList(int pageInt, int limit) {
+		map.clear();
+		map.put("start", (pageInt - 1) * limit + 1);
+		map.put("end", pageInt * limit);
+		
+		return	sqlSession.selectList(ns + "selectBlackList", map);
 				
+	}
+	
+	public int blackListCount() {
+		return sqlSession.selectOne(ns + "blackListCount");
 	}
 	
 	// 회원 정보 수정

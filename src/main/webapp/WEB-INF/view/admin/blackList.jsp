@@ -32,11 +32,12 @@
 			
 			<c:forEach var="member" items="${blackList}">
 			<tr>
-			    <td>0</td>
+			    <td>${memberNum}</td>
+                <c:set var="memberNum" value="${memberNum-1 }"/>
 			    <td>${member.id}</td>
                 <td>${member.name}</td>
                 <td>${member.email}</td>
-			    <td><button class="btn red" type="submit">등록 해제</button></td>
+			    <td><button class="btn red" type="button" onclick="deleteBlackList('${member.id}')">등록 해제</button></td>
 			</tr>
 			</c:forEach>
 			
@@ -65,6 +66,10 @@
 		
 	</div>
 </div>
-
+<script>
+function deleteBlackList(id) {
+    location.href="<%=request.getContextPath()%>/admin/deleteBlackList?member_id=" + id;
+}
+</script>
 </body>
 </html>

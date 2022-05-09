@@ -166,7 +166,7 @@ public class MemberController {
 		
 		String msg = "아이디를 확인해 주세요";
 		String url = request.getContextPath() + "/member/login";
-		
+		/*
 		if (m != null) { // 계정이 존재함
 			if (m.getPwd().equals(pwd)) { // 패스워드가 일치함
 				//request.getSession().setAttribute("memid", id);
@@ -178,7 +178,25 @@ public class MemberController {
 				url = request.getContextPath() + "/member/login";
 			}
 		}
-			
+		*/
+		
+		if (m != null) {
+			if (m.getPwd().equals(pwd) && m.getBlacklist().equals("N")) {
+				// 해당 계정이 블랙리스트로 등록되지 않은 경우
+				session.setAttribute("memid", id);
+				msg = "로그인 되었습니다.";
+				url = request.getContextPath() + "/classes/main";
+			} else if (m.getPwd().equals(pwd) && m.getBlacklist().equals("Y")){
+				// 해당 계정이 블랙리스트로 등록된 경우
+				msg = "로그인이 제한된 계정입니다.";
+				url = request.getContextPath() + "/classes/main";
+			}
+			else { // 패스워드 불일치
+				msg = "비밀번호를 확인해 주세요";
+				url = request.getContextPath() + "/member/login";
+			}
+		}
+		
 		model.addAttribute("msg", msg);
 		model.addAttribute("url", url);
 		
