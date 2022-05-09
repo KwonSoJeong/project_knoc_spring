@@ -11,12 +11,31 @@ insert into knoc_member values(#{id},#{pwd},#{name},#{email},#{tel},#{profile},#
 select * from knoc_member where id = #{id}
 </select>
 
-<select id="selectMemberAll" resultType="knoc_member">
-select * from knoc_member where id != 'admin'
+<select id="memberList" resultType="knoc_member" parameterType="map">
+select * from (select rownum rnum, a.* from (select * from knoc_member where blacklist != 'Y' and id != 'admin') a) where rnum between #{start} and #{end}
 </select>
 
-<select id="selectBlackList" resultType="knoc_member">
-select * from knoc_member where blacklist = 'Y'
+<select id="memberCount" resultType="int">
+select count(*) from knoc_member where blacklist != 'Y' and id != 'admin'
+</select>
+
+<select id="memberListWithKeyword" resultType="knoc_member" parameterType="map">
+select * from 
+(select rownum rnum, a.* from 
+(select * from knoc_member where blacklist != 'Y' and id != 'admin' and id like '%${keyword}%') 
+a) where rnum between #{start} and #{end}
+</select>
+
+<select id="memberCountWithKeyword" resultType="int" parameterType="string">
+select count(*) from knoc_member where blacklist != 'Y' and id != 'admin' and id like '%${value}%'
+</select>
+
+<select id="selectBlackList" resultType="knoc_member" parameterType="map">
+select * from (select rownum rnum, a.* from (select * from knoc_member where blacklist = 'Y') a) where rnum between #{start} and #{end}
+</select>
+
+<select id="blackListCount" resultType="int">
+select count(*) from knoc_member where blacklist = 'Y'
 </select>
 
 <update id="updateMember" parameterType="knoc_member">

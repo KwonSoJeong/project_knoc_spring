@@ -14,8 +14,8 @@
 	<div class="white">
 		<div class="flex">
 			<div class="title">전체 회원 목록</div>
-			<form action="">
-				<input class="form-control form-content" type="text" placeholder="아이디로 검색" name="#">
+			<form action="<%=request.getContextPath()%>/admin/memberList">
+				<input class="form-control form-content" type="text" placeholder="아이디로 검색" name="keyword">
 			</form>
 		</div>
 		
@@ -42,13 +42,14 @@
 			
 			<c:forEach var="member" items="${memberList}">
 			<tr>
-			    <td>0</td>
+			    <td>${memberNum}</td>
+			    <c:set var="memberNum" value="${memberNum-1 }"/>
 			    <td>${member.id}</td>
 			    <td>${member.name}</td>
 			    <td>${member.email}</td>
 			    <td>${member.blacklist}</td>
 			    <td><button class="btn1 green" type="button" onclick="addBlackList('${member.id}')">블랙리스트 등록</button></td>
-			    <td><button class="btn red" type="button">정보 삭제</button></td>
+			    <td><button class="btn red" type="button" onclick="deleteMember('${member.id}')">정보 삭제</button></td>
 			</tr>
 			</c:forEach>
 			
@@ -79,7 +80,11 @@
 </div>
 <script>
 function addBlackList(id) {
-	location.href="<%=request.getContextPath()%>/admin/blackListPro?member_id=" + id;
+	location.href="<%=request.getContextPath()%>/admin/addBlackList?member_id=" + id;
+}
+
+function deleteMember(id) {
+    location.href="<%=request.getContextPath()%>/admin/deleteMember?member_id=" + id;
 }
 </script>
 </body>

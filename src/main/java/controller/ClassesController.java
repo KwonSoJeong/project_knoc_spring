@@ -342,10 +342,9 @@ public class ClassesController {
 		
 		Classes classOne = cd.classOne(class_id);
 		
-		Member_Study_Info msi = msd.infoOne(id, class_id);
-		
 		if (id != null) {
 			// 수강신청을 눌렀을 때 수강신청이 되어있는 상태라면 바로 컨텐츠 화면으로 이동
+			Member_Study_Info msi = msd.infoOne(id, class_id);
 			if (msi != null) {
 				msg = "수강신청이 완료된 강의입니다. 수강 화면으로 이동합니다.";
 				url = request.getContextPath() + "/classes/classContent";
