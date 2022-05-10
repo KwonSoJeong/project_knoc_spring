@@ -13,15 +13,15 @@
 <select id="nextNum" resultType="int">
 select reportseq.nextval from dual
 </select>
-
-<select id="reportList" parameterType="string" resultType="report">
-select * from report where report_id like '${value}*'
-</select>
 <!-- 
-<select id="reportList" parameterType="string" resultMap="reportTitleList">
-select r.*, m.title from report r, ${table} m where ${value}_id like '${value}'
-</select> 
+<select id="reportList" parameterType="string" resultType="report">
+select * from report where report_id like '${value}%'
+</select>
  -->
+<select id="reportList" parameterType="string" resultMap="reportTitleList">
+select r.*, m.title from report r, ${value} m where r.report_id = m.${value}_id
+</select> 
+
 <insert id="insertReport" parameterType="report">
 insert into report values (#{no},#{id},#{report_Id},sysdate,#{reason})
 </insert>

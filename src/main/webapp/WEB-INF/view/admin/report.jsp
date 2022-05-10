@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!-- ㅡㅡㅡㅡㅡㅡㅡㅡReportㅡㅡㅡㅡㅡㅡㅡㅡㅡ -->
 <!DOCTYPE html>
 <html>
@@ -11,15 +12,14 @@
 <div class="wrapper">
 
 	<div class="white">
-		<div class="title">멘토링 신고 내역</div>
+		<div class="title">${subject} 신고 내역</div>
 		<table class="table">
 			<colgroup>
-				<col width="6%"/>
-				<col width="15%"/>
-				<col width="19%"/>
-				<col width="15%"/>
-				<col width="10%"/>
-				<col width="25%"/>
+				<col width="9%"/>
+				<col width="18%"/>
+				<col width="22%"/>
+				<col width="13%"/>
+				<col width="28%"/>
 				<col width="10%"/>
 			</colgroup>
 		
@@ -27,21 +27,25 @@
 				<th>번호</th>
 				<th>신고한 ID</th>
 				<th>신고 게시물</th>
-				<th>신고된 ID</th>
 				<th>접수일자</th>
 				<th>신고사유</th>
 				<th></th>
 			</tr>	
 			
-			<c:forEach begin="1" end="12" varStatus="status">
+			<c:forEach var="report" items="${reportList}">
+			<c:set var="reportID" value="${report.REPORT_ID}"/>
 			<tr>
-			    <td>${status.count}</td>
-			    <td>신고자</td>
-			    <td><a href="#">게시물 제목</a></td>
-			    <td>abcd123</td>
-			    <td>2022.03.11</td>
-			    <td>맘에안들어서</td>
-			    <td><button class="btn green" type="submit">제재</button></td>
+			    <td>${report.no}</td>
+			    <td>${report.id}</td>
+			    <c:if test="${fn:contains(reportID, 'mentoring')}">
+			    <td><a href="<%=request.getContextPath()%>/mentor/mentorInfo?mentoring_Id=${reportID}">${report.title}</a></td>
+			    </c:if>
+			    <c:if test="${fn:contains(reportID, 'study')}">
+                <td><a href="<%=request.getContextPath()%>/study/studyInfo?study_Id=${reportID}">${report.title}</a></td>
+                </c:if>
+			    <td>${report.regdate}</td>
+			    <td>${report.reason}</td>
+			    <td><button class="btn green" type="button" onclick="addSuspendedMember('${reportID}')">제재</button></td>
 			</tr>
 			</c:forEach>
 			
@@ -70,6 +74,10 @@
 		
 	</div>
 </div>
-
+<script>
+function addSuspendedMember(reportID) {
+	location.href="<%=request.getContextPath()%>/admin/addSuspendedMember?report_id=" + reportID;
+}
+</script>
 </body>
 </html>

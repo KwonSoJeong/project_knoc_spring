@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="suspended_list">
+<insert id="addSuspendedMember" parameterType="string">
+insert into suspended_list values(#{value}, sysdate, sysdate + interval '3' day, 1, 'Y')
+</insert>
+
+<select id="selectOne" parameterType="string" resultType="suspended_list">
+select * from suspended_list where id=#{value}
+</select>
+
+<update id="updateAccCnt" parameterType="string">
+update suspended_list set acccnt = acccnt + 1, regdate = sysdate, duedate = sysdate + interval '3' day where id = #{value}
+</update>
+
+<select id="selectList" resultType="suspended_list">
+select * from suspended_list where acccnt != 3
+</select>
+</mapper>

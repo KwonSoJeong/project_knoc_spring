@@ -18,6 +18,7 @@
         <typeAlias type="model.WebChat" alias="webchat"/>
         <typeAlias type="model.Notification" alias="notification"/>
         <typeAlias type="model.Report" alias="report"/>
+        <typeAlias type="model.Suspended_List" alias="suspended_list"/>
         
     </typeAliases>
     <environments default="development">
@@ -46,5 +47,6 @@
         <mapper resource="mybatis/WebChat.xml"/>
         <mapper resource="mybatis/Notification.xml"/>
         <mapper resource="mybatis/Report.xml"/>
+        <mapper resource="mybatis/Suspended_List.xml"/>
     </mappers>
 </configuration>
