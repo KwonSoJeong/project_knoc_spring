@@ -34,23 +34,19 @@
        <property name="suffix" value=".jsp" />
     </bean>
     
-    
-    <!-- 
     <mvc:interceptors>
         <mvc:interceptor>
-            <mvc:mapping path="/acl/**"/>
-            <bean class="service.AdminInterceptor"/>
+            <mvc:mapping path="/admin/**"/>
+            <bean class="interceptor.AdminInterceptor"/>
         </mvc:interceptor>
-        
-        <bean class="service.MeasuringInterceptor" />
         
         <mvc:interceptor>
-            <mvc:mapping path="/members/m2"/>
-            <mvc:mapping path="/files/**"/>
-            <ref bean="login"/>
+            <mvc:mapping path="/member/memberUpdate**"/>
+            <mvc:mapping path="/member/password**"/>
+            <mvc:mapping path="/member/memberDelete**"/>
+            <mvc:mapping path="/member/myPage"/>
+            <bean class="interceptor.LoginInterceptor"/> 
         </mvc:interceptor>
     </mvc:interceptors>
-    
-    <bean id="login" class="service.LoginInterceptor"/>
-     -->
+     
 </beans>

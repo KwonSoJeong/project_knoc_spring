@@ -8,6 +8,13 @@
 <link rel="stylesheet" href="<%=request.getContextPath() %>/resource/style/member.css" />
 </head>
 <body>
+<script>
+if ('${param.msg}' === 'not_authorized') {
+    alert('접근 권한이 없습니다.');
+} else if ('${param.msg}' === 'need_login') {
+    alert('로그인이 필요한 서비스입니다.');
+}
+</script>
 <main>
         <div class="container">
             <div id="member-login" class="center-align">
