@@ -98,7 +98,12 @@
                             <li><a href="<%=request.getContextPath()%>/mentor/mentorInfo?mentoring_Id=${m.member_study_id}">${m.title}</a></li>
                             </c:forEach>
 							</ul>
-						</div>					
+						</div>	
+						
+						<div class="mp-justf">
+							<div class="cur" onclick="location.href='<%=request.getContextPath()%>/mentor/mentorManage'">관리</div>
+						</div>		
+										
 					</div>			
 				</div>
 				<span></span>

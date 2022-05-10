@@ -26,7 +26,7 @@
       <div class="modal-body">
       <div class="form-group">
         <label>신고 사유</label>
-        <textarea name="reason" class="form-control" style="height: 180px; placeholder="신고 사유를 입력해 주세요"></textarea>
+        <textarea name="reason" class="form-control" style="height: 180px;" placeholder="신고 사유를 입력해 주세요"></textarea>
         <input type="hidden" name="id" value="${memid }">
         <input type="hidden" name="report_Id" value="${mt.mentoring_Id}">
         </div>
