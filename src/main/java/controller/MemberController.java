@@ -58,7 +58,6 @@ public class MemberController {
 	// 회원가입 process
 	@RequestMapping("memberInputPro")
 	public String memberInputPro(Knoc_Member newMember) {
-		// Knoc_Member m = new Knoc_Member();
 		Knoc_Member chk = new Knoc_Member();
 		
 		String msg = "이미 존재하는 ID 입니다";
@@ -166,19 +165,6 @@ public class MemberController {
 		
 		String msg = "아이디를 확인해 주세요";
 		String url = request.getContextPath() + "/member/login";
-		/*
-		if (m != null) { // 계정이 존재함
-			if (m.getPwd().equals(pwd)) { // 패스워드가 일치함
-				//request.getSession().setAttribute("memid", id);
-				session.setAttribute("memid", id);
-				msg = "로그인 되었습니다.";
-				url = request.getContextPath() + "/classes/main";
-			} else { // 패스워드 불일치
-				msg = "비밀번호를 확인해 주세요";
-				url = request.getContextPath() + "/member/login";
-			}
-		}
-		*/
 		
 		if (m != null) {
 			if (m.getPwd().equals(pwd) && m.getBlacklist().equals("N")) {
@@ -205,8 +191,6 @@ public class MemberController {
 
 	@RequestMapping("logout")
 	public String logout() {
-		
-		//request.getSession().invalidate();
 		session.invalidate();
 		
 		String msg = "로그아웃 되었습니다.";
@@ -221,25 +205,12 @@ public class MemberController {
 	// 회원정보 수정 view
 	@RequestMapping("memberUpdate")
 	public String memberUpdate() {
-		
-		// HttpSession session = request.getSession();
 		String memid = (String) session.getAttribute("memid");
-		
-		String msg = "로그인 정보가 없습니다.";
-		String url = request.getContextPath()+"/member/login";
-		
-		if (memid != null) {
-			
-			Knoc_Member member = md.selectOne(memid);
-			model.addAttribute("member", member);
-			
-			return "/view/member/memberUpdate";
-		}
-		
-		model.addAttribute("msg", msg);
-		model.addAttribute("url", url);
-		
-		return "/view/alert";
+		Knoc_Member member = md.selectOne(memid);
+		model.addAttribute("member", member);
+
+		return "/view/member/memberUpdate";
+
 	}
 
 	// 회원정보 수정 process
@@ -271,20 +242,7 @@ public class MemberController {
 	// 비밀번호 수정 view
 	@RequestMapping("password")
 	public String password() {
-		//HttpSession session = request.getSession();
-		
 		String id = (String) session.getAttribute("memid");
-		
-		if (id == null) {
-			String msg = "로그인 정보가 없습니다.";
-			String url = request.getContextPath() + "/member/login";
-			
-			model.addAttribute("msg", msg);
-			model.addAttribute("url", url);
-			
-			return "/view/alert";
-			
-		}
 		
 		return "/view/member/password";
 	}
@@ -292,8 +250,6 @@ public class MemberController {
 	// 비밀번호 수정 process
 	@RequestMapping("passwordPro")
 	public String passwordPro(String pwd, String newpwd) {
-		//HttpSession session = request.getSession();
-
 		String id = (String) session.getAttribute("memid");
 		Knoc_Member mem = md.selectOne(id);
 		
@@ -322,20 +278,7 @@ public class MemberController {
 	// 회원탈퇴 view
 	@RequestMapping("memberDelete")
 	public String memberDelete() {
-		//HttpSession session = request.getSession();
-
 		String id = (String) session.getAttribute("memid");
-
-		if (id == null) {
-			String msg = "로그인 정보가 없습니다.";
-			String url = request.getContextPath() + "/member/login";
-
-			model.addAttribute("msg", msg);
-			model.addAttribute("url", url);
-
-			return "/view/alert";
-
-		}
 		Knoc_Member member = md.selectOne(id);
 
 		model.addAttribute("member", member);
@@ -373,20 +316,7 @@ public class MemberController {
 	// mypage view, 참여하는 클래스, 스터디, 관심 클래스, 멘토링, 회원 정보 전달
 	@RequestMapping("myPage")
 	public String myPage() {
-		//HttpSession session = request.getSession();
-
 		String id = (String) session.getAttribute("memid");
-
-		if (id == null) {
-			String msg = "로그인 정보가 없습니다.";
-			String url = request.getContextPath() + "/member/login";
-
-			model.addAttribute("msg", msg);
-			model.addAttribute("url", url);
-
-			return "/view/alert";
-
-		}
 		
 		// 1) 회원 정보 가져오기
 		Knoc_Member member = md.selectOne(id);
