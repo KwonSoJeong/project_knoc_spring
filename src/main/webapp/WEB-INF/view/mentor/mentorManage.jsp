@@ -75,16 +75,16 @@
 		  <form action="#">
 		      <div class="modal-body">
 				<div class="rating">
-					<input type="radio" name="rating" value="0.5">
-					<input type="radio" name="rating" value="1">
-					<input type="radio" name="rating" value="1.5">
-					<input type="radio" name="rating" value="2">
-					<input type="radio" name="rating" value="2.5">
-					<input type="radio" name="rating" value="3">
-					<input type="radio" name="rating" value="3.5">
-					<input type="radio" name="rating" value="4">
-					<input type="radio" name="rating" value="4.5">
 					<input type="radio" name="rating" value="5">
+					<input type="radio" name="rating" value="4.5">
+					<input type="radio" name="rating" value="4">
+					<input type="radio" name="rating" value="3.5">
+					<input type="radio" name="rating" value="3">
+					<input type="radio" name="rating" value="2.5">
+					<input type="radio" name="rating" value="2">
+					<input type="radio" name="rating" value="1.5">
+					<input type="radio" name="rating" value="1">
+					<input type="radio" name="rating" value="0.5">
 					
 			        <input type="hidden" name="" value="${mtd.mentoring_Id}">
 				</div>
