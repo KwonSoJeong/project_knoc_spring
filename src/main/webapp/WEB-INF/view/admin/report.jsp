@@ -35,7 +35,8 @@
 			<c:forEach var="report" items="${reportList}">
 			<c:set var="reportID" value="${report.REPORT_ID}"/>
 			<tr>
-			    <td>${report.no}</td>
+			    <td>${reportNum}</td>
+			    <c:set var="reportNum" value="${reportNum-1 }"/>
 			    <td>${report.id}</td>
 			    <c:if test="${fn:contains(reportID, 'mentoring')}">
 			    <td><a href="<%=request.getContextPath()%>/mentor/mentorInfo?mentoring_Id=${reportID}">${report.title}</a></td>

@@ -160,18 +160,36 @@ public class AdminController {
 	}
 	
 	@RequestMapping("report")
-	public String report(String subject) {
-		
+	public String report(String subject, 
+						 @RequestParam(value="pageNum", defaultValue = "1") int pageInt) {
+		int limit = 10;
 		List<Map<String, Object>> reportList = null;
+		
 		String title = null;
 		if (subject.equals("study") ) {
-			reportList = rd.reportList("study");
+			reportList = rd.reportList("study", pageInt, limit);
 			title = "스터디";
 		} else if (subject.equals("mentoring")) {
-			reportList = rd.reportList("mentoring");
+			reportList = rd.reportList("mentoring", pageInt, limit);
 			title = "멘토링";
 		}
 		
+		int bottomLine = 5;
+		int reportCount = rd.reportCount(subject);
+		int reportNum = reportCount - (pageInt - 1) * limit;
+		int startPage = (pageInt - 1) / bottomLine * bottomLine + 1;
+		int endPage = startPage + bottomLine - 1;
+		int maxPage = (reportCount / limit) + (reportCount % limit == 0 ? 0 : 1);
+		if (endPage > maxPage) {
+			endPage = maxPage;
+		}
+		
+		model.addAttribute("pageInt", pageInt);
+		model.addAttribute("reportNum", reportNum);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("bottomLine", bottomLine);
+		model.addAttribute("endPage", endPage);
+		model.addAttribute("maxPage", maxPage);
 		model.addAttribute("subject", title);
 		model.addAttribute("reportList", reportList);
 		
@@ -219,14 +237,44 @@ public class AdminController {
 		
 	}
 	
-	
 	@RequestMapping("suspendedList")
-	public String suspendedList() {
-		List<Suspended_List> suspendedList = sld.selectList();
+	public String suspendedList(@RequestParam(value="pageNum", defaultValue = "1") int pageInt) {
+		int limit = 10;
+		
+		List<Suspended_List> suspendedList = sld.selectList(pageInt, limit);
 		Date now = new Date();
 		
+		int bottomLine = 5;
+		int listCount = sld.suspendedListCount();
+		int listNum = listCount - (pageInt - 1) * limit;
+		int startPage = (pageInt - 1) / bottomLine * bottomLine + 1;
+		int endPage = startPage + bottomLine - 1;
+		int maxPage = (listCount / limit) + (listCount % limit == 0 ? 0 : 1);
+		if (endPage > maxPage) {
+			endPage = maxPage;
+		}
+		
+		model.addAttribute("pageInt", pageInt);
+		model.addAttribute("listNum", listNum);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("bottomLine", bottomLine);
+		model.addAttribute("endPage", endPage);
+		model.addAttribute("maxPage", maxPage);
 		model.addAttribute("suspendedList", suspendedList);
 		model.addAttribute("now", now);
 		return "view/admin/suspendedList";
+	}
+	
+	@RequestMapping("updateStatus")
+	public String updateStatus(String reportedID) {
+		sld.updateStatus(reportedID);
+		
+		String msg = "활동 제재가 해제되었습니다.";
+		String url = request.getContextPath() + "/admin/suspendedList";
+		
+		model.addAttribute("msg", msg);
+		model.addAttribute("url", url);
+		
+		return "/view/alert";
 	}
 }

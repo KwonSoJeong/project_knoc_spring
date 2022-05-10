@@ -14,7 +14,15 @@ select * from suspended_list where id=#{value}
 update suspended_list set acccnt = acccnt + 1, regdate = sysdate, duedate = sysdate + interval '3' day where id = #{value}
 </update>
 
-<select id="selectList" resultType="suspended_list">
-select * from suspended_list where acccnt != 3
+<select id="selectList" resultType="suspended_list" parameterType="map">
+select * from (select rownum rnum, a.* from (select * from suspended_list where acccnt != 3) a) where rnum between #{start} and #{end}
 </select>
+
+<select id="suspendedListCount" resultType="int">
+select count(*) from suspended_list where acccnt != 3
+</select>
+
+<update id="updateStatus" parameterType="string">
+update suspended_list set status = 'N' where id=#{value}
+</update>
 </mapper>

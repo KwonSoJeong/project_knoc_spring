@@ -42,13 +42,31 @@ public class Suspended_ListDao {
 		return sqlSession.selectOne(ns + "selectOne", id);
 	}
 	
-	public List<Suspended_List> selectList() {
-		return sqlSession.selectList(ns + "selectList");
+	public List<Suspended_List> selectList(int pageInt, int limit) {
+		map.clear();
+		map.put("start", (pageInt - 1) * limit + 1);
+		map.put("end", pageInt * limit);
+		
+		return sqlSession.selectList(ns + "selectList", map);
+	}
+	
+	public int suspendedListCount() {
+		return sqlSession.selectOne(ns + "suspendedListCount");
 	}
 	
 	public void updateAccCnt (String id) {
 		try {
 			sqlSession.update(ns + "updateAccCnt", id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.commit();
+		}
+	}
+	
+	public void updateStatus(String id) {
+		try {
+			sqlSession.update(ns + "updateStatus", id);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
