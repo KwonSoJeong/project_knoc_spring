@@ -5,9 +5,8 @@ import java.util.Date;
 public class Mentoring {
 	private String mentoring_Id, mentor_Id, content, intro, title;
 	private Date regDate;
-	private int rating;
 	
-	public Mentoring(String mentoring_Id, String mentor_Id, String content, String intro, Date regDate, String title, int rating) {
+	public Mentoring(String mentoring_Id, String mentor_Id, String content, String intro, Date regDate, String title) {
 		super();
 		this.mentoring_Id = mentoring_Id;
 		this.mentor_Id = mentor_Id;
@@ -15,7 +14,6 @@ public class Mentoring {
 		this.intro = intro;
 		this.regDate = regDate;
 		this.title = title;
-		this.rating = rating;
 	}
 
 	public Mentoring() {
@@ -68,14 +66,6 @@ public class Mentoring {
 
 	public void setTitle(String title) {
 		this.title = title;
-	}
-
-	public int getRating() {
-		return rating;
-	}
-
-	public void setRating(int rating) {
-		this.rating = rating;
 	}
 
 	@Override
