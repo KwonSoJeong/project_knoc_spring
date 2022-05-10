@@ -52,7 +52,7 @@
 	</div>
 	<script>
 		var IMP = window.IMP; // 생략 가능
-		IMP.init("imp85768208"); // 예: imp00000000
+		IMP.init("#"); // 예: imp00000000
 
 		function requestPay() {
 			// IMP.request_pay(param, callback) 결제창 호출
