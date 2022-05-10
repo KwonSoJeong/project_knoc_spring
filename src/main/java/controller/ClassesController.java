@@ -33,6 +33,7 @@ import model.WishList;
 import service.CategoryDao;
 import service.Class_ContentDao;
 import service.ClassesDao;
+import service.Knoc_MemberDao;
 import service.Member_Study_InfoDao;
 import service.WebChatDao;
 import service.WishListDao;
@@ -57,6 +58,8 @@ public class ClassesController {
 	WebChatDao wcd;
 	@Autowired
 	WishListDao wld;
+	@Autowired
+	Knoc_MemberDao md;
 	
 	@ModelAttribute
 	void init(HttpServletRequest request, Model model) {
@@ -348,13 +351,17 @@ public class ClassesController {
 			if (msi != null) {
 				msg = "수강신청이 완료된 강의입니다. 수강 화면으로 이동합니다.";
 				url = request.getContextPath() + "/classes/classContent";
-			} else {
+			} else if (classOne.getPrice() == 0) {
 				// 수강신청을 눌렀을 때 수강신청이 안 되어 있으면 db 추가하고 수강신청 완료 메세지 출력 후 컨텐츠 화면으로 이동
 				msg = "수강신청이 완료되었습니다.";
 				url = request.getContextPath() + "/classes/classContent";
 				
 				Member_Study_Info newInfo = new Member_Study_Info(id, class_id, 2, msd.nextSeq());
 				msd.insertInfo(newInfo);
+				
+			} else if (classOne.getPrice() > 0) {
+				msg = "결제가 필요한 클래스입니다.";
+				url = request.getContextPath() + "/classes/classPay";
 			}
 
 		}
@@ -363,6 +370,35 @@ public class ClassesController {
 
 		return "/view/alert";
 		
+	}
+	
+	@RequestMapping("classPay")
+	public String classPay() {
+		String classId = (String) session.getAttribute("classId");
+		Classes classOne = cd.classOne(classId);
+		
+		String id = (String) session.getAttribute("memid");
+		Knoc_Member member = md.selectOne(id);
+		
+		model.addAttribute("classOne", classOne);
+		model.addAttribute("member", member);
+		return "/view/classes/classPay";
+	}
+	
+	@RequestMapping("classPayPro")
+	public String classPayPro(String class_id) {
+		String id = (String) session.getAttribute("memid");
+		
+		Member_Study_Info newInfo = new Member_Study_Info(id, class_id, 2, msd.nextSeq());
+		msd.insertInfo(newInfo);
+		
+		String msg = "결제 및 수강신청이 완료되었습니다. 수강 화면으로 이동합니다.";
+		String url = request.getContextPath() + "/classes/classContent?class_id=" + class_id;
+		
+		model.addAttribute("msg", msg);
+		model.addAttribute("url", url);
+		
+		return "/view/alert";
 	}
 	
 	// 클래스 수강 view

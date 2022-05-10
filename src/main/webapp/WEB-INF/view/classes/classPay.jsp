@@ -28,17 +28,17 @@
 
 							<div class="heart_img">
 								<div class="cc-cc">
-									<img src="/Project_KNOC/thumbnail/" onclick="location.href='/Project_KNOC/classes/classInfo?class_id='" style="width: 280px; height: 215px;">
+									<img src="<%=request.getContextPath()%>/thumbnail/${classOne.thumbnail}" onclick="location.href='/Project_KNOC/classes/classInfo?class_id='" style="width: 280px; height: 215px;">
 								</div>
 							</div>
 						</div>
 					</div>
 
 					<div>
-						<div class="payment-title">클래스 제목(왼쪽 정렬)</div>
+						<div class="payment-title">${classOne.title}</div>
 					</div>
 					<div>
-						<div class="payment-price">55,000원</div>
+						<div class="payment-price">${classOne.price}원</div>
 					</div>
 				</div>
 
@@ -52,26 +52,27 @@
 	</div>
 	<script>
 		var IMP = window.IMP; // 생략 가능
-		IMP.init("{가맹점 식별코드}"); // 예: imp00000000
+		IMP.init("imp85768208"); // 예: imp00000000
 
 		function requestPay() {
 			// IMP.request_pay(param, callback) 결제창 호출
 			IMP.request_pay({ // param
 				pg : "html5_inicis",
 				pay_method : "card",
-				merchant_uid : "ORD20180131-0000011",
-				name : "클래스 제목",
+				merchant_uid : 'merchant_' + new Date().getTime(),
+				name : "${classOne.title}",
 				amount : 100,
-				buyer_email : "example@example.com",
-				buyer_name : "user",
-				buyer_tel : "010-1234-5678",
+				buyer_email : "${member.email}",
+				buyer_name : "${member.name}",
+				buyer_tel : "${member.tel}",
 				buyer_addr : "서울특별시 강남구 신사동",
 				buyer_postcode : "01181"
 			}, function(rsp) { // callback
 				if (rsp.success) {
-					// 결제 성공 시 로직
+					location.href="<%=request.getContextPath()%>/classes/classPayPro?class_id=" + "${classOne.class_id}";
 				} else {
-					// 결제 실패 시 로직
+					alert('결제에 실패하였습니다.')
+					location.href="<%=request.getContextPath()%>/classes/classInfo?class_id=" + "${classOne.class_id}";
 				}
 			});
 		}
