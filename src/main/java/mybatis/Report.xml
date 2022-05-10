@@ -18,9 +18,21 @@ select reportseq.nextval from dual
 select * from report where report_id like '${value}%'
 </select>
  -->
+ <!-- 
 <select id="reportList" parameterType="string" resultMap="reportTitleList">
 select r.*, m.title from report r, ${value} m where r.report_id = m.${value}_id
 </select> 
+ -->
+<select id="reportList" parameterType="map" resultMap="reportTitleList">
+select * from 
+(select rownum rnum, a.* from 
+(select r.*, m.title from report r, ${value} m where r.report_id = m.${value}_id) a)
+where rnum between #{start} and #{end}
+</select> 
+
+<select id="reportCount" resultType="int" parameterType="string">
+select count(*) from (select r.*, m.title from report r, ${value} m where r.report_id = m.${value}_id)
+</select>
 
 <insert id="insertReport" parameterType="report">
 insert into report values (#{no},#{id},#{report_Id},sysdate,#{reason})

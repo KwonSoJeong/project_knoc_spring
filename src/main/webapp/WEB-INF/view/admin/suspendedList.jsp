@@ -33,14 +33,15 @@
 			
 			<c:forEach var="member" items="${suspendedList}">
 			<tr>
-			    <td>0</td>
+			    <td>${listNum}</td>
+			    <c:set var="listNum" value="${listNum-1}"/>
 			    <td>${member.id}</td>
 			    <td>${member.regDate}</td>
 			    <td>${member.dueDate}</td>
 			    <td>${member.accCnt}</td>
 			    <td>
-			    <c:if test="${now > member.dueDate}">
-			    <button class="btn red" type="submit">등록 해제</button>
+			    <c:if test="${member.status == 'Y' && now > member.dueDate}">
+			    <button class="btn red" type="submit" onclick="updateStatus('${member.id}')">등록 해제</button>
 			    </c:if></td>
 			</tr>
 			</c:forEach>
@@ -70,6 +71,10 @@
 		
 	</div>
 </div>
-
+<script>
+function updateStatus(id) {
+    location.href="<%=request.getContextPath()%>/admin/updateStatus?reportedID=" + id;
+}
+</script>
 </body>
 </html>

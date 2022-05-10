@@ -1,5 +1,6 @@
 package service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,7 @@ import util.MySqlSessionFactory;
 @Component
 public class ReportDao {
 	private final static String ns = "report.";
+	private static Map<String, Object> map = new HashMap<>();
 
 	@Autowired
 	MySqlSessionFactory sqlSessionFactory;
@@ -41,7 +43,16 @@ public class ReportDao {
 		return 0;
 	}
 	
-	public List<Map<String, Object>> reportList(String subject) {
-		return sqlSession.selectList(ns + "reportList", subject);
+	public List<Map<String, Object>> reportList(String subject, int pageInt, int limit) {
+		map.clear();
+		map.put("start", (pageInt - 1) * limit + 1);
+		map.put("end", pageInt * limit);
+		map.put("value", subject);
+		
+		return sqlSession.selectList(ns + "reportList", map);
+	}
+	
+	public int reportCount(String subject) {
+		return sqlSession.selectOne(ns + "reportCount", subject);
 	}
 }
