@@ -56,25 +56,29 @@ public class MentorController {
 
 	
 	// 멘토링 리스트 뷰
-		@RequestMapping("mentorList")
-		public String mentorList(@RequestParam(value = "keyword",required = false)String keyword) {
-			
-			List<Mentoring> mt;
-			List profile;
-			if(keyword!=null) { //검색키워드가 있으면
-				mt = mtd.selectListKeyword(keyword);	//멘토링 게시글 리스트
-				profile = mtd.profileListKeyword(keyword);		//프로필사진 리스트
-			}else {					//전체 리스트
-				mt = mtd.selectList();	//멘토링 게시글 리스트
-				profile = mtd.profileList();		//프로필사진 리스트
-			}
-		//	System.out.println("mt="+mt);
-		//	System.out.println("profile="+profile);
-			
-			m.addAttribute("profile", profile);
-			m.addAttribute("mt", mt);
-			return "/view/mentor/mentorList";
+	@RequestMapping("mentorList")
+	public String mentorList(@RequestParam(value = "keyword", required = false) String keyword) {
+
+		List<Mentoring> mt;
+		List profile;
+		List ratingList;
+		if (keyword != null) { // 검색키워드가 있으면
+			mt = mtd.selectListKeyword(keyword); // 멘토링 게시글 리스트
+			profile = mtd.profileListKeyword(keyword); // 프로필사진 리스트
+			ratingList = mtd.selectListRatingKeyword(keyword);
+		} else { // 전체 리스트
+			mt = mtd.selectList(); // 멘토링 게시글 리스트
+			profile = mtd.profileList(); // 프로필사진 리스트
+			ratingList = mtd.selectListRating();
 		}
+		// System.out.println("mt="+mt);
+		// System.out.println("profile="+profile);
+		
+		m.addAttribute("ratingList",ratingList);
+		m.addAttribute("profile", profile);
+		m.addAttribute("mt", mt);
+		return "/view/mentor/mentorList";
+	}
 
 	// 멘토링 등록 view
 	@RequestMapping("mentorRegister")
@@ -146,6 +150,9 @@ public class MentorController {
 		mt = mtd.selectOne(mentoring_Id);
 	//	System.out.println("mt"+mt);
 		String profile = sd.callProfile(mt.getMentor_Id());
+		double rating = mtd.selectOneRating(mentoring_Id);
+		
+		m.addAttribute("rating",rating);
 		m.addAttribute("profile", profile);
 		m.addAttribute("mt", mt);
 		return "/view/mentor/mentorInfo";
@@ -305,5 +312,23 @@ public class MentorController {
 		return "/view/alert";
 	}
 	
+	
+	@RequestMapping("rating")
+	public String rating(double rating,String mentoring_Id) {
+		//@@@@@@프론트에서 rating, mentoring_Id 받아와야함
+		int num = mtd.insertRating(mentoring_Id,rating);
+		
+		if(num > 0) {
+			msg = "별점이 등록 되었습니다";
+		}else {
+			msg = "별점 등록 오류";
+		}
+		
+//		url = request.getContextPath()+"/mentor/****";  //@@@@@@@@@@@@@@@페이지에 맞게 수정해야함
+		m.addAttribute("msg",msg);
+		m.addAttribute("url",url);
+		return "/view/alert";
+	}
+
 
 }

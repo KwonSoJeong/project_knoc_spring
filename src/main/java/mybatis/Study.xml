@@ -16,7 +16,7 @@ select count(*) from study where process = #{process}
 </select>
 
 <select id="studyCountKeyword" resultType="int" parameterType="map">
-select count(*) from study where process = #{process} and title like '%${keyword}%'
+select count(*) from study where process = #{process} and upper(title) like upper('%${keyword}%')
 </select>
 
 <select id="studyAllCount" resultType="int">
@@ -24,7 +24,7 @@ select count(*) from study
 </select>
 
 <select id="studyAllCountKeyword" resultType="int" parameterType="map">
-select count(*) from study where title like '%${keyword}%'
+select count(*) from study where upper(title) like upper('%${keyword}%')
 </select>
 
 <select id="studyList" resultType="study" parameterType="map">
@@ -35,7 +35,7 @@ where rnum between #{start} and #{end}
 
 <select id="studyListKeyword" resultType="study" parameterType="map">
 select * from (select rownum rnum, a.* from (
-select * from study where process = #{process} and title like '%${keyword}%' order by regDate desc) a) 
+select * from study where process = #{process} and upper(title) like upper('%${keyword}%') order by regDate desc) a) 
 where rnum between #{start} and #{end}
 </select>
 
@@ -47,7 +47,7 @@ where rnum between #{start} and #{end}
 
 <select id="studyAllListKeyword" resultType="study" parameterType="map">
 select * from (select rownum rnum, a.* from (
-select * from study where title like '%${keyword}%' order by regDate desc) a) 
+select * from study where upper(title) like upper('%${keyword}%') order by regDate desc) a) 
 where rnum between #{start} and #{end}
 </select>
  
@@ -61,7 +61,7 @@ select profile from knoc_member where id = #{id}
  
  <select id="callProfileAllListKeyword" resultType="string" parameterType="map">
 select * from (select a.*, rownum rnum from (
-select m.PROFILE from study s,KNOC_MEMBER m where s.LEADER_ID = m.ID(+) and title like '%${keyword}%' order by regDate desc) a) 
+select m.PROFILE from study s,KNOC_MEMBER m where s.LEADER_ID = m.ID(+) and upper(title) like upper('%${keyword}%') order by regDate desc) a) 
 where rnum between #{start} and #{end}
 </select>
 
@@ -79,7 +79,7 @@ where rnum between #{start} and #{end}
  
  <select id="callProfileListKeyword" resultType="string" parameterType="map">
 select * from (select a.*, rownum rnum from (
-select m.PROFILE from study s,KNOC_MEMBER m where s.LEADER_ID = m.ID(+) and process = #{process} and title like '%${keyword}%' order by regDate desc) a) 
+select m.PROFILE from study s,KNOC_MEMBER m where s.LEADER_ID = m.ID(+) and process = #{process} and upper(title) like upper('%${keyword}%') order by regDate desc) a) 
 where rnum between #{start} and #{end}
 </select>
 

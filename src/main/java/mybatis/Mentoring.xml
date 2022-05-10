@@ -16,7 +16,7 @@ select * from mentoring order by regdate desc
 </select>
 
 <select id="selectListKeyword" resultType="mentoring" parameterType="map">
-select * from mentoring where title like '%${keyword}%'order by regdate desc
+select * from mentoring where upper(title) like upper('%${keyword}%')order by regdate desc
 </select>
 
 <select id="selectOne" resultType="mentoring" parameterType="string">
@@ -28,7 +28,7 @@ select profile from mentoring m, knoc_member mem where mentor_id = id order by r
 </select>
 
 <select id="profileListKeyword" resultType="string" parameterType="map">
-select profile from mentoring m, knoc_member mem where mentor_id = id and title like '%${keyword}%' order by regdate desc
+select profile from mentoring m, knoc_member mem where mentor_id = id and upper(title) like upper('%${keyword}%') order by regdate desc
 </select>
 
 <delete id="delete" parameterType="string">
@@ -38,5 +38,32 @@ delete from mentoring where mentoring_Id = #{mentoring_Id}
 <update id="update" parameterType="map">
 update mentoring set title = #{title}, content = #{content}, intro = #{intro} where mentoring_Id = #{mentoring_Id}
 </update>
+
+<insert id="insertRating" parameterType="map">
+insert into mentoring_rating values (#{mentoring_Id},#{rating})
+</insert>
+
+<select id="selectOneRating" parameterType="string" resultType="double">
+select round(nvl(avg(rating),0),1) from mentoring_rating where mentoring_id = #{mentoring_Id} 
+</select>
+
+<select id="selectListRating" resultType="double">
+select rating from (
+select max(REGDATE) regdate, mentoring_id, round(avg(rating),1) rating from (
+select m.REGDATE, m.MENTORING_ID, nvl(rating,0) rating 
+from mentoring m, mentoring_rating mr where m.MENTORING_ID = mr.MENTORING_ID(+)) 
+group by mentoring_id order by regdate desc)
+</select>
+
+<select id="selectListRatingKeyword" parameterType="map" resultType="double">
+select rating from (
+select max(REGDATE) regdate, mentoring_id, round(avg(rating),1) rating from (
+select m.REGDATE, m.MENTORING_ID, nvl(rating,0) rating 
+from mentoring m, mentoring_rating mr where m.MENTORING_ID = mr.MENTORING_ID(+) and upper(title) like upper('%${keyword}%')) 
+group by mentoring_id order by regdate desc)
+</select>
+
+
+
 
 </mapper>

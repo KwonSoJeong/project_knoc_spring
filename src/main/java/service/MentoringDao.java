@@ -93,4 +93,34 @@ public class MentoringDao {
 		return 0;
 	}
 	
+	//별점등록
+	public int insertRating(String mentoring_Id, double rating) {
+		try {
+			map.clear();
+			map.put("mentoring_Id", mentoring_Id);
+			map.put("rating", rating);
+			return sqlSession.insert(ns + "insertRating",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.commit();
+		}
+		return 0;
+	}
+	
+	//별점 불러오기
+	public double selectOneRating(String mentoring_Id) {
+		return sqlSession.selectOne(ns + "selectOneRating",mentoring_Id);
+	}
+	
+	public List selectListRating() {
+		return sqlSession.selectList(ns + "selectListRating");
+	}
+
+	public List selectListRatingKeyword(String keyword) {
+		map.clear();
+		map.put("keyword", keyword);
+		return sqlSession.selectList(ns + "selectListRatingKeyword",map);
+	}
+	
 }
