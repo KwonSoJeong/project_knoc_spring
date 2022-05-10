@@ -6,6 +6,8 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" href="<%=request.getContextPath() %>/resource/style/mentorlist.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 </head>
 <body>
 	<div class="ml-wrapper">
@@ -30,6 +32,22 @@
 							
 							<div class="ml-topic">${m.title}</div>
 							<div class="ml-pro-name">by. ${m.mentor_Id}</div>	
+							
+							<%-- <c:if test="${ratingavg<=0.5}"> --%>
+							<div class="rating">
+								<input type="radio" name="rating${status.count}" onclick="return(false);">
+								<input type="radio" name="rating${status.count}" onclick="return(false);">
+								<input type="radio" name="rating${status.count}" onclick="return(false);">
+								<input type="radio" name="rating${status.count}" onclick="return(false);">
+								<input type="radio" name="rating${status.count}" onclick="return(false);">
+								<input type="radio" name="rating${status.count}" onclick="return(false);">
+								<input type="radio" name="rating${status.count}" onclick="return(false);">
+								<input type="radio" name="rating${status.count}" onclick="return(false);">
+								<input type="radio" name="rating${status.count}" onclick="return(false);">
+								<input type="radio" name="rating${status.count}" checked onclick="return(false);">
+							</div>
+							<%-- </c:if> --%>
+							
 						</div>
 						<div class="ml-btn">
 							<form action="<%=request.getContextPath() %>/mentor/mentorInfo?mentoring_Id=${m.mentoring_Id}" method="post">
