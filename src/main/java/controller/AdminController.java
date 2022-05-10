@@ -1,5 +1,6 @@
 package controller;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -14,9 +15,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import model.Knoc_Member;
+import model.Mentoring;
 import model.Report;
+import model.Study;
+import model.Suspended_List;
 import service.Knoc_MemberDao;
+import service.MentoringDao;
 import service.ReportDao;
+import service.StudyDao;
+import service.Suspended_ListDao;
 
 @Controller
 @RequestMapping("/admin/")
@@ -30,6 +37,12 @@ public class AdminController {
 	Knoc_MemberDao md;
 	@Autowired
 	ReportDao rd;
+	@Autowired
+	MentoringDao mtd;
+	@Autowired
+	StudyDao sd;
+	@Autowired
+	Suspended_ListDao sld;
 	
 	@ModelAttribute
 	void init(HttpServletRequest request, Model model) {
@@ -146,23 +159,74 @@ public class AdminController {
 		return "/view/alert";
 	}
 	
-	@RequestMapping("suspendedList")
-	public String suspendedList() {
-		return "view/admin/suspendedList";
-	}
-	
 	@RequestMapping("report")
 	public String report(String subject) {
-		/*
-		List<Map<String, Object>> reportList = null;
 		
+		List<Map<String, Object>> reportList = null;
+		String title = null;
 		if (subject.equals("study") ) {
 			reportList = rd.reportList("study");
+			title = "스터디";
 		} else if (subject.equals("mentoring")) {
 			reportList = rd.reportList("mentoring");
+			title = "멘토링";
 		}
-		System.out.println(reportList);
-		*/
+		
+		model.addAttribute("subject", title);
+		model.addAttribute("reportList", reportList);
+		
 		return "view/admin/report";
+	}
+	
+	@RequestMapping("addSuspendedMember")
+	public String addSuspendedMember(String report_id) {
+		String reportedId = "";
+		
+		String msg = "해당 지식공유자에게 3일의 활동정지 기간이 부여됩니다.";
+		String url = request.getContextPath() + "/admin/suspendedList";
+		
+		if (report_id.contains("mentoring")) {
+			Mentoring reportedMentoring = mtd.selectOne(report_id);
+			reportedId = reportedMentoring.getMentor_Id(); 
+			
+		} else if (report_id.contains("study")) {
+			Study reportedStudy = sd.selectOne(report_id);
+			reportedId = reportedStudy.getLeader_Id();
+		}
+		
+		Suspended_List reportedMember = sld.selectOne(reportedId);
+		
+		if (reportedMember == null) {
+			sld.addSuspendedMember(reportedId);
+			
+		} else if (reportedMember.getAccCnt() < 2){
+			sld.updateAccCnt(reportedId);
+			
+		} else if (reportedMember.getAccCnt() == 2) {
+			sld.updateAccCnt(reportedId);
+			md.addBlackList(reportedId);
+			msg = "해당 지식공유자는 활동 제재 3회 누적으로 블랙리스트로 등록됩니다.";
+			
+		} else {
+			msg = "활동 제재 3회 누적으로 블랙리스트로 등록된 사용자입니다.";
+			
+		}
+		
+		model.addAttribute("msg", msg);
+		model.addAttribute("url", url);
+		
+		return "/view/alert";
+		
+	}
+	
+	
+	@RequestMapping("suspendedList")
+	public String suspendedList() {
+		List<Suspended_List> suspendedList = sld.selectList();
+		Date now = new Date();
+		
+		model.addAttribute("suspendedList", suspendedList);
+		model.addAttribute("now", now);
+		return "view/admin/suspendedList";
 	}
 }

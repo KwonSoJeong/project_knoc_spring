@@ -14,34 +14,34 @@
 		<div class="title">제제 회원 등록 내역</div>
 		<table class="table">
 			<colgroup>
-				<col width="10%"/>
-				<col width="20%"/>
-				<col width="15%"/>
-				<col width="15%"/>
-				<col width="15%"/>
-				<col width="15%"/>
+				<col width="13%"/>
+				<col width="23%"/>
+				<col width="18%"/>
+				<col width="18%"/>
+				<col width="18%"/>
 				<col width="10%"/>
 			</colgroup>
 		
 			<tr>
 				<th>번호</th>
 				<th>ID</th>
-				<th>이름</th>
 				<th>등록일자</th>
 				<th>해제(예정)일자</th>
 				<th>누적횟수</th>
 				<th></th>
 			</tr>	
 			
-			<c:forEach begin="1" end="12" varStatus="status">
+			<c:forEach var="member" items="${suspendedList}">
 			<tr>
-			    <td>${status.count}</td>
-			    <td>에이비씨12</td>
-			    <td>홍길동</td>
-			    <td>2022.03.10</td>
-			    <td>2022.04.10</td>
-			    <td>2</td>
-			    <td><button class="btn red" type="submit">등록 해제</button></td>
+			    <td>0</td>
+			    <td>${member.id}</td>
+			    <td>${member.regDate}</td>
+			    <td>${member.dueDate}</td>
+			    <td>${member.accCnt}</td>
+			    <td>
+			    <c:if test="${now > member.dueDate}">
+			    <button class="btn red" type="submit">등록 해제</button>
+			    </c:if></td>
 			</tr>
 			</c:forEach>
 			

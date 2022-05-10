@@ -30,7 +30,7 @@ select * from (select rownum rnum, a.* from (select * from classes where categor
 
 <select id="searchedList" parameterType="map" resultType="classes">
 <!-- select * from classes where title like '%${value}%' -->
-select * from (select rownum rnum, a.* from (select * from classes where title like '%${value}%' order by regdate desc) a) where rnum between #{start} and #{end}
+select * from (select rownum rnum, a.* from (select * from classes where lower(title) like lower('%${value}%') order by regdate desc) a) where rnum between #{start} and #{end}
 </select>
 
 <update id="favoriteCntUp" parameterType="string">
