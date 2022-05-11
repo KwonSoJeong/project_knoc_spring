@@ -131,12 +131,12 @@ function next_load(pageInt){
 	
 	$.ajax({
 	        type:"GET",
-	        url:"classes/classList?pageInt="+pageInt,
+	        url:"/project_knoc_spring/classes/classList2?pageInt="+pageInt,
 	        data : '',
 	        dataType : "json",
 	        success: function(classList){
 	        	let c = classList;
-	        	console.log(c[0])
+	        	/* console.log(classList); */
 	        	
 	        	if(classList.length > 1){                		
 	        		var Loopdiv = document.createElement("div");				
@@ -145,10 +145,10 @@ function next_load(pageInt){
 					var seconddiv = document.createElement("div");       					
 					var addContent = document.createElement("div");					
 					let count = 13; 
-					let doneLoop = false;
+					let doneLoop = false;//
 					
 					for (let cls of classList) {
-						<%-- for(let w of wishList){//doneLoop변경조건문을 만들어야하는데 이 조건문이 wishList가 필요해서 
+						<%-- for(let w of wishList){
 							doneLoop = false;
 							if(doneLoop==false){
 								if(w.CLASS_ID==cls.class_id){
@@ -163,7 +163,7 @@ function next_load(pageInt){
 							Loopdiv.innerHTML ='<button class="noheartbtn" id="n' +count+ '" type="button" onclick="favoriteCntUp(' + "'" + cls.class_id+ "', '" + count + "'" + ')"><img src="<%=request.getContextPath()%>/resource/image/noheart.png"></button>'
 						} --%>
 						
-						
+						//네
 						thumdiv.innerHTML ='<div class="cc-cc"><img src="<%=request.getContextPath()%>/thumbnail/'+cls.thumbnail+'" onclick="location.href='+"'<%=request.getContextPath()%>/classes/classInfo?class_id=" +cls.class_id+ "'"  +'" style="width: 280px; height: 215px;"></div>' 						
 						
 						firstdiv.innerHTML ='<div class="heart_img">' +thumdiv.innerHTML+  '</div>' 						  						

@@ -162,7 +162,7 @@ public class ClassesController {
 		
 		// 카테고리를 전달하지 않고 view를 출력하면 전체 리스트 반환
 		List<Classes> classList = cd.classList(pageInt, limit);
-		System.out.println(classList.size());
+		System.out.println(classList.size()+"======"+classList);
 		// 카테고리를 전달하고 view를 출력하면 해당 카테고리에 맞는 리스트 반환
 		if (category != null) {
 			classList = cd.classifiedList(category, pageInt, limit); 
@@ -190,7 +190,49 @@ public class ClassesController {
 		return "/single/singleClass";}
 		
 	}
-	
+	@RequestMapping("classList2")
+	public String classList2(@RequestParam(value = "pageInt", required = false) String pageNum, 
+							@RequestParam(value = "category_id", required = false) String category,
+							@RequestParam(value = "search_keyword", required = false) String title) {
+		String userId = (String) session.getAttribute("memid");
+		
+		// page 번호를 지정하지 않았을 시 1페이지부터 시작
+		int pageInt = 1;//얘를 2로 바꿔서 다오에서 리미트가 2인채로 받아오고싶은건데
+		// 한 페이지 당 최대 12개 요소까지 출력
+		int limit = 12;
+
+		if (pageNum != null) {
+			pageInt = Integer.parseInt(pageNum);
+		}
+		
+		// 카테고리를 전달하지 않고 view를 출력하면 전체 리스트 반환
+		List<Classes> classList = cd.classList(pageInt, limit);
+		/* System.out.println(classList.size()+"======"+classList); */
+		// 카테고리를 전달하고 view를 출력하면 해당 카테고리에 맞는 리스트 반환
+		if (category != null) {
+			classList = cd.classifiedList(category, pageInt, limit); 
+		}
+		
+		// 검색어를 입력하고 view를 출력하면 해당 단어가 제목에 포함된 리스트 반환
+		if (title != null) {
+			classList = cd.searchedList(title, pageInt, limit);
+		}
+		
+		//WishListDao wld = new WishListDao();
+		if (userId != null) {
+			List<Map<String, Object>> wishList = wld.wishListOne(userId);
+			model.addAttribute("wishList", wishList);
+		}
+		
+	//	model.addAttribute("pageInt", pageInt);
+	//	model.addAttribute("limit", limit);
+	//	model.addAttribute("size", classList.size());
+		model.addAttribute("userId", userId);
+		model.addAttribute("classList", classList);
+		
+		return "/single/singleClass";
+		
+	}
 	// 신규 클래스 등록 view
 	@RequestMapping("classUpload")
 	public String classUpload() {
