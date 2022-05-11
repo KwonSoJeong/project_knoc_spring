@@ -35,16 +35,16 @@
 							
 							<c:if test="${ratingavg[status.index]>=0.5}">
 							<div class="rating">
-								<input type="radio" name="rating${status.count}" onclick="return(false);">
-								<input type="radio" name="rating${status.count}" onclick="return(false);">
-								<input type="radio" name="rating${status.count}" onclick="return(false);">
-								<input type="radio" name="rating${status.count}" onclick="return(false);">
-								<input type="radio" name="rating${status.count}" onclick="return(false);">
-								<input type="radio" name="rating${status.count}" onclick="return(false);">
-								<input type="radio" name="rating${status.count}" onclick="return(false);">
-								<input type="radio" name="rating${status.count}" onclick="return(false);">
-								<input type="radio" name="rating${status.count}" checked onclick="return(false);">
-								<input type="radio" name="rating${status.count}" checked onclick="return(false);">
+								<input type="radio" name="rating${status.count}" <c:if test="${ratingavg[status.index]==5}">checked</c:if> onclick="return(false);">
+								<input type="radio" name="rating${status.count}" <c:if test="${ratingavg[status.index]<5 && ratingavg[status.index]>=4.5}">checked</c:if> onclick="return(false);">
+								<input type="radio" name="rating${status.count}" <c:if test="${ratingavg[status.index]<4.5 && ratingavg[status.index]>=4}">checked</c:if> onclick="return(false);">
+								<input type="radio" name="rating${status.count}" <c:if test="${ratingavg[status.index]<4 && ratingavg[status.index]>=3.5}">checked</c:if> onclick="return(false);">
+								<input type="radio" name="rating${status.count}" <c:if test="${ratingavg[status.index]<3.5 && ratingavg[status.index]>=3}">checked</c:if> onclick="return(false);">
+								<input type="radio" name="rating${status.count}" <c:if test="${ratingavg[status.index]<3 && ratingavg[status.index]>=2.5}">checked</c:if> onclick="return(false);">
+								<input type="radio" name="rating${status.count}" <c:if test="${ratingavg[status.index]<2.5 && ratingavg[status.index]>=2}">checked</c:if> onclick="return(false);">
+								<input type="radio" name="rating${status.count}" <c:if test="${ratingavg[status.index]<2 && ratingavg[status.index]>=1.5}">checked</c:if> onclick="return(false);">
+								<input type="radio" name="rating${status.count}" <c:if test="${ratingavg[status.index]<1.5 && ratingavg[status.index]>=1}">checked</c:if> onclick="return(false);">
+								<input type="radio" name="rating${status.count}" <c:if test="${ratingavg[status.index]<1}">checked</c:if> onclick="return(false);">
 							</div>
 							</c:if>
 							
