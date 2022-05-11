@@ -129,12 +129,8 @@ public class ClassesController {
 	// main화면 문의톡에서 admin 계정에서 사용할 문의한 고객 리스트 전달
 	@RequestMapping("adminChat")
 	public String adminChat(String groupId) {
-		//HttpSession session = request.getSession();
-		
-		//String groupId = request.getParameter("groupId");
 		String userId = (String) session.getAttribute("memid");
 		
-		//WebChatDao wcd = new WebChatDao();
 		List<WebChat> chatList = wcd.chatList(groupId);
 		
 		model.addAttribute("groupId", groupId);
@@ -173,15 +169,11 @@ public class ClassesController {
 			classList = cd.searchedList(title, pageInt, limit);
 		}
 		
-		//WishListDao wld = new WishListDao();
 		if (userId != null) {
 			List<Map<String, Object>> wishList = wld.wishListOne(userId);
 			model.addAttribute("wishList", wishList);
 		}
 		
-	//	model.addAttribute("pageInt", pageInt);
-	//	model.addAttribute("limit", limit);
-	//	model.addAttribute("size", classList.size());
 		model.addAttribute("userId", userId);
 		model.addAttribute("classList", classList);
 		if (pageInt==1)  {
@@ -207,7 +199,7 @@ public class ClassesController {
 		
 		// 카테고리를 전달하지 않고 view를 출력하면 전체 리스트 반환
 		List<Classes> classList = cd.classList(pageInt, limit);
-		/* System.out.println(classList.size()+"======"+classList); */
+		
 		// 카테고리를 전달하고 view를 출력하면 해당 카테고리에 맞는 리스트 반환
 		if (category != null) {
 			classList = cd.classifiedList(category, pageInt, limit); 
@@ -218,15 +210,11 @@ public class ClassesController {
 			classList = cd.searchedList(title, pageInt, limit);
 		}
 		
-		//WishListDao wld = new WishListDao();
 		if (userId != null) {
 			List<Map<String, Object>> wishList = wld.wishListOne(userId);
 			model.addAttribute("wishList", wishList);
 		}
 		
-	//	model.addAttribute("pageInt", pageInt);
-	//	model.addAttribute("limit", limit);
-	//	model.addAttribute("size", classList.size());
 		model.addAttribute("userId", userId);
 		model.addAttribute("classList", classList);
 		
@@ -236,17 +224,6 @@ public class ClassesController {
 	// 신규 클래스 등록 view
 	@RequestMapping("classUpload")
 	public String classUpload() {
-		String id = (String) session.getAttribute("memid");
-		
-		if (id == null) {
-			String msg = "로그인 정보가 없습니다.";
-			String url = request.getContextPath() + "/member/login";
-			
-			model.addAttribute("msg", msg);
-			model.addAttribute("url", url);
-			
-			return "/view/alert";
-		}
 		
 		return "/view/classes/classUpload";
 	}
@@ -365,8 +342,8 @@ public class ClassesController {
 		
 		List<Class_Content> contentList = ccd.contentList(class_id);
 		int contentNo = 1;
+		
 		// parameter로 전달된 classId는 session에 저장, content view 출력 시 활용
-		HttpSession session = request.getSession();
 		session.setAttribute("classId", class_id);
 		
 		model.addAttribute("contentNo", contentNo);
@@ -381,37 +358,36 @@ public class ClassesController {
 	public String classRegister() {
 		String id = (String) session.getAttribute("memid");
 		String class_id = (String) session.getAttribute("classId");
-		// 수강신청을 눌렀을 때 로그인이 안되어있으면 로그인 화면으로 이동
-		String msg = "로그인 후 이용 가능합니다.";
-		String url = request.getContextPath() + "/member/login";
-		
-		Classes classOne = cd.classOne(class_id);
-		
-		if (id != null) {
-			// 수강신청을 눌렀을 때 수강신청이 되어있는 상태라면 바로 컨텐츠 화면으로 이동
-			Member_Study_Info msi = msd.infoOne(id, class_id);
-			if (msi != null) {
-				msg = "수강신청이 완료된 강의입니다. 수강 화면으로 이동합니다.";
-				url = request.getContextPath() + "/classes/classContent";
-			} else if (classOne.getPrice() == 0) {
-				// 수강신청을 눌렀을 때 수강신청이 안 되어 있으면 db 추가하고 수강신청 완료 메세지 출력 후 컨텐츠 화면으로 이동
-				msg = "수강신청이 완료되었습니다.";
-				url = request.getContextPath() + "/classes/classContent";
-				
-				Member_Study_Info newInfo = new Member_Study_Info(id, class_id, 2, msd.nextSeq());
-				msd.insertInfo(newInfo);
-				
-			} else if (classOne.getPrice() > 0) {
-				msg = "결제가 필요한 클래스입니다.";
-				url = request.getContextPath() + "/classes/classPay";
-			}
 
+		String msg = "";
+		String url = "";
+
+		Classes classOne = cd.classOne(class_id);
+
+		// 수강신청을 눌렀을 때 수강신청이 되어있는 상태라면 바로 컨텐츠 화면으로 이동
+		Member_Study_Info msi = msd.infoOne(id, class_id);
+		
+		if (msi != null) {
+			msg = "수강신청이 완료된 강의입니다. 수강 화면으로 이동합니다.";
+			url = request.getContextPath() + "/classes/classContent";
+		} else if (classOne.getPrice() == 0) {
+			// 수강신청을 눌렀을 때 수강신청이 안 되어 있으면 db 추가하고 수강신청 완료 메세지 출력 후 컨텐츠 화면으로 이동
+			msg = "수강신청이 완료되었습니다.";
+			url = request.getContextPath() + "/classes/classContent";
+
+			Member_Study_Info newInfo = new Member_Study_Info(id, class_id, 2, msd.nextSeq());
+			msd.insertInfo(newInfo);
+
+		} else if (classOne.getPrice() > 0) {
+			msg = "결제가 필요한 클래스입니다.";
+			url = request.getContextPath() + "/classes/classPay";
 		}
+
 		model.addAttribute("msg", msg);
 		model.addAttribute("url", url);
 
 		return "/view/alert";
-		
+
 	}
 	
 	@RequestMapping("classPay")
@@ -447,8 +423,6 @@ public class ClassesController {
 	@RequestMapping("classContent")
 	public String classContent(@RequestParam(value = "class_id", required = false) String classId,
 							   @RequestParam(value = "content_id", required = false) String contentId) {
-		HttpSession session = request.getSession();
-		
 		// mypage를 통해서 content 페이지로 왔을 때는 세션에 url에서 classid 받아오고, session에 저장
 		if (classId != null) {
 			session.setAttribute("classId", classId);
@@ -465,16 +439,6 @@ public class ClassesController {
 		}
 		Class_Content contentOne = ccd.contentOne(classId, contentId);
 		
-		if (id == null) {
-			String msg = "로그인 정보가 없습니다.";
-			String url = request.getContextPath() + "/member/login";
-			
-			model.addAttribute("msg", msg);
-			model.addAttribute("url", url);
-			
-			return "/view/alert";
-		}
-		
 		int contentNo = 1;
 		
 		model.addAttribute("contentList", contentList);
@@ -486,7 +450,6 @@ public class ClassesController {
 	// 클래스 관심등록 process, classInfo에서 javaScript + ajax로 구현
 	@RequestMapping("classFavorite")
 	public String classFavorite(@RequestParam(value = "class_id", required = false) String classId) {
-		HttpSession session = request.getSession();
 		String id = (String) session.getAttribute("memid");
 		String status = "login-null";
 		
@@ -521,17 +484,6 @@ public class ClassesController {
 	// 클래스 수정 view
 	@RequestMapping("classUpdate")
 	public String classUpdate(@RequestParam("class_id") String classId) {
-		String id = (String) session.getAttribute("memid");
-		
-		if (id == null) {
-			String msg = "로그인 정보가 없습니다.";
-			String url = request.getContextPath() + "/member/login";
-			
-			model.addAttribute("msg", msg);
-			model.addAttribute("url", url);
-			
-			return "/view/alert";
-		} 
 		Classes classOne = cd.classOne(classId);
 		
 		List<Class_Content> contentList = ccd.contentList(classId);

@@ -52,6 +52,12 @@
             <mvc:mapping path="/study/studyWrite"/>
             <mvc:mapping path="/study/studyEntry"/>
             <mvc:mapping path="/study/report"/>
+            <mvc:mapping path="/classes/classUpload**"/>
+            <mvc:mapping path="/classes/classRegister"/>
+            <mvc:mapping path="/classes/classPay**"/>
+            <mvc:mapping path="/classes/classContent"/>
+            <mvc:mapping path="/classes/classUpdate**"/>
+            <mvc:mapping path="/classes/classDeletePro"/>
             <bean class="interceptor.LoginInterceptor"/> 
         </mvc:interceptor>
     </mvc:interceptors>
