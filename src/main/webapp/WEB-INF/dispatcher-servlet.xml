@@ -60,6 +60,14 @@
             <mvc:mapping path="/classes/classDeletePro"/>
             <bean class="interceptor.LoginInterceptor"/> 
         </mvc:interceptor>
+        
+        <mvc:interceptor>
+            <mvc:mapping path="/classes/classUpload**"/>
+            <mvc:mapping path="/mentor/mentorRegister"/>
+            <mvc:mapping path="/study/studyWrite"/>
+            <mvc:mapping path="/study/writeStudyCommentPro"/>
+            <bean class="interceptor.suspendedChkInterceptor"/>
+        </mvc:interceptor>
     </mvc:interceptors>
      
 </beans>
