@@ -43,6 +43,10 @@ function favoriteCntUp(class_id, cnt) {
         }
     }
 }
+
+if ('${param.msg}' === 'no_permission') {
+    alert('진행중인 멘토링/스터디에 대한 신고접수로 모든 지식공유 활동 및 게시물 작성이 제한됩니다.');
+}
 </script>
 </head>
 <body>
