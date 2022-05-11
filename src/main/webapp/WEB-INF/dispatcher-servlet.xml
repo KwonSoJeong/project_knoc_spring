@@ -45,6 +45,13 @@
             <mvc:mapping path="/member/password**"/>
             <mvc:mapping path="/member/memberDelete**"/>
             <mvc:mapping path="/member/myPage"/>
+            <mvc:mapping path="/mentor/mentorRegister"/> 
+            <mvc:mapping path="/mentor/mentoringEntry"/>
+            <mvc:mapping path="/mentor/report"/>
+            <mvc:mapping path="/help/qnaWritePro"/> 
+            <mvc:mapping path="/study/studyWrite"/>
+            <mvc:mapping path="/study/studyEntry"/>
+            <mvc:mapping path="/study/report"/>
             <bean class="interceptor.LoginInterceptor"/> 
         </mvc:interceptor>
     </mvc:interceptors>

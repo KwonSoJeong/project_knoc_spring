@@ -104,6 +104,18 @@ public class Member_Study_InfoDao {
 		}
 	}
 	
+	public void deleteUser(String id, String mentoring_Id) {
+		try {
+			map.clear();
+			map.put("id", id);
+			map.put("member_study_id", mentoring_Id);
+			sqlSession.delete(ns + "deleteUser", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.commit();
+		}
+	}
 	/* DAO 테스트 코드 
 	public static void main(String[] args) {
 		SqlSession sqlSession = MyBatisConnection.getConnection();

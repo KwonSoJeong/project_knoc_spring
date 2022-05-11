@@ -32,4 +32,8 @@ select * from (select title, m.* from member_study_info m, ${table} c where m.me
 <delete id="deleteInfo" parameterType="String">
 delete from member_study_info where member_study_id = #{value}
 </delete>
+
+<delete id="deleteUser" parameterType="map">
+delete from member_study_info where member_study_id = #{member_study_id} and id = #{id} and type = 2
+</delete>
 </mapper>
