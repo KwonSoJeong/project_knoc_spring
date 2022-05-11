@@ -54,14 +54,6 @@ public class StudyController {
 	// 스터디 게시글 작성 view
 	@RequestMapping("studyWrite")
 	public String studyWrite() {
-		
-		if (session.getAttribute("memid") == null) {
-			msg = "로그인이 필요한 서비스 입니다.";
-			url = request.getContextPath() + "/member/login";
-			m.addAttribute("msg", msg);
-			m.addAttribute("url", url);
-			return "/view/alert";
-		}
 		String id = (String) session.getAttribute("memid");
 		String profile = sd.callProfile(id);
 
@@ -228,14 +220,6 @@ public class StudyController {
 	@RequestMapping("studyEntry")
 	public String studyEntry(String study_Id) {
 
-		if (session.getAttribute("memid") == null) { // 로그인체크
-			msg = "로그인이 필요한 서비스 입니다.";
-			url = request.getContextPath() + "/member/login";
-			m.addAttribute("msg", msg);
-			m.addAttribute("url", url);
-			return "/view/alert";
-		}
-
 		String id = (String) session.getAttribute("memid");
 		// 중복신청체크
 		if (notid.EntryCheck(id, study_Id)!=0) {
@@ -373,6 +357,7 @@ public class StudyController {
 		}
 
 		int num = sd.delete(study_Id);
+		msid.deleteInfo(study_Id);
 
 		if (num > 0) { // 성공적으로 삭제가 되었을 경우
 			msg = "삭제가 되었습니다";
@@ -389,15 +374,6 @@ public class StudyController {
 	
 	@RequestMapping("report")
 	public String report(Report report) {
-		
-		if (session.getAttribute("memid") == null) { // 로그인체크
-			msg = "로그인이 필요한 서비스 입니다.";
-			url = request.getContextPath() + "/member/login";
-			m.addAttribute("msg", msg);
-			m.addAttribute("url", url);
-			return "/view/alert";
-		}
-		
 		//프론트 화면에서 
 		report.setNo(rd.nextNum());
 		

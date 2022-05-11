@@ -1,6 +1,7 @@
 package controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -61,20 +62,20 @@ public class MentorController {
 
 		List<Mentoring> mt;
 		List profile;
-		List ratingList;
+		List ratingavg;
 		if (keyword != null) { // 검색키워드가 있으면
 			mt = mtd.selectListKeyword(keyword); // 멘토링 게시글 리스트
 			profile = mtd.profileListKeyword(keyword); // 프로필사진 리스트
-			ratingList = mtd.selectListRatingKeyword(keyword);
+			ratingavg = mtd.selectListRatingKeyword(keyword);
 		} else { // 전체 리스트
 			mt = mtd.selectList(); // 멘토링 게시글 리스트
 			profile = mtd.profileList(); // 프로필사진 리스트
-			ratingList = mtd.selectListRating();
+			ratingavg = mtd.selectListRating();
 		}
 		// System.out.println("mt="+mt);
 		// System.out.println("profile="+profile);
 		
-		m.addAttribute("ratingList",ratingList);
+		m.addAttribute("ratingavg",ratingavg);
 		m.addAttribute("profile", profile);
 		m.addAttribute("mt", mt);
 		return "/view/mentor/mentorList";
@@ -83,16 +84,6 @@ public class MentorController {
 	// 멘토링 등록 view
 	@RequestMapping("mentorRegister")
 	public String mentorRegister() {
-
-		String memid = (String) session.getAttribute("memid");
-		if (memid == null) {
-			msg = "로그인이 필요한 서비스 입니다.";
-			url = request.getContextPath()+"/member/login";
-			m.addAttribute("msg", msg);
-			m.addAttribute("url", url);
-			return "/view/alert";
-		}
-
 		return "/view/mentor/mentorRegister";
 	}
 	// 멘토링 등록 process
@@ -162,14 +153,6 @@ public class MentorController {
 	// 멘토링 참가신청 pro
 	@RequestMapping("mentoringEntry")
 	public String mentoringEntry(String mentoring_Id) {
-		
-		if(session.getAttribute("memid")==null) { //로그인체크
-			msg = "로그인이 필요한 서비스 입니다.";
-			url = request.getContextPath()+"/member/login";
-			m.addAttribute("msg", msg);
-			m.addAttribute("url", url);
-			return "/view/alert";
-		}
 //		System.out.println("mentoring_Id="+mentoring_Id);
 		//중복신청체크
 		String id = (String) session.getAttribute("memid");
@@ -271,7 +254,7 @@ public class MentorController {
 		}
 						
 		int num = mtd.delete(mentoring_Id);
-						
+		msid.deleteInfo(mentoring_Id);
 		if(num>0) {		//성공적으로 삭제가 되었을 경우
 			msg = "삭제가 되었습니다";
 			url = request.getContextPath()+"/mentor/mentorList";
@@ -287,16 +270,6 @@ public class MentorController {
 	
 	@RequestMapping("report")
 	public String report(Report report) {
-		
-		if (session.getAttribute("memid") == null) { // 로그인체크
-			msg = "로그인이 필요한 서비스 입니다.";
-			url = request.getContextPath() + "/member/login";
-			m.addAttribute("msg", msg);
-			m.addAttribute("url", url);
-			return "/view/alert";
-		}
-		
-		//프론트 화면에서 
 		report.setNo(rd.nextNum());
 		
 		int num = rd.insertReport(report);
@@ -315,19 +288,30 @@ public class MentorController {
 	
 	@RequestMapping("rating")
 	public String rating(double rating,String mentoring_Id) {
-		//@@@@@@프론트에서 rating, mentoring_Id 받아와야함
+		String id = (String) session.getAttribute("memid");
+		
 		int num = mtd.insertRating(mentoring_Id,rating);
+		msid.deleteUser(id,mentoring_Id);
 		
 		if(num > 0) {
 			msg = "별점이 등록 되었습니다";
 		}else {
 			msg = "별점 등록 오류";
 		}
-		
-//		url = request.getContextPath()+"/mentor/****";  //@@@@@@@@@@@@@@@페이지에 맞게 수정해야함
+		url = request.getContextPath()+"/mentor/mentorManage";  //@@@@@@@@@@@@@@@페이지에 맞게 수정해야함
 		m.addAttribute("msg",msg);
 		m.addAttribute("url",url);
 		return "/view/alert";
+	}
+	
+	@RequestMapping("mentorManage")
+	public String mentorManage() {
+		String id = (String) session.getAttribute("memid");
+		List<Map<String, Object>> mentoringList = msid.infoMentoringList(id);
+		
+		System.out.println("mentoringList===="+mentoringList);
+		m.addAttribute("mentoringList",mentoringList);
+		return "/view/mentor/mentorManage";
 	}
 
 

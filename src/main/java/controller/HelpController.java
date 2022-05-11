@@ -142,16 +142,6 @@ public class HelpController {
 	@RequestMapping("qnaWritePro")
 	public String qnaWritePro(Qna q) {
 
-		//로그인 체크
-		String memid = (String) session.getAttribute("memid");
-		if (memid == null) {
-			msg = "로그인이 필요한 서비스 입니다.";
-			url = request.getContextPath()+"/member/login";
-			m.addAttribute("msg", msg);
-			m.addAttribute("url", url);
-			return "/view/alert";
-		}
-
 		String writerId = (String) session.getAttribute("memid");
 		String qnaId = "qna" + qd.nextNum();
 

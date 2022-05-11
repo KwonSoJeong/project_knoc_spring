@@ -33,7 +33,7 @@
 							<div class="ml-topic">${m.title}</div>
 							<div class="ml-pro-name">by. ${m.mentor_Id}</div>	
 							
-							<%-- <c:if test="${ratingavg<=0.5}"> --%>
+							<c:if test="${ratingavg[status.index]>=0.5}">
 							<div class="rating">
 								<input type="radio" name="rating${status.count}" onclick="return(false);">
 								<input type="radio" name="rating${status.count}" onclick="return(false);">
@@ -43,10 +43,10 @@
 								<input type="radio" name="rating${status.count}" onclick="return(false);">
 								<input type="radio" name="rating${status.count}" onclick="return(false);">
 								<input type="radio" name="rating${status.count}" onclick="return(false);">
-								<input type="radio" name="rating${status.count}" onclick="return(false);">
+								<input type="radio" name="rating${status.count}" checked onclick="return(false);">
 								<input type="radio" name="rating${status.count}" checked onclick="return(false);">
 							</div>
-							<%-- </c:if> --%>
+							</c:if>
 							
 						</div>
 						<div class="ml-btn">
