@@ -20,6 +20,7 @@ public class SiteMeshFilter extends ConfigurableSiteMeshFilter{
 		.addExcludedPath("/*/imgUpload")
 		.addExcludedPath("/*/picture*")
 		.addExcludedPath("/*/single*")
+		.addExcludedPath("/*/classList2")
 		.addExcludedPath("/*/thumbnail*")
 		.addExcludedPath("/*/*Chk");
 	}
