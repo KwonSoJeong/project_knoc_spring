@@ -25,9 +25,8 @@
 		
 		<div id="con" class="container" style="padding: 35px 0;;">
 	
-			<form action="<%=request.getContextPath() %>/mentor/mentorRegisterPro" method="post">
-			<!-- <form name="f" action="<%=request.getContextPath()%>" method="post"> -->
-	
+			<form action="<%=request.getContextPath() %>/mentor/mentorUpdatePro" method="post">
+	            <input type="hidden" name="mentoring_Id" value="${mt.mentoring_Id}">
 				<div class="form-group">
 					<label>멘토링 주제</label>
 					<textarea class="form-control" rows="3" cols="40" placeholder="멘토링 주제를 작성해 주세요." name="title">${mt.title }</textarea>
@@ -46,7 +45,7 @@
 				</div>
 				
 				<div id="center" >
-					<button type="submit" onclick="location.href='<%=request.getContextPath()%>/mentor/mentorRegister'" style="border-radius: 5px;">수정하기</button>
+					<button type="submit" style="border-radius: 5px;">수정하기</button>
 				</div>
 			</form>
 		</div>
