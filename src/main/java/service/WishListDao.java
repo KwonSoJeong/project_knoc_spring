@@ -28,22 +28,37 @@ public class WishListDao {
 	}
 	
 	public int nextSeq() {
-		
+		try {
+			setSqlSession();
 		return sqlSession.selectOne(ns + "nextSeq");
-		
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+		}
+		return 0;
 	}
 	
 	public WishList wishOne(String id, String classId) {
+		try {
+			setSqlSession();
 		map.clear();
 		map.put("id", id);
 		map.put("classId", classId);
 		
 		return sqlSession.selectOne(ns + "wishOne", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+		}
+		return null;
 		
 	}
 	
 	public int insertWish(WishList newWish) {
 		try {
+			setSqlSession();
 			return sqlSession.insert(ns + "insertWish", newWish);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -55,10 +70,11 @@ public class WishListDao {
 	}
 	
 	public int deleteWish(String id, String classId) {
-		map.clear();
-		map.put("id", id);
-		map.put("classId", classId);
 		try {
+			setSqlSession();
+			map.clear();
+			map.put("id", id);
+			map.put("classId", classId);
 			return sqlSession.delete(ns + "deleteWish", map);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -70,8 +86,16 @@ public class WishListDao {
 	}
 	
 	public List<Map<String, Object>> wishListOne(String id) {
-		
+		try {
+			setSqlSession();
 		return sqlSession.selectList(ns + "wishListOne", id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.commit();
+		}
+		
+		return null;
 		
 	}
 	

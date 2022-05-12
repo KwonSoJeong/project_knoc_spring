@@ -25,11 +25,20 @@ public class Study_CommentDao {
 	} 
 	
 	public int nextNum() {
+		try {
+			setSqlSession();
 			return sqlSession.selectOne(ns + "nextNum");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+		}
+		return 0;
 	}
 	
 	public int insert(Study_Comment sc) {
 		try {
+			setSqlSession();
 			return sqlSession.insert(ns + "insert",sc);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -40,15 +49,39 @@ public class Study_CommentDao {
 	}
 	
 	public List<Study_Comment> selectComment(String refId) {
+		try {
+			setSqlSession();
 			return sqlSession.selectList(ns + "selectComment",refId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+		}
+		return null;
 	}
 	
 	public int count(String refId) {
+		try {
+			setSqlSession();
 			return sqlSession.selectOne(ns + "count",refId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+		}
+		return 0;
 	}
 	
 	public List<String> callProfile(String refId) {
+		try {
+			setSqlSession();
 			return sqlSession.selectList(ns + "callProfile",refId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+		}
+		return null;
 	}
 	
 	

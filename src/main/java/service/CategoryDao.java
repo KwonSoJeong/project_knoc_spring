@@ -22,8 +22,14 @@ public class CategoryDao {
 	}
 	
 	public String selectCategoryName(String categoryId) {
-		
+		try {
+			setSqlSession();
 		return sqlSession.selectOne(ns + "selectCategoryName", categoryId);
-		
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+		}
+		return null;
 	}
 }

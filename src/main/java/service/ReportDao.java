@@ -29,11 +29,20 @@ public class ReportDao {
 
 	// 다음 번호 불러오기
 	public int nextNum() {
+		try {
+			setSqlSession();
 		return sqlSession.selectOne(ns + "nextNum");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+		}
+		return 0;
 	}
 	
 	public int insertReport(Report report) {
 		try {
+			setSqlSession();
 			return sqlSession.insert(ns + "insertReport", report);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -44,15 +53,31 @@ public class ReportDao {
 	}
 	
 	public List<Map<String, Object>> reportList(String subject, int pageInt, int limit) {
+		try {
+			setSqlSession();
 		map.clear();
 		map.put("start", (pageInt - 1) * limit + 1);
 		map.put("end", pageInt * limit);
 		map.put("value", subject);
 		
 		return sqlSession.selectList(ns + "reportList", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+		}
+		return null;
 	}
 	
 	public int reportCount(String subject) {
+		try {
+			setSqlSession();
 		return sqlSession.selectOne(ns + "reportCount", subject);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+		}
+		return 0;
 	}
 }

@@ -99,7 +99,7 @@ public class WebChatDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			sqlSession.commit();
+			sqlSession.close();
 		}
 		return 0;
 	}

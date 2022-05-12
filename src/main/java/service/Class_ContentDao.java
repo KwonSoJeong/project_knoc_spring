@@ -29,15 +29,21 @@ public class Class_ContentDao {
 	
 	// 신규 컨텐츠 아이디 생성을 위해 시퀀스 다음 번호 반환
 	public int newContentNum() {
-		
+		try {
+			setSqlSession();
 		return sqlSession.selectOne(ns + "newContentNum");
-		
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+		}
+		return 0;
 	}
 	
 	// 신규 컨텐츠 등록
 	public int contentUpload(Class_Content newContent) {
-		
 		try {
+			setSqlSession();
 			return sqlSession.insert(ns + "contentUpload", newContent);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -49,25 +55,41 @@ public class Class_ContentDao {
 	}
 	
 	public Class_Content contentOne(String classId, String contentId) {
+		try {
+			setSqlSession();
 		map.clear();
 		map.put("classId", classId);
 		map.put("contentId", contentId);
 		
 		return sqlSession.selectOne(ns + "contentOne", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+		}
+
+		return null;
 		
 	}
 	
 	// 클래스 아이디를 매개변수로 해당 클래스의 컨텐츠를 리스트로 반환
 	public List<Class_Content> contentList(String classId) {
-		
+		try {
+			setSqlSession();
 		return sqlSession.selectList(ns + "contentList", classId);
-		
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+		}
+
+		return null;
 	}
 	
 	// 컨텐츠 수정
 	public int contentUpdate(Class_Content updatedContent) {
-		
 		try {
+			setSqlSession();
 			return sqlSession.update(ns + "contentUpdate", updatedContent);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -80,8 +102,8 @@ public class Class_ContentDao {
 	
 	// 컨텐츠 삭제
 	public int contentDelete(String classId) {
-		
 		try {
+			setSqlSession();
 			return sqlSession.delete(ns + "contentDelete", classId);
 		} catch (Exception e) {
 			e.printStackTrace();
