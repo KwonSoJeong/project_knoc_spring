@@ -66,7 +66,7 @@ public class ClassesDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			sqlSession.close();
+			sqlSession.commit();
 		}
 
 		return 0;
@@ -144,6 +144,7 @@ public class ClassesDao {
 	// 클래스 관심 등록 수 1 증가
 	public int favoriteCntUp(String classId) {
 		try {
+			setSqlSession();
 			return sqlSession.update(ns + "favoriteCntUp", classId);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -157,6 +158,7 @@ public class ClassesDao {
 	// 클래스 관심 등록 수 1 감소
 	public int favoriteCntDown(String classId) {
 		try {
+			setSqlSession();
 			return sqlSession.update(ns + "favoriteCntDown", classId);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -170,6 +172,7 @@ public class ClassesDao {
 	// 클래스 수정
 	public int classUpdate(Classes updatedClass) {
 		try {
+			setSqlSession();
 			return sqlSession.update(ns + "classUpdate", updatedClass);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -183,6 +186,7 @@ public class ClassesDao {
 	// 클래스 삭제
 	public int classDelete(String classId) {
 		try {
+			setSqlSession();
 			return sqlSession.delete(ns + "classDelete", classId);
 		} catch (Exception e) {
 			e.printStackTrace();
