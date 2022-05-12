@@ -231,7 +231,8 @@ public class MentorController {
 			msg = "수정에 실패하였습니다";
 			url = request.getContextPath()+"/mentor/mentorInfo?mentoring_Id="+mt.getMentoring_Id();
 		}
-
+		
+		session.setAttribute("mentoring_Id", mt.getMentoring_Id());
 		m.addAttribute("msg", msg);
 		m.addAttribute("url", url);
 		return "/view/alert";
