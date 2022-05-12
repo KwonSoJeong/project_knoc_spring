@@ -54,14 +54,14 @@ public class GroupChat implements ApplicationContextAware {
 			for (Session client : clients.keySet()) {
 				if (!client.equals(session) && clients.get(client).equals(webChat.getGroupId())) {
 					client.getBasicRemote().sendText(webChat.toString());
-					/*
+					
 					// 상대방이 연결상태일 경우 readchk 업데이트
 					if (!webChat.getUserId().equals("admin")) {
 						wcd.adminReadChkUpdate();
 					} else {
 						wcd.userReadChkUpdate(webChat.getGroupId());
 					}
-					*/
+					
 					
 				}
 			}
