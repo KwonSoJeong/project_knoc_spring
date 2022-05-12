@@ -30,6 +30,7 @@ public class Knoc_MemberDao {
 	// 신규 회원 추가
 	public int insertMember(Knoc_Member m) {
 		try {
+			setSqlSession();
 			return sqlSession.insert(ns + "insertMember", m);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -41,52 +42,108 @@ public class Knoc_MemberDao {
 	
 	// id로 해당하는 knoc_member 객체 반환
 	public Knoc_Member selectOne(String id) {
-		
+		try {
+			setSqlSession();
 		return sqlSession.selectOne(ns + "selectOne", id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+		}
+		return null;
 		
 	}
 	
 	public List<Knoc_Member> memberList(int pageInt, int limit) {
+		try {
+			setSqlSession();
 		map.clear();
 		map.put("start", (pageInt - 1) * limit + 1);
 		map.put("end", pageInt * limit);
 		
 		return sqlSession.selectList(ns + "memberList", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+		}
+		return null;
 	}
 	
 	public int memberCount() {
+		try {
+			setSqlSession();
 		return sqlSession.selectOne(ns + "memberCount");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+		}
+		return 0;
 	}
 	
 	public List<Knoc_Member> memberListWithKeyword(int pageInt, int limit, String keyword) {
+		try {
+			setSqlSession();
 		map.clear();
 		map.put("start", (pageInt - 1) * limit + 1);
 		map.put("end", pageInt * limit);
 		map.put("keyword", keyword);
 		
 		return sqlSession.selectList(ns + "memberListWithKeyword", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+		}
+		return null;
 	}
 	
 	public int memberCountWithKeyword(String keyword) {
+		try {
+			setSqlSession();
 		return sqlSession.selectOne(ns + "memberCountWithKeyword", keyword);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+		}
+		return 0;
 	}
 	
 	public List<Knoc_Member> selectBlackList(int pageInt, int limit) {
+		try {
+			setSqlSession();
 		map.clear();
 		map.put("start", (pageInt - 1) * limit + 1);
 		map.put("end", pageInt * limit);
 		
 		return	sqlSession.selectList(ns + "selectBlackList", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+		}
+		return null;
 				
 	}
 	
 	public int blackListCount() {
+		try {
+			setSqlSession();
 		return sqlSession.selectOne(ns + "blackListCount");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+		}
+		return 0;
 	}
 	
 	// 회원 정보 수정
 	public int updateMember(Knoc_Member member) {
 		try {
+			setSqlSession();
 			return sqlSession.update(ns + "updateMember", member);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -101,6 +158,7 @@ public class Knoc_MemberDao {
 	// 비밀번호 수정
 	public int updatePwd(Knoc_Member member) {
 		try {
+			setSqlSession();
 			return sqlSession.update(ns + "updatePwd", member);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -113,6 +171,7 @@ public class Knoc_MemberDao {
 	
 	public void addBlackList(String id) {
 		try {
+			setSqlSession();
 			sqlSession.update(ns + "addBlackList", id);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -123,6 +182,7 @@ public class Knoc_MemberDao {
 	
 	public void deleteBlackList(String id) {
 		try {
+			setSqlSession();
 			sqlSession.update(ns + "deleteBlackList", id);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -133,6 +193,7 @@ public class Knoc_MemberDao {
 	
 	public int deleteMember(Knoc_Member member) {
 		try {
+			setSqlSession();
 			return sqlSession.delete(ns + "deleteMember", member);
 		} catch (Exception e) {
 			e.printStackTrace();
