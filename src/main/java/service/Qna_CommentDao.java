@@ -41,23 +41,48 @@ public class Qna_CommentDao {
 	*/
 	
 	public Qna_Comment selectOneComment(String refId) {
+		try {
+			setSqlSession();
 			return sqlSession.selectOne(ns + "selectOneComment",refId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+		}
+		return null;
 	}
 	
 	public List countList(int pageInt, int limit) {
+		try {
+			setSqlSession();
 			map.clear();
 			map.put("start", (pageInt-1)*limit+1);
 			map.put("end", pageInt * limit);
 			return sqlSession.selectList(ns + "countList",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+		}
+		return null;
 	}
 	
 	//다음 번호 불러오기
 		public int nextNum() {
+			try {
+				setSqlSession();
 				return sqlSession.selectOne(ns + "nextNum");
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				sqlSession.close();
+			}
+			return 0;
 		}
 		
 		public int insert(Qna_Comment qc) {
 			try {
+				setSqlSession();
 				return sqlSession.insert(ns + "insert",qc);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -68,6 +93,14 @@ public class Qna_CommentDao {
 		}
 		
 		public int countOne(String refId) {
+			try {
+				setSqlSession();
 				return sqlSession.selectOne(ns + "countOne",refId);
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				sqlSession.commit();
+			}
+			return 0;
 		}
 }
