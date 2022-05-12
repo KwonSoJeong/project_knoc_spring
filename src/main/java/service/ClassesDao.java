@@ -29,29 +29,44 @@ public class ClassesDao {
 	
 	// 전체 classes 리스트 생성하여 한 페이지당 classes 객체를 12개씩 반환
 	public List<Classes> classList(int pageInt, int limit) {
+		try {
+		setSqlSession();
 		map.clear();
 		map.put("start", (pageInt - 1) * limit + 1);
 		map.put("end", pageInt * limit);
-		
 		return sqlSession.selectList(ns + "classList", map);
-		
+	} catch (Exception e) {
+		e.printStackTrace();
+	} finally {
+		sqlSession.close();
+	}
+
+	return null;
 	}
 	
 	// 신규 클래스 아이디 생성을 위해 시퀀스 다음 번호 반환
 	public int newClassNum() {
-		
+		try {
+			setSqlSession();
 		return sqlSession.selectOne(ns + "newClassNum");
-		
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+		}
+
+		return 0;
 	}
 	
 	// 신규 클래스 등록
 	public int classUpload(Classes newClass) {
 		try {
+			setSqlSession();
 			return sqlSession.insert(ns + "classUpload", newClass);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			sqlSession.commit();
+			sqlSession.close();
 		}
 
 		return 0;
@@ -59,31 +74,56 @@ public class ClassesDao {
 
 	// 클래스 아이디를 매개변수로 특정 클래스 조회
 	public Classes classOne(String classId) {
-		
+		try {
+			setSqlSession();
 		return sqlSession.selectOne(ns + "classOne", classId);
-		
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+		}
+
+		return null;
 	}
 	
 	// 특정 컬럼 기준 내림차순으로 테이블을 정렬하여, 상위 4개 객체만 리스트로 반환
 	public List<Classes> sortedClassList(String columnName) {
-		
+		try {
+			setSqlSession();
 		return sqlSession.selectList(ns + "sortedClassList", columnName);
-		
+	} catch (Exception e) {
+		e.printStackTrace();
+	} finally {
+		sqlSession.close();
+	}
+
+	return null;
 	}
 	
 	// 특정 카테고리에 맞는 클래스만 한 페이지당 classes 객체를 12개씩 반환
 	public List<Classes> classifiedList(String value, int pageInt, int limit) {
+		try {
+		setSqlSession();
 		map.clear();
 		map.put("value", value);
 		map.put("start", (pageInt - 1) * limit + 1);
 		map.put("end", pageInt * limit);
 		
 		return sqlSession.selectList(ns + "classifiedList", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+		}
+
+		return null;
 		
 	}
 	
 	// 검색어를 입력하여 해당 검색어를 제목에 포함하는 클래스만 한 페이지당 classes 객체를 12개씩 반환
 	public List<Classes> searchedList(String value, int pageInt, int limit) {
+		try {
+			setSqlSession();
 		String keyword = value.trim();
 		
 		map.put("value", keyword);
@@ -91,6 +131,13 @@ public class ClassesDao {
 		map.put("end", pageInt * limit);
 		
 		return sqlSession.selectList(ns + "searchedList", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+		}
+
+		return null;
 		
 	}
 
